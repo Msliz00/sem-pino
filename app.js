@@ -110,34 +110,59 @@ $('#form-cadastro').addEventListener('submit', async (e) => {
   }
 
   try {
-    // Cria conta no Auth
-    const { data, error } = await sb.auth.signUp({
+    // 1. Cria conta no Auth
+    const { data: signUpData, error: signUpErr } = await sb.auth.signUp({
+      email: userToEmail(username),
+      password: pass,
+      options: {
+        emailRedirectTo: window.location.origin,
+      },
+    });
+    if (signUpErr) throw signUpErr;
+
+    // 2. Tenta login imediato
+    const { data: loginData, error: loginErr } = await sb.auth.signInWithPassword({
       email: userToEmail(username),
       password: pass,
     });
-    if (error) throw error;
 
-    // Vincula auth.users.id ao perfil pré-cadastrado
-    const userId = data.user?.id;
-    if (userId) {
+    // 3a. Se login funcionou (confirm email está OFF) → entra direto no painel
+    if (!loginErr && loginData?.user) {
+      const userId = loginData.user.id;
       const { error: updErr } = await sb
         .from('membros')
         .update({ user_id: userId })
         .eq('username', username);
       if (updErr) throw updErr;
+
+      localStorage.setItem('sem-pino-user', username);
+      toast('Conta criada com sucesso!', 'success');
+      await initPainel(loginData.user);
+      return;
     }
 
-    // Login automático
-    const { data: loginData, error: loginErr } = await sb.auth.signInWithPassword({
-      email: userToEmail(username),
-      password: pass,
-    });
+    // 3b. Se login falhou por confirmação pendente → vincula com signUp.user.id e avisa
+    if (loginErr && (loginErr.message.toLowerCase().includes('confirm') || loginErr.message.toLowerCase().includes('not confirmed'))) {
+      const userId = signUpData?.user?.id;
+      if (userId) {
+        await sb.from('membros').update({ user_id: userId }).eq('username', username);
+      }
+      $('#cad-error').style.color = '#ff8c00';
+      $('#cad-error').textContent = '✓ Conta criada! Faça login com seu usuário e senha.';
+      $('#login-user').value = username;
+      setTimeout(() => {
+        showScreen('login');
+        $('#cad-error').style.color = '';
+        $('#cad-error').textContent = '';
+      }, 2500);
+      return;
+    }
+
+    // 3c. Outro erro de login
     if (loginErr) throw loginErr;
 
-    localStorage.setItem('sem-pino-user', username);
-    toast('Conta criada com sucesso!', 'success');
-    await initPainel(loginData.user);
   } catch (err) {
+    $('#cad-error').style.color = '';
     $('#cad-error').textContent = traduzErro(err.message);
   }
 });
