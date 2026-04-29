@@ -6,7 +6,7 @@ const { createClient } = supabase;
 const sb = createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.key);
 
 // Email "fake" derivado do username (Supabase Auth exige email)
-const userToEmail = (u) => `${u.toLowerCase().trim()}@sem-pino.local`;
+const userToEmail = (u) => `${u.toLowerCase().trim()}@sempino.app`;
 
 // Estado global
 const state = {
@@ -440,10 +440,13 @@ async function loadRankingHistorico(cicloId) {
 function traduzErro(msg) {
   if (!msg) return 'Erro desconhecido.';
   const m = msg.toLowerCase();
-  if (m.includes('invalid login')) return 'Usuário ou senha incorretos.';
-  if (m.includes('already registered') || m.includes('already exists')) return 'Esse usuário já tem conta. Faça login.';
-  if (m.includes('rate limit')) return 'Muitas tentativas. Aguarde 1 min.';
-  if (m.includes('email')) return 'Erro de validação. Tente outro usuário.';
+  if (m.includes('invalid login') || m.includes('invalid credentials')) return 'Usuário ou senha incorretos.';
+  if (m.includes('already registered') || m.includes('already exists') || m.includes('user already')) return 'Esse usuário já tem conta. Faça login.';
+  if (m.includes('rate limit') || m.includes('too many')) return 'Muitas tentativas. Aguarde 1 min.';
+  if (m.includes('email') && m.includes('invalid')) return 'Erro técnico de email. Avise o ADM.';
+  if (m.includes('email') && m.includes('confirm')) return 'Conta criada! Aguarde 1 min e faça login.';
+  if (m.includes('password') && m.includes('weak')) return 'Senha muito fraca. Use 6+ caracteres.';
+  if (m.includes('network') || m.includes('fetch')) return 'Erro de conexão. Verifique internet.';
   return msg;
 }
 
