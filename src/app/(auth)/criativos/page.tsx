@@ -1,3 +1,7 @@
 export default function CriativosPage() {
-  return <h1 className="text-2xl font-semibold">Criativos</h1>;
+  return (
+    <h1 className="text-[32px] font-semibold leading-tight tracking-tight">
+      Criativos
+    </h1>
+  );
 }

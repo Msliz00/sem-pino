@@ -7,8 +7,14 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
 
   return (
-    <h1 className="text-2xl font-semibold">
-      Dashboard - logado como: {user?.email}
-    </h1>
+    <div className="space-y-2">
+      <h1 className="text-[32px] font-semibold leading-tight tracking-tight">
+        Dashboard
+      </h1>
+      <p className="text-sm text-muted">
+        logado como{" "}
+        <span className="font-mono text-snow/80">{user?.email}</span>
+      </p>
+    </div>
   );
 }

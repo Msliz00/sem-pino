@@ -22,13 +22,15 @@ export function Header({ userEmail }: { userEmail: string }) {
 
   return (
     <header
-      className="flex items-center justify-between border-b border-white/10 px-6"
+      className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.08] bg-[rgba(8,7,10,0.6)] px-8 backdrop-blur-xl"
       style={{ height: 60 }}
     >
-      <h1 className="text-base font-semibold">{title}</h1>
+      <h1 className="text-[18px] font-semibold tracking-tight text-snow">
+        {title}
+      </h1>
 
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-1 rounded-full border border-white/10 bg-black/40 p-1">
+      <div className="flex items-center gap-5">
+        <div className="flex items-center gap-1 rounded-full border border-white/[0.08] bg-white/[0.03] p-1">
           {EXPERTS.map((expert) => {
             const active = activeExpert === expert;
             return (
@@ -36,10 +38,10 @@ export function Header({ userEmail }: { userEmail: string }) {
                 key={expert}
                 type="button"
                 onClick={() => setActiveExpert(expert)}
-                className={`rounded-full px-3 py-1 text-xs transition ${
+                className={`rounded-full px-4 py-1.5 text-sm transition-colors duration-200 ${
                   active
-                    ? "bg-white text-black"
-                    : "text-white/70 hover:text-white"
+                    ? "bg-snow text-ink"
+                    : "text-muted hover:text-snow"
                 }`}
               >
                 {expert}
@@ -48,7 +50,7 @@ export function Header({ userEmail }: { userEmail: string }) {
           })}
         </div>
 
-        <span className="text-xs text-white/60">{userEmail}</span>
+        <span className="text-sm text-muted">{userEmail}</span>
       </div>
     </header>
   );

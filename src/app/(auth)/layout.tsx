@@ -24,7 +24,7 @@ export default async function AuthLayout({
       <Sidebar />
       <div className="flex flex-1 flex-col" style={{ marginLeft: 240 }}>
         <Header userEmail={user.email ?? ""} />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 px-10 py-8">{children}</main>
       </div>
     </div>
   );

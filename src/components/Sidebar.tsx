@@ -44,39 +44,47 @@ export function Sidebar() {
 
   return (
     <aside
-      className="fixed left-0 top-0 flex h-screen flex-col border-r border-white/10 bg-black/40"
+      className="fixed left-0 top-0 z-10 flex h-screen flex-col border-r border-white/[0.08] bg-[#06050a]"
       style={{ width: 240 }}
     >
-      <div className="px-6 py-5 text-lg font-semibold">Painel Experts</div>
+      <div className="px-6 py-6 text-[22px] leading-none tracking-tight">
+        <span className="font-semibold text-snow">Painel </span>
+        <span className="font-serif italic text-snow/90">Experts</span>
+      </div>
 
-      <nav className="flex flex-1 flex-col gap-1 px-3">
+      <nav className="flex flex-1 flex-col gap-0.5 px-3">
         {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
           return (
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-3 rounded px-3 py-2 text-sm transition ${
+              className={`relative flex items-center gap-3 rounded-md px-4 py-3 text-sm transition-colors ${
                 active
-                  ? "bg-white/10 text-white"
-                  : "text-white/70 hover:bg-white/5 hover:text-white"
+                  ? "bg-bingo/[0.15] text-snow"
+                  : "text-muted hover:bg-white/[0.04] hover:text-snow"
               }`}
             >
-              <Icon size={18} />
+              {active && (
+                <span className="absolute left-0 top-1/2 h-6 w-[2px] -translate-y-1/2 rounded-r bg-bingo" />
+              )}
+              <Icon size={18} strokeWidth={1.75} />
               <span>{label}</span>
             </Link>
           );
         })}
       </nav>
 
-      <button
-        type="button"
-        onClick={handleSignOut}
-        className="m-3 flex items-center gap-3 rounded px-3 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
-      >
-        <LogOut size={18} />
-        <span>Sair</span>
-      </button>
+      <div className="border-t border-white/[0.08] p-3">
+        <button
+          type="button"
+          onClick={handleSignOut}
+          className="flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm text-muted transition-colors hover:bg-white/[0.04] hover:text-snow"
+        >
+          <LogOut size={18} strokeWidth={1.75} />
+          <span>Sair</span>
+        </button>
+      </div>
     </aside>
   );
 }

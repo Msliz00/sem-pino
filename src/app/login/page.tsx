@@ -40,39 +40,53 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-6">
+    <main className="flex min-h-screen items-center justify-center px-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm space-y-4 rounded-lg border border-white/10 bg-white/5 p-6"
+        className="w-full max-w-[400px] space-y-5 rounded-2xl border border-white/[0.08] bg-surface p-8 shadow-2xl"
       >
-        <h1 className="text-xl font-semibold">Painel Experts - Login</h1>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="email@exemplo.com"
-          className="w-full rounded border border-white/10 bg-black/40 px-3 py-2 text-sm"
-          required
-          disabled={loading}
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="senha"
-          className="w-full rounded border border-white/10 bg-black/40 px-3 py-2 text-sm"
-          required
-          disabled={loading}
-        />
+        <div className="space-y-1">
+          <h1 className="text-[28px] leading-tight tracking-tight">
+            <span className="font-semibold text-snow">Painel </span>
+            <span className="font-serif italic text-snow/90">Experts</span>
+          </h1>
+          <p className="text-sm text-muted">Acesse o painel BingoBet</p>
+        </div>
+
+        <div className="space-y-3">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="email@exemplo.com"
+            className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-snow placeholder:text-[#71717a] outline-none transition-colors focus:border-bingo"
+            required
+            disabled={loading}
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="senha"
+            className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-snow placeholder:text-[#71717a] outline-none transition-colors focus:border-bingo"
+            required
+            disabled={loading}
+          />
+        </div>
+
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded bg-white px-3 py-2 text-sm font-medium text-black hover:bg-white/90 disabled:opacity-50"
+          className="w-full rounded-lg bg-bingo-gradient px-3 py-2.5 text-sm font-medium text-ink shadow-[0_0_0_0_rgba(255,107,0,0)] transition-all hover:shadow-[0_0_24px_-4px_rgba(255,107,0,0.6)] disabled:opacity-50 disabled:shadow-none"
         >
           {loading ? "Entrando..." : "Entrar"}
         </button>
+
         {errorMessage && (
-          <p className="text-sm text-red-400" role="alert">
+          <p
+            role="alert"
+            className="rounded border-l-2 border-danger bg-danger/[0.08] px-3 py-2 text-sm text-danger"
+          >
             {errorMessage}
           </p>
         )}
