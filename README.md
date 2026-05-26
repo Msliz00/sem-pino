@@ -1,36 +1,18 @@
-# SEM PINO 💣 — Painel da Equipe
+# Painel Experts
 
-Painel de cartões (azul / amarelo / vermelho) com ranking ao vivo, histórico semanal ilimitado e permissão de ADM (BK + JP).
-
-## Deploy GitHub Pages
-
-1. Cria um repositório novo chamado `sem-pino` na sua conta do GitHub
-2. Faz upload de **todos os arquivos** dessa pasta (incluindo a pasta `avatars/`)
-3. No repo, vai em **Settings → Pages**
-4. Em "Source", seleciona `Deploy from a branch` → `main` → `/ (root)` → Save
-5. Espera ~1 min e o link aparece: `https://msliz00.github.io/sem-pino/`
+Painel administrativo construído com Next.js 15 (App Router), Supabase (Auth + SSR) e Tailwind CSS.
 
 ## Stack
 
-- Frontend: HTML + CSS + JS puro (sem build)
-- Backend: Supabase (Auth + Postgres + Realtime)
-- Hospedagem: GitHub Pages
+- Next.js 15 + React 18 + TypeScript
+- Supabase SSR (auth via cookies)
+- Tailwind CSS
+- Recharts
 
-## Membros
+## Setup
 
-| User | ADM |
-|------|-----|
-| Tuty | — |
-| Primos | — |
-| Kaio | — |
-| Felipão | — |
-| Gabriel | — |
-| **Bk** | ✅ |
-| **Jp** | ✅ |
-| Dieguinho | — |
-
-## Cartões
-
-- 🔵 Azul = +1
-- 🟨 Amarelo = -1
-- 🟥 Vermelho = -3
+```bash
+npm install
+cp .env.local.example .env.local # configurar NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY
+npm run dev
+```
