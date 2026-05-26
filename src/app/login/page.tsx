@@ -1,13 +1,42 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrorMessage(null);
+    setLoading(true);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        setErrorMessage(error.message);
+        setLoading(false);
+        return;
+      }
+
+      router.push("/dashboard");
+      router.refresh();
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : "Erro ao fazer login",
+      );
+      setLoading(false);
+    }
   };
 
   return (
@@ -24,6 +53,7 @@ export default function LoginPage() {
           placeholder="email@exemplo.com"
           className="w-full rounded border border-white/10 bg-black/40 px-3 py-2 text-sm"
           required
+          disabled={loading}
         />
         <input
           type="password"
@@ -32,13 +62,20 @@ export default function LoginPage() {
           placeholder="senha"
           className="w-full rounded border border-white/10 bg-black/40 px-3 py-2 text-sm"
           required
+          disabled={loading}
         />
         <button
           type="submit"
-          className="w-full rounded bg-white px-3 py-2 text-sm font-medium text-black hover:bg-white/90"
+          disabled={loading}
+          className="w-full rounded bg-white px-3 py-2 text-sm font-medium text-black hover:bg-white/90 disabled:opacity-50"
         >
-          Entrar
+          {loading ? "Entrando..." : "Entrar"}
         </button>
+        {errorMessage && (
+          <p className="text-sm text-red-400" role="alert">
+            {errorMessage}
+          </p>
+        )}
       </form>
     </main>
   );
