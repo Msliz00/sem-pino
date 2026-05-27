@@ -20,19 +20,8 @@ export default async function AuthLayout({
     redirect("/login");
   }
 
-  const { data: expertsRaw } = await supabase
-    .from("experts")
-    .select("slug, nome, ordem, ativo")
-    .eq("ativo", true)
-    .order("ordem", { ascending: true });
-
-  const experts = (expertsRaw ?? []).map((e) => ({
-    slug: e.slug,
-    nome: e.nome,
-  }));
-
   return (
-    <ExpertFilterProvider experts={experts}>
+    <ExpertFilterProvider>
       <div className="flex min-h-screen">
         <Sidebar />
         <div className="flex flex-1 flex-col" style={{ marginLeft: 240 }}>

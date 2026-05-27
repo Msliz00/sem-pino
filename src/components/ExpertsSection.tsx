@@ -25,6 +25,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { ExpertModal, type ExpertDraft } from "@/components/ExpertModal";
+import { useExpertFilter } from "@/contexts/ExpertFilterContext";
 
 export type ExpertRow = {
   id: string;
@@ -127,6 +128,7 @@ function SortableRow({
 
 export function ExpertsSection({ onChange }: { onChange: () => void }) {
   const router = useRouter();
+  const { refetchExperts } = useExpertFilter();
   const [experts, setExperts] = useState<ExpertRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -187,6 +189,7 @@ export function ExpertsSection({ onChange }: { onChange: () => void }) {
         const d = await res.json().catch(() => ({}));
         throw new Error(d.error ?? "Erro ao reordenar");
       }
+      await refetchExperts();
       router.refresh();
     } catch (e) {
       setOpError(e instanceof Error ? e.message : "Erro de rede");
@@ -206,6 +209,7 @@ export function ExpertsSection({ onChange }: { onChange: () => void }) {
       const d = await res.json();
       if (!res.ok) throw new Error(d.error ?? "Erro");
       await fetchData();
+      await refetchExperts();
       onChange();
       router.refresh();
     } catch (err) {
@@ -229,6 +233,7 @@ export function ExpertsSection({ onChange }: { onChange: () => void }) {
     setModalOpen(false);
     setEditing(null);
     await fetchData();
+    await refetchExperts();
     onChange();
     router.refresh();
   };
