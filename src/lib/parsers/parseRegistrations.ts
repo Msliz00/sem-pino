@@ -65,7 +65,10 @@ function findKey(keys: string[], target: string): string | null {
   );
 }
 
-export function parseRegistrations(buffer: ArrayBuffer): ParsedData {
+export function parseRegistrations(
+  buffer: ArrayBuffer,
+  opts?: { strict?: boolean },
+): ParsedData {
   const workbook = XLSX.read(buffer, { type: "array", cellDates: true });
   const sheetName = workbook.SheetNames[0];
   if (!sheetName) {
@@ -95,6 +98,18 @@ export function parseRegistrations(buffer: ArrayBuffer): ParsedData {
   if (!kRegDate) missing.push("Registration Date");
   if (!kCampain) missing.push("Campain");
   if (!kFTD) missing.push("FTD");
+
+  if (opts?.strict) {
+    if (!findKey(keys, "User ID")) missing.push("User ID");
+    if (!findKey(keys, "External_id")) missing.push("External_id");
+    if (!kAffiliate) missing.push("AffiliateId");
+    if (!findKey(keys, "FTD (Date)")) missing.push("FTD (Date)");
+    if (!kDeposits) missing.push("Deposits");
+    if (!kWithdrawn) missing.push("Withdrawn");
+    if (!kNetDeposits) missing.push("Net Deposits");
+    if (!kWagering) missing.push("Wagering");
+  }
+
   if (missing.length > 0) {
     throw new Error(
       `Colunas obrigatórias ausentes: ${missing.join(", ")}.`,
