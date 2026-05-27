@@ -1,10 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import {
-  useExpertFilter,
-  type ExpertSlug,
-} from "@/contexts/ExpertFilterContext";
+import { useExpertFilter } from "@/contexts/ExpertFilterContext";
 
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
@@ -14,17 +11,14 @@ const PAGE_TITLES: Record<string, string> = {
   "/gestao": "Gestão",
 };
 
-const EXPERTS: { label: string; slug: ExpertSlug }[] = [
-  { label: "Todos", slug: "todos" },
-  { label: "Professor", slug: "professor" },
-  { label: "Iris Aviator", slug: "iris-aviator" },
-];
-
 export function Header({ userEmail }: { userEmail: string }) {
   const pathname = usePathname();
-  const { expertSelecionado, setExpertSelecionado } = useExpertFilter();
+  const { expertSelecionado, setExpertSelecionado, experts } =
+    useExpertFilter();
 
   const title = PAGE_TITLES[pathname] ?? "";
+
+  const pills = [{ slug: "todos", nome: "Todos" }, ...experts];
 
   return (
     <header
@@ -37,7 +31,7 @@ export function Header({ userEmail }: { userEmail: string }) {
 
       <div className="flex items-center gap-5">
         <div className="flex items-center gap-1 rounded-full border border-white/[0.08] bg-white/[0.03] p-1">
-          {EXPERTS.map(({ label, slug }) => {
+          {pills.map(({ slug, nome }) => {
             const active = expertSelecionado === slug;
             return (
               <button
@@ -50,7 +44,7 @@ export function Header({ userEmail }: { userEmail: string }) {
                     : "text-muted hover:text-snow"
                 }`}
               >
-                {label}
+                {nome}
               </button>
             );
           })}

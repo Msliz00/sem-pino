@@ -78,7 +78,8 @@ function badgeClasses(marca: MarcaDominante): string {
 }
 
 export function HistoricoView() {
-  const { expertSelecionado, setExpertSelecionado } = useExpertFilter();
+  const { expertSelecionado, setExpertSelecionado, experts } =
+    useExpertFilter();
   const [marca, setMarca] = useState<MarcaFiltro>("todas");
   const [dataInicio, setDataInicio] = useState(ymdNDaysAgo(30));
   const [dataFim, setDataFim] = useState(ymdNDaysAgo(0));
@@ -168,12 +169,11 @@ export function HistoricoView() {
               <option value="todos" className="bg-surface">
                 Todos
               </option>
-              <option value="professor" className="bg-surface">
-                Professor
-              </option>
-              <option value="iris-aviator" className="bg-surface">
-                Iris Aviator
-              </option>
+              {experts.map((e) => (
+                <option key={e.slug} value={e.slug} className="bg-surface">
+                  {e.nome}
+                </option>
+              ))}
             </select>
           </div>
 
