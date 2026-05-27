@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { usePathname } from "next/navigation";
+import {
+  useExpertFilter,
+  type ExpertSlug,
+} from "@/contexts/ExpertFilterContext";
 
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
@@ -11,12 +14,15 @@ const PAGE_TITLES: Record<string, string> = {
   "/gestao": "Gestão",
 };
 
-const EXPERTS = ["Todos", "Professor", "Iris Aviator"] as const;
-type Expert = (typeof EXPERTS)[number];
+const EXPERTS: { label: string; slug: ExpertSlug }[] = [
+  { label: "Todos", slug: "todos" },
+  { label: "Professor", slug: "professor" },
+  { label: "Iris Aviator", slug: "iris-aviator" },
+];
 
 export function Header({ userEmail }: { userEmail: string }) {
   const pathname = usePathname();
-  const [activeExpert, setActiveExpert] = useState<Expert>("Todos");
+  const { expertSelecionado, setExpertSelecionado } = useExpertFilter();
 
   const title = PAGE_TITLES[pathname] ?? "";
 
@@ -31,20 +37,20 @@ export function Header({ userEmail }: { userEmail: string }) {
 
       <div className="flex items-center gap-5">
         <div className="flex items-center gap-1 rounded-full border border-white/[0.08] bg-white/[0.03] p-1">
-          {EXPERTS.map((expert) => {
-            const active = activeExpert === expert;
+          {EXPERTS.map(({ label, slug }) => {
+            const active = expertSelecionado === slug;
             return (
               <button
-                key={expert}
+                key={slug}
                 type="button"
-                onClick={() => setActiveExpert(expert)}
+                onClick={() => setExpertSelecionado(slug)}
                 className={`rounded-full px-4 py-1.5 text-sm transition-colors duration-200 ${
                   active
                     ? "bg-snow text-ink"
                     : "text-muted hover:text-snow"
                 }`}
               >
-                {expert}
+                {label}
               </button>
             );
           })}
