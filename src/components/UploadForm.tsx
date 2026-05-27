@@ -2,8 +2,16 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Upload as UploadIcon, X, FileSpreadsheet } from "lucide-react";
-import { parseRegistrations, type ParsedData } from "@/lib/parsers/parseRegistrations";
+import {
+  Upload as UploadIcon,
+  X,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
+import {
+  parseRegistrations,
+  type ParsedData,
+} from "@/lib/parsers/parseRegistrations";
 import { ConflictDialog } from "@/components/ConflictDialog";
 
 type Expert = { slug: string; nome: string };
@@ -18,13 +26,6 @@ type ConflictState = {
   dataReferencia: string;
 } | null;
 
-function formatNumber(n: number): string {
-  return n.toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
-
 function formatDateBR(ymd: string): string {
   const m = ymd.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (!m) return ymd;
@@ -35,6 +36,15 @@ function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+function formatDistribuicao(
+  dist: ParsedData["distribuicao_origens"],
+): string {
+  return Object.entries(dist)
+    .sort((a, b) => b[1].registros - a[1].registros)
+    .map(([k, v]) => `${k} ${v.registros}`)
+    .join(" · ");
 }
 
 export function UploadForm({ experts }: { experts: Expert[] }) {
@@ -56,6 +66,8 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
   const [conflict, setConflict] = useState<ConflictState>(null);
 
   const canSubmit = !!expertSlug && !!file && !!parsedData && !parseError;
+  const showPreview = !!file && !!parsedData;
+  const showDropZone = !showPreview;
 
   const resetFile = () => {
     setFile(null);
@@ -65,17 +77,19 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
   };
 
   const handleFileSelected = async (f: File) => {
-    setFile(f);
     setParsedData(null);
     setParseError(null);
     try {
       const buffer = await f.arrayBuffer();
       const parsed = parseRegistrations(buffer);
+      setFile(f);
       setParsedData(parsed);
     } catch (err) {
+      setFile(null);
       setParseError(
         err instanceof Error ? err.message : "Erro ao processar planilha.",
       );
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -176,12 +190,12 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
       </section>
 
       {/* Upload */}
-      <section className="space-y-2">
+      <section className="space-y-3">
         <label className="text-sm font-medium text-snow">
           Upload da Planilha
         </label>
 
-        {!file ? (
+        {showDropZone && (
           <div
             onDragOver={(e) => {
               e.preventDefault();
@@ -209,56 +223,69 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
               className="hidden"
             />
           </div>
-        ) : (
-          <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3 overflow-hidden">
-                <FileSpreadsheet
-                  size={22}
-                  strokeWidth={1.5}
-                  className="shrink-0 text-bingo"
-                />
-                <div className="overflow-hidden">
-                  <p className="truncate text-sm text-snow">{file.name}</p>
-                  <p className="text-xs text-muted">
-                    {formatFileSize(file.size)}
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={resetFile}
-                className="rounded p-1 text-muted transition-colors hover:bg-white/[0.06] hover:text-snow"
-                aria-label="Remover arquivo"
-              >
-                <X size={18} />
-              </button>
-            </div>
+        )}
 
-            {parsedData && (
-              <p className="mt-3 border-t border-white/[0.06] pt-3 font-mono text-xs text-muted">
-                {parsedData.total_registros} registros ·{" "}
-                {parsedData.total_ftd} FTD · R${" "}
-                {formatNumber(parsedData.total_deposits)} em depósitos · Data{" "}
-                {formatDateBR(parsedData.data_referencia)}
+        {showPreview && file && parsedData && (
+          <div
+            className="relative rounded-xl border border-white/[0.08] bg-white/[0.03] p-4"
+            style={{ borderLeft: "3px solid #ff6b00" }}
+          >
+            <button
+              type="button"
+              onClick={resetFile}
+              className="absolute right-3 top-3 rounded p-1 text-muted transition-colors hover:bg-white/[0.06] hover:text-snow"
+              aria-label="Remover arquivo"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="space-y-2 pr-8">
+              <p className="truncate font-mono text-sm text-muted">
+                {file.name} · {formatFileSize(file.size)}
               </p>
-            )}
+              <p className="text-base font-semibold text-snow">
+                {parsedData.total_registros} registros ·{" "}
+                {parsedData.total_ftd} FTD
+              </p>
+              <p className="font-mono text-sm text-muted">
+                Data: {formatDateBR(parsedData.data_referencia)}
+                {parsedData.affiliate_id_detectado && (
+                  <>
+                    {" · "}AffiliateId detectado:{" "}
+                    {parsedData.affiliate_id_detectado}
+                  </>
+                )}
+              </p>
+              <p className="text-xs text-muted">
+                Distribuição:{" "}
+                {formatDistribuicao(parsedData.distribuicao_origens)}
+              </p>
+            </div>
           </div>
         )}
 
         {parseError && (
-          <p className="rounded border-l-2 border-danger bg-danger/[0.08] px-3 py-2 text-sm text-danger">
-            {parseError}
-          </p>
+          <div
+            role="alert"
+            className="flex items-start gap-2 rounded bg-danger/[0.08] px-3 py-3 text-sm text-danger"
+            style={{ borderLeft: "3px solid #ef4444" }}
+          >
+            <AlertCircle size={16} strokeWidth={2} className="mt-0.5 shrink-0" />
+            <span>{parseError}</span>
+          </div>
         )}
       </section>
 
       {/* Manual metrics */}
       {parsedData && (
-        <section className="space-y-2">
-          <label className="text-sm font-medium text-snow">
-            Métricas Manuais
-          </label>
+        <section className="space-y-3">
+          <div className="space-y-1">
+            <h3 className="text-sm font-medium text-snow">Métricas Manuais</h3>
+            <p className="text-xs text-muted">
+              Preencha investimento, cliques e entradas (dados não vêm na
+              planilha)
+            </p>
+          </div>
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-1">
               <span className="text-xs text-muted">Investimento (R$)</span>
@@ -305,11 +332,13 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
         type="button"
         onClick={() => submit(false)}
         disabled={!canSubmit || submitting}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-bingo-gradient px-3 py-3 text-sm font-medium text-ink shadow-[0_0_0_0_rgba(255,107,0,0)] transition-all hover:shadow-[0_0_24px_-4px_rgba(255,107,0,0.6)] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
+        className={`flex w-full items-center justify-center gap-2 rounded-lg bg-bingo-gradient px-3 py-3 text-sm font-medium text-ink transition-all hover:shadow-[0_0_24px_-4px_rgba(255,107,0,0.6)] disabled:shadow-none ${
+          submitting
+            ? "cursor-not-allowed opacity-60"
+            : "disabled:cursor-not-allowed disabled:opacity-40"
+        }`}
       >
-        {submitting && (
-          <span className="h-3 w-3 animate-spin rounded-full border-2 border-ink border-r-transparent" />
-        )}
+        {submitting && <Loader2 size={16} className="animate-spin" />}
         {submitting ? "Salvando..." : "Salvar"}
       </button>
 
