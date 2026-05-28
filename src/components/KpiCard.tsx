@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import type { Variacao } from "@/lib/metricas";
 
 export type Formato = "numero" | "moeda" | "percentual";
@@ -52,37 +52,37 @@ export function KpiCard({ label, value, formato, variacao }: Props) {
     el.style.setProperty("--my", `${e.clientY - rect.top}px`);
   };
 
+  const hintClass =
+    sinal === "up"
+      ? "kpi-hint kpi-hint--up"
+      : sinal === "down"
+        ? "kpi-hint kpi-hint--down"
+        : "kpi-hint";
+
   return (
     <div
       ref={ref}
       onMouseMove={handleMouseMove}
-      className="glass glass-spotlight rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.03] hover:border-white/[0.18] hover:shadow-[0_0_60px_-10px_rgba(255,107,0,0.45)]"
+      className="glass glass-spotlight rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.03] hover:border-white/[0.18] hover:shadow-[0_0_60px_-10px_rgba(255,107,0,0.45)]"
     >
       <div className="relative z-[1]">
-        <div className="text-xs uppercase tracking-wide text-muted">
-          {label}
-        </div>
-        <div className="mt-3 font-mono text-3xl font-semibold leading-tight text-snow">
-          {formatValue(value, formato)}
-        </div>
-        <div className="mt-2 flex items-center gap-1 text-xs">
+        <div className="kpi-label">{label}</div>
+        <div className="kpi-value">{formatValue(value, formato)}</div>
+        <div className={hintClass}>
           {sinal === "up" && pct !== null && (
             <>
-              <TrendingUp size={12} className="text-success" />
-              <span className="text-success">{formatPct(pct)}</span>
+              <TrendingUp size={11} />
+              <span>{formatPct(pct)} vs anterior</span>
             </>
           )}
           {sinal === "down" && pct !== null && (
             <>
-              <TrendingDown size={12} className="text-danger" />
-              <span className="text-danger">{formatPct(pct)}</span>
+              <TrendingDown size={11} />
+              <span>{formatPct(pct)} vs anterior</span>
             </>
           )}
           {(sinal === "neutral" || pct === null) && (
-            <>
-              <Minus size={12} className="text-muted" />
-              <span className="text-muted">—</span>
-            </>
+            <span>vs período anterior</span>
           )}
         </div>
       </div>

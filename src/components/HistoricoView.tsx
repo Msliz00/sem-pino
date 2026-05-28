@@ -8,10 +8,7 @@ import {
   ChevronRight,
   Loader2,
 } from "lucide-react";
-import {
-  useExpertFilter,
-  type ExpertSlug,
-} from "@/contexts/ExpertFilterContext";
+import { useExpertFilter } from "@/contexts/ExpertFilterContext";
 import { EditUploadModal } from "@/components/EditUploadModal";
 
 export type MarcaDominante = "BINGO" | "REALS" | "MISTA" | null;
@@ -78,8 +75,7 @@ function badgeClasses(marca: MarcaDominante): string {
 }
 
 export function HistoricoView() {
-  const { expertSelecionado, setExpertSelecionado, experts } =
-    useExpertFilter();
+  const { expertSelecionado, setExpertSelecionado } = useExpertFilter();
   const [marca, setMarca] = useState<MarcaFiltro>("todas");
   const [dataInicio, setDataInicio] = useState(ymdNDaysAgo(30));
   const [dataFim, setDataFim] = useState(ymdNDaysAgo(0));
@@ -155,28 +151,6 @@ export function HistoricoView() {
       {/* Filtros */}
       <div className="glass-strong sticky top-[60px] z-[5] -mx-10 px-10 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
         <div className="flex flex-wrap items-end gap-3">
-          <div className="space-y-1">
-            <label className="text-xs uppercase tracking-wide text-muted">
-              Expert
-            </label>
-            <select
-              value={expertSelecionado}
-              onChange={(e) =>
-                setExpertSelecionado(e.target.value as ExpertSlug)
-              }
-              className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-snow outline-none transition-colors focus:border-bingo"
-            >
-              <option value="todos" className="bg-surface">
-                Todos
-              </option>
-              {experts.map((e) => (
-                <option key={e.slug} value={e.slug} className="bg-surface">
-                  {e.nome}
-                </option>
-              ))}
-            </select>
-          </div>
-
           <div className="space-y-1">
             <label className="text-xs uppercase tracking-wide text-muted">
               Marca

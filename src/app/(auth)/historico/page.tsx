@@ -1,11 +1,14 @@
 import { HistoricoView } from "@/components/HistoricoView";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function HistoricoPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-[32px] font-semibold leading-tight tracking-tight">
-        Histórico
-      </h1>
+      <PageHeader
+        title="Histórico"
+        accent="diário"
+        subtitle="série temporal de métricas"
+      />
       <HistoricoView />
     </div>
   );

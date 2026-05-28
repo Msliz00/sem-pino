@@ -1,11 +1,14 @@
 import { CriativosView } from "@/components/CriativosView";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function CriativosPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-[32px] font-semibold leading-tight tracking-tight">
-        Criativos
-      </h1>
+      <PageHeader
+        title="Criativos"
+        accent="biblioteca"
+        subtitle="performance dos criativos publicados"
+      />
       <CriativosView />
     </div>
   );

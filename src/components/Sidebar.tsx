@@ -47,8 +47,19 @@ export function Sidebar() {
       className="glass-strong fixed left-0 top-0 z-10 flex h-screen flex-col"
       style={{ width: 240, borderRight: "1px solid rgba(255,255,255,0.08)" }}
     >
-      <div className="px-6 py-6 text-[24px] font-semibold leading-none tracking-tight">
-        Bingo<span className="brand-gradient">Bet</span>
+      <div className="px-6 py-6">
+        <div className="text-[24px] font-semibold leading-none tracking-tight">
+          Bingo<span className="brand-gradient">Bet</span>
+        </div>
+        <div
+          className="mt-2 font-mono uppercase text-muted"
+          style={{
+            fontSize: 10,
+            letterSpacing: "0.15em",
+          }}
+        >
+          Painel Experts
+        </div>
       </div>
 
       <nav className="flex flex-1 flex-col gap-0.5 px-3">
