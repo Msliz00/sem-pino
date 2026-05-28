@@ -353,17 +353,12 @@ export function EditUploadModal({ upload, onClose, onSaved }: Props) {
           )}
         </section>
 
-        {/* Download */}
+        {/* Download (single ou multi-BTAG) */}
         {upload.arquivo_nome && (
-          <a
-            href={`/api/uploads/${upload.id}/download`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-snow"
-          >
-            <Download size={16} />
-            Baixar planilha original
-          </a>
+          <DownloadList
+            uploadId={upload.id}
+            arquivoNome={upload.arquivo_nome}
+          />
         )}
 
         {/* Footer */}
@@ -395,6 +390,84 @@ export function EditUploadModal({ upload, onClose, onSaved }: Props) {
             {submitError}
           </p>
         )}
+      </div>
+    </div>
+  );
+}
+
+function parseStoragePaths(raw: string): string[] {
+  const trimmed = raw.trim();
+  if (trimmed.startsWith("[")) {
+    try {
+      const arr = JSON.parse(trimmed);
+      if (Array.isArray(arr)) {
+        return arr.filter((p): p is string => typeof p === "string");
+      }
+    } catch {
+      // fallback
+    }
+  }
+  return [trimmed];
+}
+
+function extractMeta(path: string): { btag: string | null; fileName: string } {
+  const last = path.split("/").pop() ?? path;
+  const m = last.match(/^(.+?)_(\d{13})_(.+)$/);
+  if (m) return { btag: m[1], fileName: m[3] };
+  return { btag: null, fileName: last };
+}
+
+function DownloadList({
+  uploadId,
+  arquivoNome,
+}: {
+  uploadId: string;
+  arquivoNome: string;
+}) {
+  const paths = parseStoragePaths(arquivoNome);
+
+  if (paths.length === 0) return null;
+
+  if (paths.length === 1) {
+    return (
+      <a
+        href={`/api/uploads/${uploadId}/download`}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-snow"
+      >
+        <Download size={16} />
+        Baixar planilha original
+      </a>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <p className="text-xs uppercase tracking-wide text-muted">
+        Planilhas originais ({paths.length} BTAGs)
+      </p>
+      <div className="space-y-1">
+        {paths.map((p, idx) => {
+          const { btag, fileName } = extractMeta(p);
+          return (
+            <a
+              key={idx}
+              href={`/api/uploads/${uploadId}/download?index=${idx}`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-between gap-3 rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-xs transition-colors hover:border-white/[0.15] hover:bg-white/[0.05]"
+            >
+              <span className="flex items-center gap-2">
+                <Download size={12} className="text-muted" />
+                <span className="font-mono uppercase tracking-wide text-bingo">
+                  {btag ?? `#${idx + 1}`}
+                </span>
+              </span>
+              <span className="truncate text-muted">{fileName}</span>
+            </a>
+          );
+        })}
       </div>
     </div>
   );

@@ -7,6 +7,10 @@ import {
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// Limite de tempo de processamento. Vercel default 4.5MB pro body —
+// 5 planilhas XLSX ~500KB cada cabem com folga (~2.5MB total).
+// Não há config de body size no App Router; a Vercel impõe pela plataforma.
+export const maxDuration = 60;
 
 type FileSummary = {
   arquivo: string;

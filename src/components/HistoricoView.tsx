@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import {
-  Download,
   Pencil,
   ChevronLeft,
   ChevronRight,
   Loader2,
 } from "lucide-react";
+import { DownloadCell } from "@/components/DownloadCell";
 import { useExpertFilter } from "@/contexts/ExpertFilterContext";
 import { EditUploadModal } from "@/components/EditUploadModal";
 
@@ -285,15 +285,10 @@ export function HistoricoView() {
                 <td className="px-4 py-3">
                   <div className="flex items-center justify-end gap-1">
                     {row.arquivo_nome && (
-                      <a
-                        href={`/api/uploads/${row.id}/download`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded p-1.5 text-muted transition-colors hover:bg-white/[0.06] hover:text-snow"
-                        aria-label="Baixar planilha"
-                      >
-                        <Download size={16} />
-                      </a>
+                      <DownloadCell
+                        uploadId={row.id}
+                        arquivoNome={row.arquivo_nome}
+                      />
                     )}
                     <button
                       type="button"
