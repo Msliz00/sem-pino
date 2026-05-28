@@ -185,7 +185,7 @@ export function CampanhaModal({
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
               <label className="text-xs uppercase tracking-wide text-muted">
-                Código UX
+                BTAG
               </label>
               <input
                 type="text"

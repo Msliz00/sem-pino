@@ -182,7 +182,7 @@ export function CampanhasSection({
             <tr>
               <th className="px-4 py-3 font-medium">Nome</th>
               <th className="px-4 py-3 font-medium">Marca</th>
-              <th className="px-4 py-3 font-medium">Código UX</th>
+              <th className="px-4 py-3 font-medium">BTAG</th>
               <th className="px-4 py-3 font-medium">Affiliate ID</th>
               <th className="px-4 py-3 font-medium">Expert</th>
               <th className="px-4 py-3 font-medium text-right">Ações</th>
