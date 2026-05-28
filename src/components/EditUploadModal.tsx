@@ -13,6 +13,7 @@ import {
   type ParsedData,
 } from "@/lib/parsers/parseRegistrations";
 import type { HistoricoUpload } from "@/components/HistoricoView";
+import { parsePaths, extractStorageMeta } from "@/lib/storage-paths";
 
 type Props = {
   upload: HistoricoUpload | null;
@@ -395,28 +396,6 @@ export function EditUploadModal({ upload, onClose, onSaved }: Props) {
   );
 }
 
-function parseStoragePaths(raw: string): string[] {
-  const trimmed = raw.trim();
-  if (trimmed.startsWith("[")) {
-    try {
-      const arr = JSON.parse(trimmed);
-      if (Array.isArray(arr)) {
-        return arr.filter((p): p is string => typeof p === "string");
-      }
-    } catch {
-      // fallback
-    }
-  }
-  return [trimmed];
-}
-
-function extractMeta(path: string): { btag: string | null; fileName: string } {
-  const last = path.split("/").pop() ?? path;
-  const m = last.match(/^(.+?)_(\d{13})_(.+)$/);
-  if (m) return { btag: m[1], fileName: m[3] };
-  return { btag: null, fileName: last };
-}
-
 function DownloadList({
   uploadId,
   arquivoNome,
@@ -424,7 +403,7 @@ function DownloadList({
   uploadId: string;
   arquivoNome: string;
 }) {
-  const paths = parseStoragePaths(arquivoNome);
+  const paths = parsePaths(arquivoNome);
 
   if (paths.length === 0) return null;
 
@@ -449,7 +428,7 @@ function DownloadList({
       </p>
       <div className="space-y-1">
         {paths.map((p, idx) => {
-          const { btag, fileName } = extractMeta(p);
+          const { btag, fileName } = extractStorageMeta(p);
           return (
             <a
               key={idx}

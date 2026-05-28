@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { parsePaths, extractStorageMeta } from "@/lib/storage-paths";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,30 +12,6 @@ type FileEntry = {
   file_name: string;
   signed_url: string | null;
 };
-
-function parsePaths(raw: string | null | undefined): string[] {
-  if (!raw) return [];
-  const trimmed = raw.trim();
-  if (trimmed.startsWith("[")) {
-    try {
-      const arr = JSON.parse(trimmed);
-      if (Array.isArray(arr)) {
-        return arr.filter((p): p is string => typeof p === "string");
-      }
-    } catch {
-      // fallback
-    }
-  }
-  return [trimmed];
-}
-
-// Path no storage: {slug}/{date}/{btag}_{ts(13d)}_{filename}
-function extract(path: string): { btag: string | null; fileName: string } {
-  const last = path.split("/").pop() ?? path;
-  const m = last.match(/^(.+?)_(\d{13})_(.+)$/);
-  if (m) return { btag: m[1], fileName: m[3] };
-  return { btag: null, fileName: last };
-}
 
 export async function GET(
   _request: Request,
@@ -62,7 +39,7 @@ export async function GET(
 
   const files: FileEntry[] = await Promise.all(
     paths.map(async (path, idx) => {
-      const { btag, fileName } = extract(path);
+      const { btag, fileName } = extractStorageMeta(path);
       const { data: signed } = await supabase.storage
         .from("uploads-planilhas")
         .createSignedUrl(path, 60);

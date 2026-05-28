@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Download, ChevronDown } from "lucide-react";
+import { parsePaths, extractStorageMeta } from "@/lib/storage-paths";
 
 type Props = {
   uploadId: string;
@@ -14,28 +15,6 @@ type ParsedPath = {
   fileName: string;
 };
 
-function parsePaths(raw: string): string[] {
-  const trimmed = raw.trim();
-  if (trimmed.startsWith("[")) {
-    try {
-      const arr = JSON.parse(trimmed);
-      if (Array.isArray(arr)) {
-        return arr.filter((p): p is string => typeof p === "string");
-      }
-    } catch {
-      // fallback
-    }
-  }
-  return [trimmed];
-}
-
-function extract(path: string): { btag: string | null; fileName: string } {
-  const last = path.split("/").pop() ?? path;
-  const m = last.match(/^(.+?)_(\d{13})_(.+)$/);
-  if (m) return { btag: m[1], fileName: m[3] };
-  return { btag: null, fileName: last };
-}
-
 export function DownloadCell({ uploadId, arquivoNome }: Props) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,7 +22,7 @@ export function DownloadCell({ uploadId, arquivoNome }: Props) {
   const items = useMemo<ParsedPath[]>(() => {
     const paths = parsePaths(arquivoNome);
     return paths.map((p, idx) => {
-      const { btag, fileName } = extract(p);
+      const { btag, fileName } = extractStorageMeta(p);
       return { index: idx, btag, fileName };
     });
   }, [arquivoNome]);

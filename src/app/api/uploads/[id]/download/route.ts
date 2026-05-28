@@ -1,24 +1,9 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { parsePaths } from "@/lib/storage-paths";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-function parsePaths(raw: string | null | undefined): string[] {
-  if (!raw) return [];
-  const trimmed = raw.trim();
-  if (trimmed.startsWith("[")) {
-    try {
-      const arr = JSON.parse(trimmed);
-      if (Array.isArray(arr)) {
-        return arr.filter((p): p is string => typeof p === "string");
-      }
-    } catch {
-      // fallback: trata como path único
-    }
-  }
-  return [trimmed];
-}
 
 export async function GET(
   request: Request,
