@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Painel Experts · BingoBet · Preview V0.7</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #08070a;
+  --ink-2: #0d0c10;
+  --orange-500: #ff6b00;
+  --orange-400: #ff8a3c;
+  --fog: rgba(255,255,255,0.55);
+  --snow: #f5f5f7;
+  --green: #4ade80;
+  --red: #ef4444;
+  --yellow: #facc15;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+html, body { background: var(--ink); color: var(--snow); font-family: "Bricolage Grotesque", system-ui, sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+.bg-live { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bg-live::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%); animation: breathe 6s ease-in-out infinite; }
+.orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: drift 20s ease-in-out infinite; }
+.orb-1 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(255,107,0,0.35) 0%, transparent 70%); top: -10%; left: -10%; }
+.orb-2 { width: 380px; height: 380px; background: radial-gradient(circle, rgba(255,138,60,0.25) 0%, transparent 70%); bottom: -10%; right: -5%; animation-delay: -7s; }
+.orb-3 { width: 280px; height: 280px; background: radial-gradient(circle, rgba(255,107,0,0.2) 0%, transparent 70%); top: 40%; right: 30%; animation-delay: -13s; }
+
+@keyframes drift { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, -30px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.95); } }
+@keyframes breathe { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
+@keyframes shine { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-border { 0%, 100% { border-color: rgba(255,107,0,0.3); } 50% { border-color: rgba(255,107,0,0.6); } }
+@keyframes pulse-red { 0%, 100% { border-color: rgba(239,68,68,0.4); box-shadow: 0 0 30px rgba(239,68,68,0.15); } 50% { border-color: rgba(239,68,68,0.7); box-shadow: 0 0 50px rgba(239,68,68,0.3); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes heightUp { from { height: 0%; } to { height: var(--h); } }
+@keyframes glowPulse { 0%, 100% { box-shadow: 0 0 30px rgba(255,107,0,0.3); } 50% { box-shadow: 0 0 50px rgba(255,107,0,0.5); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+.glass { background: rgba(20,18,24,0.55); backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%); border: 1px solid rgba(255,255,255,0.08); }
+.glass-strong { background: rgba(13,12,16,0.75); backdrop-filter: blur(24px) saturate(140%); -webkit-backdrop-filter: blur(24px) saturate(140%); border: 1px solid rgba(255,255,255,0.1); }
+
+.btn-orange { background: linear-gradient(135deg, #ff8a3c 0%, #ff6b00 100%); color: var(--ink); font-weight: 600; border-radius: 12px; padding: 12px 24px; border: none; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 0 40px rgba(255,107,0,0.25); transition: all 0.2s ease; font-family: inherit; font-size: 15px; }
+.btn-orange:hover { box-shadow: 0 0 60px rgba(255,107,0,0.45); transform: translateY(-1px); }
+.btn-orange::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%); background-size: 200% 100%; animation: shine 8s linear infinite; pointer-events: none; }
+.btn-ghost { background: rgba(255,255,255,0.05); color: var(--snow); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 24px; cursor: pointer; transition: all 0.2s ease; font-family: inherit; font-size: 14px; }
+.btn-ghost:hover { border-color: rgba(255,107,0,0.5); background: rgba(255,107,0,0.08); }
+
+.input { background: rgba(20,18,24,0.6); border: 1px solid rgba(255,255,255,0.1); color: var(--snow); border-radius: 10px; padding: 12px 16px; width: 100%; font-family: inherit; font-size: 15px; transition: border 0.2s, box-shadow 0.2s; }
+.input:focus { outline: none; border-color: rgba(255,107,0,0.5); box-shadow: 0 0 0 3px rgba(255,107,0,0.15); }
+
+.mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+.serif-accent { font-family: "Instrument Serif", Georgia, serif; font-style: italic; color: var(--orange-400); }
+
+.brand { font-weight: 700; display: inline-flex; align-items: center; gap: 2px; font-family: "Bricolage Grotesque", sans-serif; }
+.brand .bingo { color: var(--snow); }
+.brand .bet { background: linear-gradient(135deg, #ff8a3c 0%, #ff6b00 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+.screen { display: none; min-height: 100vh; position: relative; }
+.screen.active { display: flex; }
+
+#login-screen { align-items: center; justify-content: center; padding: 24px; }
+.login-card { width: 100%; max-width: 440px; border-radius: 24px; padding: 40px; box-shadow: 0 0 40px rgba(255,107,0,0.25); position: relative; z-index: 10; }
+
+.app { display: flex; width: 100%; }
+.sidebar { width: 256px; min-height: 100vh; padding: 24px; position: relative; z-index: 10; display: flex; flex-direction: column; }
+.main { flex: 1; padding: 40px; position: relative; z-index: 10; overflow-x: hidden; }
+
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; color: var(--fog); text-decoration: none; margin-bottom: 4px; cursor: pointer; transition: all 0.2s ease; font-weight: 500; }
+.nav-item:hover { color: var(--snow); background: rgba(255,255,255,0.05); }
+.nav-item.active { background: rgba(255,107,0,0.15); color: var(--orange-400); border: 1px solid rgba(255,107,0,0.3); }
+
+.user-card { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px; margin-top: 16px; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #ff8a3c 0%, #ff6b00 100%); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--ink); box-shadow: 0 0 20px rgba(255,107,0,0.4); }
+
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; gap: 24px; flex-wrap: wrap; }
+.page-title { font-size: 48px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
+.page-sub { font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--fog); margin-top: 12px; }
+
+/* Experts pills (compartilhado Dashboard + Upload + Criativos) */
+.experts-pills { display: flex; gap: 8px; align-items: center; padding: 6px; background: rgba(20,18,24,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; backdrop-filter: blur(20px); }
+.expert-pill { padding: 10px 18px; border-radius: 10px; background: transparent; border: none; cursor: pointer; color: var(--fog); font-family: "Bricolage Grotesque"; font-size: 14px; font-weight: 500; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.expert-pill:hover { color: var(--snow); }
+.expert-pill.active { background: linear-gradient(135deg, #ff8a3c 0%, #ff6b00 100%); color: var(--ink); font-weight: 700; box-shadow: 0 0 30px rgba(255,107,0,0.4); }
+.expert-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--fog); transition: all 0.3s ease; }
+.expert-pill:hover .dot { background: var(--snow); }
+.expert-pill.active .dot { background: var(--ink); box-shadow: 0 0 8px rgba(8,7,10,0.4); }
+
+.filters-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+
+.filter-pill-group { display: flex; align-items: center; gap: 6px; padding: 6px; background: rgba(20,18,24,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; backdrop-filter: blur(20px); }
+.filter-pill { padding: 9px 16px; border-radius: 10px; background: transparent; border: none; cursor: pointer; color: var(--fog); font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; font-weight: 500; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.filter-pill:hover { color: var(--snow); background: rgba(255,255,255,0.04); }
+.filter-pill.active { background: linear-gradient(135deg, #ff8a3c 0%, #ff6b00 100%); color: var(--ink); font-weight: 700; box-shadow: 0 4px 20px rgba(255,107,0,0.35), 0 0 0 1px rgba(255,138,60,0.5) inset; position: relative; }
+.filter-pill.active::before { content: ''; position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%); background-size: 200% 100%; animation: shimmer 4s linear infinite; pointer-events: none; }
+
+.filter-icon-btn { padding: 11px 16px; border-radius: 12px; background: rgba(20,18,24,0.6); border: 1px solid rgba(255,255,255,0.08); color: var(--fog); cursor: pointer; font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; }
+.filter-icon-btn:hover { border-color: rgba(255,107,0,0.5); color: var(--orange-400); background: rgba(255,107,0,0.06); }
+.filter-icon-btn.active { border-color: rgba(255,107,0,0.5); color: var(--orange-400); background: rgba(255,107,0,0.1); box-shadow: 0 0 20px rgba(255,107,0,0.15); }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.kpi { border-radius: 16px; padding: 24px; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); cursor: pointer; position: relative; transform-style: preserve-3d; }
+.kpi:hover { transform: translateY(-6px) scale(1.03); border-color: rgba(255,107,0,0.5); box-shadow: 0 20px 60px rgba(255,107,0,0.25), 0 0 80px rgba(255,107,0,0.15); }
+.kpi::before { content: ''; position: absolute; inset: 0; border-radius: 16px; background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,107,0,0.18), transparent 60%); opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+.kpi:hover::before { opacity: 1; }
+.kpi-grid.has-focus .kpi:not(.kpi-focused) { opacity: 0.35; transform: scale(0.97); filter: blur(1px); }
+.kpi-focused { transform: translateY(-6px) scale(1.05) !important; border-color: rgba(255,107,0,0.6) !important; box-shadow: 0 20px 60px rgba(255,107,0,0.3), 0 0 80px rgba(255,107,0,0.2) !important; z-index: 5; }
+.kpi-label { font-family: "JetBrains Mono", monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--fog); margin-bottom: 8px; position: relative; z-index: 2; }
+.kpi-value { font-size: 30px; font-weight: 600; font-family: "Bricolage Grotesque"; position: relative; z-index: 2; }
+.kpi-unit { font-size: 18px; color: var(--fog); margin-left: 4px; }
+.kpi-hint { font-family: "JetBrains Mono", monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--fog); margin-top: 8px; position: relative; z-index: 2; }
+.kpi.hidden { display: none; }
+
+.label { font-family: "JetBrains Mono", monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--fog); display: block; margin-bottom: 8px; }
+
+.logout-btn { background: none; border: none; cursor: pointer; width: 100%; text-align: left; padding: 8px 0; font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--fog); transition: color 0.2s; }
+.logout-btn:hover { color: var(--orange-400); }
+
+/* NOTA: Esta é uma versão reduzida — mantida apenas os componentes
+   visuais referenciados pela Fase C.1.1: tokens, .glass/.glass-strong,
+   keyframes, brand+sidebar, .page-header/.page-title/.page-sub/.serif-accent,
+   .experts-pills, .filter-pill-group, .kpi-label/.kpi-value/.kpi-hint.
+   Demais blocos (hourly view, upload-zone, criativos cards detalhados,
+   expert cards, forms) estão preservados na conversa original que
+   gerou este arquivo. As fases C.2/C.3 vão referenciar isso direto. */
+</style>
+</head>
+<body>
+
+<div class="bg-live"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+<!-- LOGIN -->
+<div id="login-screen" class="screen active">
+  <div class="login-card glass-strong">
+    <div style="text-align:center; margin-bottom:32px;">
+      <div class="brand" style="font-size:36px; margin-bottom:8px;"><span class="bingo">Bingo</span><span class="bet">Bet</span></div>
+      <div class="mono" style="font-size:11px; text-transform:uppercase; letter-spacing:0.15em; color: var(--fog);">Painel Experts</div>
+      <p class="serif-accent" style="font-size:20px; margin-top:16px;">acesso restrito</p>
+    </div>
+    <div style="margin-bottom:16px;"><label class="label">Email</label><input class="input" id="email" type="email" value="tuty@gmail.com"></div>
+    <div style="margin-bottom:24px;"><label class="label">Senha</label><input class="input" id="password" type="password" value="demosenha"></div>
+    <button class="btn-orange" style="width:100%;">Entrar →</button>
+    <p class="mono" style="text-align:center; margin-top:32px; font-size:10px; text-transform:uppercase; letter-spacing:0.15em; color: var(--fog);">BingoBet · UX Operations</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-screen" class="screen">
+  <div class="app">
+    <aside class="sidebar glass-strong">
+      <div style="margin-bottom:40px;">
+        <div class="brand" style="font-size:24px;"><span class="bingo">Bingo</span><span class="bet">Bet</span></div>
+        <div class="mono" style="font-size:10px; text-transform:uppercase; letter-spacing:0.15em; color: var(--fog); margin-top:8px;">Painel Experts</div>
+      </div>
+      <nav style="flex:1; display:flex; flex-direction:column;">
+        <a class="nav-item active"><span style="font-size:18px;">▦</span><span>Dashboard</span></a>
+        <a class="nav-item"><span style="font-size:18px;">❍</span><span>Histórico</span></a>
+        <a class="nav-item"><span style="font-size:18px;">↑</span><span>Upload</span></a>
+        <a class="nav-item"><span style="font-size:18px;">◈</span><span>Criativos</span></a>
+        <a class="nav-item"><span style="font-size:18px;">◇</span><span>Gestão</span></a>
+      </nav>
+      <div class="user-card">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+          <div class="avatar">T</div>
+          <div style="flex:1; min-width:0;">
+            <div style="font-weight:600;">Tuty</div>
+            <div class="mono" style="font-size:10px; color: var(--fog);">tuty@gmail.com</div>
+          </div>
+        </div>
+        <button class="logout-btn">→ Sair</button>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <!-- DASHBOARD -->
+      <div class="page" id="page-dashboard" style="display:block;">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Dashboard<span class="serif-accent" style="font-size:36px; margin-left:12px;">Experts</span></h1>
+            <p class="page-sub">visão consolidada · todos os experts</p>
+          </div>
+          <div class="experts-pills">
+            <button class="expert-pill active"><span class="dot"></span><span>Todos</span></button>
+            <button class="expert-pill"><span class="dot"></span><span>Professor</span></button>
+            <button class="expert-pill"><span class="dot"></span><span>Iris Aviator</span></button>
+          </div>
+        </div>
+
+        <div class="filters-bar">
+          <div class="filter-pill-group">
+            <button class="filter-pill">Hoje</button>
+            <button class="filter-pill active">7 dias</button>
+            <button class="filter-pill">30 dias</button>
+            <button class="filter-pill">⚙ Personalizado</button>
+          </div>
+          <button class="filter-icon-btn"><span>⚙</span><span>Personalizar Métricas</span></button>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi glass"><div class="kpi-label">Investimento</div><div class="kpi-value">R$ 12.150</div><div class="kpi-hint">últimos 7 dias</div></div>
+          <div class="kpi glass"><div class="kpi-label">Cliques</div><div class="kpi-value">3.840</div><div class="kpi-hint">últimos 7 dias</div></div>
+          <div class="kpi glass"><div class="kpi-label">Entradas no Grupo</div><div class="kpi-value">412</div><div class="kpi-hint">últimos 7 dias</div></div>
+          <div class="kpi glass"><div class="kpi-label">Registros</div><div class="kpi-value">284</div><div class="kpi-hint">últimos 7 dias</div></div>
+          <div class="kpi glass"><div class="kpi-label">FTD</div><div class="kpi-value">152</div><div class="kpi-hint">últimos 7 dias</div></div>
+          <div class="kpi glass"><div class="kpi-label">CPA</div><div class="kpi-value">R$ 79,93</div><div class="kpi-hint">custo por FTD</div></div>
+          <div class="kpi glass"><div class="kpi-label">CPC</div><div class="kpi-value">R$ 3,16</div><div class="kpi-hint">custo por clique</div></div>
+          <div class="kpi glass"><div class="kpi-label">% Entrada → FTD</div><div class="kpi-value">36,9<span class="kpi-unit">%</span></div><div class="kpi-hint">meta: 8%</div></div>
+        </div>
+      </div>
+
+      <!-- HISTÓRICO -->
+      <div class="page" id="page-historico" style="display:none;">
+        <h1 class="page-title">Histórico<span class="serif-accent" style="font-size:36px; margin-left:12px;">diário</span></h1>
+        <p class="page-sub">Série temporal de métricas</p>
+      </div>
+
+      <!-- UPLOAD -->
+      <div class="page" id="page-upload" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Upload<span class="serif-accent" style="font-size:36px; margin-left:12px;">dados</span></h1>
+            <p class="page-sub">3 fontes · BINGO · REALS · MACRO (consolidado)</p>
+          </div>
+          <div class="experts-pills">
+            <button class="expert-pill"><span class="dot"></span><span>Selecionar</span></button>
+            <button class="expert-pill"><span class="dot"></span><span>Professor</span></button>
+            <button class="expert-pill"><span class="dot"></span><span>Iris Aviator</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CRIATIVOS -->
+      <div class="page" id="page-criativos" style="display:none;">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Criativos<span class="serif-accent" style="font-size:36px; margin-left:12px;">biblioteca</span></h1>
+            <p class="page-sub">Performance dos criativos publicados</p>
+          </div>
+          <div class="experts-pills">
+            <button class="expert-pill active"><span class="dot"></span><span>Todos</span></button>
+            <button class="expert-pill"><span class="dot"></span><span>Professor</span></button>
+            <button class="expert-pill"><span class="dot"></span><span>Iris Aviator</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GESTÃO -->
+      <div class="page" id="page-gestao" style="display:none;">
+        <h1 class="page-title">Gestão<span class="serif-accent" style="font-size:36px; margin-left:12px;">experts</span></h1>
+        <p class="page-sub">CRUD de experts e campanhas · marcas: BINGO / REALS</p>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>
