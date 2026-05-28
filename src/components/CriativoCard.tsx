@@ -163,7 +163,7 @@ export function CriativoCard({ criativo, onEdit, onDelete, onUpdated }: Props) {
     : undefined;
 
   return (
-    <div className="space-y-4 rounded-2xl border border-white/[0.08] bg-surface p-5 transition-all hover:border-white/[0.15] hover:shadow-lg hover:shadow-black/30">
+    <div className="glass space-y-4 rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/[0.18] hover:shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)]">
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-1 items-center gap-2 overflow-hidden">
           <h3 className="truncate text-base font-semibold text-snow">

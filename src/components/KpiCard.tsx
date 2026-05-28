@@ -1,3 +1,6 @@
+"use client";
+
+import { useRef } from "react";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import type { Variacao } from "@/lib/metricas";
 
@@ -39,32 +42,49 @@ function formatPct(pct: number): string {
 
 export function KpiCard({ label, value, formato, variacao }: Props) {
   const { pct, sinal } = variacao;
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    el.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  };
 
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5 transition-colors hover:border-white/[0.15]">
-      <div className="text-xs uppercase tracking-wide text-muted">{label}</div>
-      <div className="mt-3 font-mono text-3xl font-semibold leading-tight text-snow">
-        {formatValue(value, formato)}
-      </div>
-      <div className="mt-2 flex items-center gap-1 text-xs">
-        {sinal === "up" && pct !== null && (
-          <>
-            <TrendingUp size={12} className="text-success" />
-            <span className="text-success">{formatPct(pct)}</span>
-          </>
-        )}
-        {sinal === "down" && pct !== null && (
-          <>
-            <TrendingDown size={12} className="text-danger" />
-            <span className="text-danger">{formatPct(pct)}</span>
-          </>
-        )}
-        {(sinal === "neutral" || pct === null) && (
-          <>
-            <Minus size={12} className="text-muted" />
-            <span className="text-muted">—</span>
-          </>
-        )}
+    <div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      className="glass glass-spotlight rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.03] hover:border-white/[0.18] hover:shadow-[0_0_60px_-10px_rgba(255,107,0,0.45)]"
+    >
+      <div className="relative z-[1]">
+        <div className="text-xs uppercase tracking-wide text-muted">
+          {label}
+        </div>
+        <div className="mt-3 font-mono text-3xl font-semibold leading-tight text-snow">
+          {formatValue(value, formato)}
+        </div>
+        <div className="mt-2 flex items-center gap-1 text-xs">
+          {sinal === "up" && pct !== null && (
+            <>
+              <TrendingUp size={12} className="text-success" />
+              <span className="text-success">{formatPct(pct)}</span>
+            </>
+          )}
+          {sinal === "down" && pct !== null && (
+            <>
+              <TrendingDown size={12} className="text-danger" />
+              <span className="text-danger">{formatPct(pct)}</span>
+            </>
+          )}
+          {(sinal === "neutral" || pct === null) && (
+            <>
+              <Minus size={12} className="text-muted" />
+              <span className="text-muted">—</span>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
