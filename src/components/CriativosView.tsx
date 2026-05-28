@@ -145,7 +145,7 @@ export function CriativosView() {
   return (
     <div className="space-y-6">
       {/* Filtros */}
-      <div className="sticky top-[60px] z-[5] -mx-10 border-b border-white/[0.08] bg-[rgba(8,7,10,0.7)] px-10 py-4 backdrop-blur-xl">
+      <div className="glass-strong sticky top-[60px] z-[5] -mx-10 px-10 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
         <div className="flex flex-wrap items-end gap-3">
           <div className="space-y-1">
             <label className="text-xs uppercase tracking-wide text-muted">

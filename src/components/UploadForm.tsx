@@ -204,7 +204,7 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
             onDragLeave={() => setDragOver(false)}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
-            className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed px-6 py-12 text-center transition-colors ${
+            className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed px-6 py-12 text-center transition-colors animate-pulse-border ${
               dragOver
                 ? "border-bingo bg-bingo/[0.08]"
                 : "border-white/[0.12] bg-white/[0.02] hover:bg-white/[0.04]"
@@ -227,7 +227,7 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
 
         {showPreview && file && parsedData && (
           <div
-            className="relative rounded-xl border border-white/[0.08] bg-white/[0.03] p-4"
+            className="glass relative rounded-2xl p-4 animate-fade-in-up"
             style={{ borderLeft: "3px solid #ff6b00" }}
           >
             <button
@@ -332,7 +332,7 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
         type="button"
         onClick={() => submit(false)}
         disabled={!canSubmit || submitting}
-        className={`flex w-full items-center justify-center gap-2 rounded-lg bg-bingo-gradient px-3 py-3 text-sm font-medium text-ink transition-all hover:shadow-[0_0_24px_-4px_rgba(255,107,0,0.6)] disabled:shadow-none ${
+        className={`btn-shine flex w-full items-center justify-center gap-2 rounded-lg bg-bingo-gradient px-3 py-3 text-sm font-medium text-ink transition-all hover:shadow-[0_0_24px_-4px_rgba(255,107,0,0.6)] disabled:shadow-none ${
           submitting
             ? "cursor-not-allowed opacity-60"
             : "disabled:cursor-not-allowed disabled:opacity-40"

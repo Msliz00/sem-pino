@@ -153,7 +153,7 @@ export function HistoricoView() {
   return (
     <div className="space-y-4">
       {/* Filtros */}
-      <div className="sticky top-[60px] z-[5] -mx-10 border-b border-white/[0.08] bg-[rgba(8,7,10,0.7)] px-10 py-4 backdrop-blur-xl">
+      <div className="glass-strong sticky top-[60px] z-[5] -mx-10 px-10 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
         <div className="flex flex-wrap items-end gap-3">
           <div className="space-y-1">
             <label className="text-xs uppercase tracking-wide text-muted">
@@ -233,7 +233,7 @@ export function HistoricoView() {
       </div>
 
       {/* Tabela */}
-      <div className="overflow-hidden rounded-xl border border-white/[0.08] bg-surface">
+      <div className="glass overflow-hidden rounded-2xl">
         <table className="w-full text-sm">
           <thead className="border-b border-white/[0.08] text-left text-xs uppercase tracking-wide text-muted">
             <tr>
@@ -277,7 +277,7 @@ export function HistoricoView() {
             {rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b border-white/[0.04] transition-colors hover:bg-white/[0.02]"
+                className="border-b border-white/[0.04] transition-colors hover:bg-white/[0.04]"
               >
                 <td className="px-4 py-3 font-mono text-snow">
                   {formatDateBR(row.data_referencia)}

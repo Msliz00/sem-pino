@@ -255,7 +255,7 @@ export function ExpertsSection({ onChange }: { onChange: () => void }) {
           <button
             type="button"
             onClick={openNew}
-            className="flex items-center gap-2 rounded-lg bg-bingo-gradient px-3 py-2 text-sm font-medium text-ink transition-all hover:shadow-[0_0_24px_-4px_rgba(255,107,0,0.6)]"
+            className="btn-shine flex items-center gap-2 rounded-lg bg-bingo-gradient px-3 py-2 text-sm font-medium text-ink transition-all hover:shadow-[0_0_24px_-4px_rgba(255,107,0,0.6)]"
           >
             <Plus size={14} />
             Novo Expert
@@ -272,7 +272,7 @@ export function ExpertsSection({ onChange }: { onChange: () => void }) {
         </p>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-white/[0.08] bg-surface">
+      <div className="glass overflow-hidden rounded-2xl">
         <table className="w-full text-sm">
           <thead className="border-b border-white/[0.08] text-left text-xs uppercase tracking-wide text-muted">
             <tr>

@@ -3,6 +3,19 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --ink: #08070a;
+    --ink-2: #0f0e13;
+    --orange-500: #ff6b00;
+    --orange-400: #ff8a3c;
+    --fog: #a1a1aa;
+    --snow: #f5f5f7;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --purple: #a78bfa;
+  }
+
   *,
   *::before,
   *::after {
@@ -20,71 +33,278 @@
   }
 
   body {
-    background-color: #08070a;
-    color: #f5f5f7;
+    background-color: var(--ink);
+    color: var(--snow);
     font-family: var(--font-bricolage), system-ui, sans-serif;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
-    background-image:
-      linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0.03) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.03) 1px,
-        transparent 1px
-      );
-    background-size: 48px 48px;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(20, 18, 24, 0.55);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  body::before,
-  body::after {
+  .glass-strong {
+    background: rgba(13, 12, 16, 0.75);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .brand-gradient {
+    background: linear-gradient(135deg, var(--orange-400) 0%, var(--orange-500) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .btn-shine {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(255, 107, 0, 0.25);
+  }
+
+  .btn-shine::after {
     content: "";
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(90px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.25) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%) skewX(-15deg);
+    animation: shine 8s ease-in-out infinite;
     pointer-events: none;
-    z-index: -1;
-  }
-
-  body::before {
-    width: 600px;
-    height: 600px;
-    top: -180px;
-    left: -180px;
-    background: #ff6b00;
-    opacity: 0.08;
-    animation: float-orb-1 18s ease-in-out infinite alternate;
-  }
-
-  body::after {
-    width: 500px;
-    height: 500px;
-    bottom: -180px;
-    right: -180px;
-    background: #a78bfa;
-    opacity: 0.06;
-    animation: float-orb-2 20s ease-in-out infinite alternate;
   }
 }
 
-@keyframes float-orb-1 {
-  from {
+/* Background animado */
+.bg-live {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-live__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: breathe 6s ease-in-out infinite;
+}
+
+.bg-live__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  animation: drift 20s ease-in-out infinite;
+}
+
+.bg-live__orb--1 {
+  top: -180px;
+  left: -180px;
+  width: 600px;
+  height: 600px;
+  background: var(--orange-500);
+  opacity: 0.1;
+}
+
+.bg-live__orb--2 {
+  bottom: -180px;
+  right: -180px;
+  width: 500px;
+  height: 500px;
+  background: var(--purple);
+  opacity: 0.08;
+  animation-delay: -7s;
+}
+
+.bg-live__orb--3 {
+  top: 35%;
+  left: 45%;
+  width: 420px;
+  height: 420px;
+  background: var(--orange-400);
+  opacity: 0.06;
+  animation-delay: -14s;
+}
+
+/* Spotlight em cards (KPI etc) */
+.glass-spotlight {
+  position: relative;
+}
+
+.glass-spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    480px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 107, 0, 0.18),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.glass-spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Keyframes */
+@keyframes drift {
+  0%,
+  100% {
     transform: translate(0, 0);
   }
-  to {
-    transform: translate(120px, 80px);
+  33% {
+    transform: translate(60px, -40px);
+  }
+  66% {
+    transform: translate(-40px, 60px);
   }
 }
 
-@keyframes float-orb-2 {
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  60%,
+  100% {
+    transform: translateX(220%) skewX(-15deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fadeInUp {
   from {
-    transform: translate(0, 0);
+    opacity: 0;
+    transform: translateY(20px);
   }
   to {
-    transform: translate(-100px, -60px);
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-border {
+  0%,
+  100% {
+    border-color: rgba(255, 107, 0, 0.35);
+    box-shadow: 0 0 0 0 rgba(255, 107, 0, 0);
+  }
+  50% {
+    border-color: rgba(255, 107, 0, 0.75);
+    box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.08);
+  }
+}
+
+@keyframes pulse-red {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes heightUp {
+  from {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  to {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 30px rgba(255, 107, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 60px rgba(255, 107, 0, 0.55);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-5px);
+  }
+  40%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+.animate-pulse-border {
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out;
 }

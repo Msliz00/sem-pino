@@ -36,8 +36,8 @@ export function Header({ userEmail }: { userEmail: string }) {
 
   return (
     <header
-      className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.08] bg-[rgba(8,7,10,0.6)] px-8 backdrop-blur-xl"
-      style={{ height: 60 }}
+      className="glass-strong sticky top-0 z-10 flex items-center justify-between px-8"
+      style={{ height: 60, borderBottom: "1px solid rgba(255,255,255,0.08)" }}
     >
       <h1 className="text-[18px] font-semibold tracking-tight text-snow">
         {title}
