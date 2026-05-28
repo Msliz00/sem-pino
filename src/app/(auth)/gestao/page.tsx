@@ -1,11 +1,14 @@
 import { GestaoView } from "@/components/GestaoView";
+import { PageHeader } from "@/components/PageHeader";
 
 export default function GestaoPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-[32px] font-semibold leading-tight tracking-tight">
-        Gestão
-      </h1>
+      <PageHeader
+        title="Gestão"
+        accent="experts"
+        subtitle="CRUD de experts e campanhas · marcas: BINGO / REALS"
+      />
       <GestaoView />
     </div>
   );

@@ -5,10 +5,10 @@
 @layer base {
   :root {
     --ink: #08070a;
-    --ink-2: #0f0e13;
+    --ink-2: #0d0c10;
     --orange-500: #ff6b00;
     --orange-400: #ff8a3c;
-    --fog: #a1a1aa;
+    --fog: rgba(255, 255, 255, 0.55);
     --snow: #f5f5f7;
     --green: #22c55e;
     --red: #ef4444;
@@ -307,4 +307,132 @@
 
 .animate-fade-in-up {
   animation: fadeInUp 0.4s ease-out;
+}
+
+/* ============ Tipografia de página ============ */
+.page-title {
+  font-size: 48px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--snow);
+  margin: 0;
+}
+
+.page-sub {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--fog);
+  margin-top: 12px;
+}
+
+.serif-accent {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-style: italic;
+  color: var(--orange-400);
+  font-weight: 400;
+}
+
+/* ============ Experts pills ============ */
+.experts-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  background: rgba(20, 18, 24, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.expert-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--fog);
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.expert-pill:hover {
+  color: var(--snow);
+}
+
+.expert-pill.active {
+  background: linear-gradient(135deg, #ff8a3c 0%, #ff6b00 100%);
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
+}
+
+.expert-pill .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fog);
+  transition: all 0.3s ease;
+}
+
+.expert-pill:hover .dot {
+  background: var(--snow);
+}
+
+.expert-pill.active .dot {
+  background: var(--ink);
+  box-shadow: 0 0 8px rgba(8, 7, 10, 0.4);
+}
+
+/* ============ KPI tipografia ============ */
+.kpi-label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--fog);
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-size: 30px;
+  font-weight: 600;
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+  line-height: 1.1;
+  color: var(--snow);
+}
+
+.kpi-unit {
+  font-size: 18px;
+  color: var(--fog);
+  margin-left: 4px;
+}
+
+.kpi-hint {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--fog);
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kpi-hint--up {
+  color: var(--green);
+}
+
+.kpi-hint--down {
+  color: var(--red);
 }

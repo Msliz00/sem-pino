@@ -45,9 +45,12 @@ export function ExpertFilterProvider({
           slug: string;
           nome: string;
           ordem: number;
+          campanhas_count?: number;
         }[];
-        list.sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
-        setExperts(list.map((e) => ({ slug: e.slug, nome: e.nome })));
+        const filtered = list
+          .filter((e) => (e.campanhas_count ?? 0) > 0)
+          .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+        setExperts(filtered.map((e) => ({ slug: e.slug, nome: e.nome })));
       }
     } catch {
       // silencioso — pills ficam vazias mas app continua
