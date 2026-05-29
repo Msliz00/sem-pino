@@ -9,7 +9,10 @@ export interface ParsedData {
   total_wagering: number;
   distribuicao_origens: Record<string, { registros: number; ftd: number }>;
   data_referencia: string;
+  /** BTAG dominante (mantido por backwards-compat). */
   affiliate_id_detectado: string | null;
+  /** Todos os BTAGs distintos da coluna AffiliateId, ordenados por contagem desc. */
+  btags_distintos: { btag: string; count: number }[];
 }
 
 type RawRow = Record<string, unknown>;
@@ -169,14 +172,11 @@ export function parseRegistrations(
     );
   }
 
-  let affiliate_id_detectado: string | null = null;
-  let maxCount = 0;
-  for (const [aff, count] of affiliateCount.entries()) {
-    if (count > maxCount) {
-      maxCount = count;
-      affiliate_id_detectado = aff;
-    }
-  }
+  const btags_distintos = [...affiliateCount.entries()]
+    .map(([btag, count]) => ({ btag, count }))
+    .sort((a, b) => b.count - a.count);
+
+  const affiliate_id_detectado = btags_distintos[0]?.btag ?? null;
 
   return {
     total_registros,
@@ -188,5 +188,6 @@ export function parseRegistrations(
     distribuicao_origens,
     data_referencia: formatYMD(minDate),
     affiliate_id_detectado,
+    btags_distintos,
   };
 }

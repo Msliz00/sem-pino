@@ -23,7 +23,6 @@ function TabsInner({ experts }: { experts: Expert[] }) {
         : "upload";
   const [tab, setTab] = useState<Tab>(initial);
 
-  const uploadExperts = experts.map(({ slug, nome }) => ({ slug, nome }));
   const criativoExperts: CriativoExpert[] = experts;
 
   const renderTab = (id: Tab, label: string) => (
@@ -49,7 +48,7 @@ function TabsInner({ experts }: { experts: Expert[] }) {
         {renderTab("drive", "Importar do Drive")}
       </div>
 
-      {tab === "upload" && <UploadForm experts={uploadExperts} />}
+      {tab === "upload" && <UploadForm experts={experts} />}
       {tab === "criativos" && <CriativoForm experts={criativoExperts} />}
       {tab === "drive" && <DriveImportForm experts={criativoExperts} />}
     </div>

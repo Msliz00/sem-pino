@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Upload as UploadIcon,
@@ -15,7 +15,7 @@ import {
 } from "@/lib/parsers/parseRegistrations";
 import { ConflictDialog } from "@/components/ConflictDialog";
 
-type Expert = { slug: string; nome: string };
+type Expert = { id: string; slug: string; nome: string };
 
 type FileEntry = {
   id: string;
@@ -61,6 +61,30 @@ function uid() {
   return Math.random().toString(36).slice(2, 9);
 }
 
+type EntryValidation = {
+  invalidBtags: string[];
+  isMixed: boolean;
+};
+
+function validateEntry(
+  entry: FileEntry,
+  expertBtags: Set<string>,
+): EntryValidation {
+  if (!entry.parsed) return { invalidBtags: [], isMixed: false };
+  const distintos = entry.parsed.btags_distintos;
+  if (distintos.length === 0) {
+    return { invalidBtags: ["(sem AffiliateId)"], isMixed: false };
+  }
+  // Se ainda não carregou o set, não acusa inválido (evita flash vermelho)
+  if (expertBtags.size === 0) {
+    return { invalidBtags: [], isMixed: distintos.length > 1 };
+  }
+  const invalidBtags = distintos
+    .map((b) => b.btag.trim())
+    .filter((b) => !expertBtags.has(b));
+  return { invalidBtags, isMixed: distintos.length > 1 };
+}
+
 export function UploadForm({ experts }: { experts: Expert[] }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -77,14 +101,74 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
   const [feedback, setFeedback] = useState<FeedbackBanner>(null);
   const [conflict, setConflict] = useState<ConflictState>(null);
 
+  const [expertBtags, setExpertBtags] = useState<Set<string>>(new Set());
+  const [btagsLoading, setBtagsLoading] = useState(false);
+  const [btagsError, setBtagsError] = useState<string | null>(null);
+
+  const selectedExpert = experts.find((e) => e.slug === expertSlug) ?? null;
+
+  // Fetcha BTAGs do expert sempre que muda a seleção
+  useEffect(() => {
+    if (!selectedExpert) {
+      setExpertBtags(new Set());
+      setBtagsError(null);
+      return;
+    }
+    let cancelled = false;
+    setBtagsLoading(true);
+    setBtagsError(null);
+    fetch(`/api/campanhas?expert_id=${selectedExpert.id}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (cancelled) return;
+        const set = new Set<string>();
+        const rows = (d.data ?? []) as {
+          codigo_ux: string | null;
+          affiliate_id: string | null;
+        }[];
+        rows.forEach((c) => {
+          if (c.codigo_ux) set.add(String(c.codigo_ux).trim());
+          if (c.affiliate_id) set.add(String(c.affiliate_id).trim());
+        });
+        setExpertBtags(set);
+        if (set.size === 0) {
+          setBtagsError(
+            `Expert "${selectedExpert.nome}" não tem BTAGs cadastrados. Vá em /gestao e cadastre campanhas antes de subir planilhas.`,
+          );
+        }
+      })
+      .catch(() => {
+        if (!cancelled)
+          setBtagsError("Falha ao carregar BTAGs do expert.");
+      })
+      .finally(() => {
+        if (!cancelled) setBtagsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedExpert]);
+
   const parsedEntries = entries.filter((e) => e.parsed !== null);
-  const hasErrors = entries.some((e) => e.error !== null);
+  const hasParseErrors = entries.some((e) => e.error !== null);
 
   // Conflito de datas (client-side)
   const dataSet = new Set(
     parsedEntries.map((e) => e.parsed!.data_referencia),
   );
   const dateConflict = dataSet.size > 1;
+
+  // Validação de BTAG por arquivo (eager — só quando o set já foi carregado)
+  const entryValidations = new Map<string, EntryValidation>();
+  for (const entry of entries) {
+    entryValidations.set(entry.id, validateEntry(entry, expertBtags));
+  }
+  const anyBtagInvalid =
+    expertBtags.size > 0 &&
+    entries.some((e) => {
+      const v = entryValidations.get(e.id);
+      return v ? v.invalidBtags.length > 0 : false;
+    });
 
   // Totais consolidados (preview)
   const totals = parsedEntries.reduce(
@@ -101,7 +185,9 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
     !!expertSlug &&
     entries.length > 0 &&
     parsedEntries.length === entries.length &&
-    !dateConflict;
+    !dateConflict &&
+    !anyBtagInvalid &&
+    !hasParseErrors;
 
   const dataReferencia =
     !dateConflict && parsedEntries.length > 0
@@ -246,6 +332,36 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
             </option>
           ))}
         </select>
+
+        {selectedExpert && (
+          <div className="flex items-center gap-2 text-xs text-muted">
+            {btagsLoading && (
+              <>
+                <Loader2 size={11} className="animate-spin" />
+                <span>Carregando BTAGs cadastrados...</span>
+              </>
+            )}
+            {!btagsLoading && !btagsError && expertBtags.size > 0 && (
+              <>
+                <span className="text-snow/70">BTAGs cadastrados:</span>
+                <span className="font-mono text-bingo">
+                  {[...expertBtags].sort().join(", ")}
+                </span>
+              </>
+            )}
+          </div>
+        )}
+
+        {btagsError && (
+          <div
+            role="alert"
+            className="flex items-start gap-2 rounded bg-warning/[0.08] px-3 py-2 text-xs text-warning"
+            style={{ borderLeft: "3px solid #f59e0b" }}
+          >
+            <AlertCircle size={13} className="mt-0.5 shrink-0" />
+            <span>{btagsError}</span>
+          </div>
+        )}
       </section>
 
       {/* Upload zone */}
@@ -299,65 +415,104 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
         {/* Lista de arquivos */}
         {entries.length > 0 && (
           <div className="space-y-2">
-            {entries.map((entry) => (
-              <div
-                key={entry.id}
-                className="glass relative rounded-xl p-3"
-                style={{
-                  borderLeft: entry.error
-                    ? "3px solid #ef4444"
-                    : entry.parsed
-                      ? "3px solid #ff6b00"
-                      : "3px solid rgba(255,255,255,0.15)",
-                }}
-              >
-                <div className="flex items-start gap-3 pr-8">
-                  <FileSpreadsheet
-                    size={18}
-                    strokeWidth={1.5}
-                    className="mt-0.5 shrink-0 text-bingo"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm text-snow">
-                      {entry.file.name}
-                    </p>
-                    <p className="font-mono text-xs text-muted">
-                      {formatFileSize(entry.file.size)}
-                      {entry.parsed && (
-                        <>
-                          {" · BTAG "}
-                          <span className="text-snow">
-                            {entry.parsed.affiliate_id_detectado ?? "—"}
-                          </span>
-                          {" · "}
-                          {formatInt(entry.parsed.total_registros)} reg ·{" "}
-                          {formatInt(entry.parsed.total_ftd)} FTD
-                          {" · "}data{" "}
-                          {formatDateBR(entry.parsed.data_referencia)}
-                        </>
-                      )}
-                    </p>
-                    {entry.error && (
-                      <p className="mt-1 text-xs text-danger">{entry.error}</p>
-                    )}
-                    {!entry.parsed && !entry.error && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-muted">
-                        <Loader2 size={10} className="animate-spin" />
-                        processando...
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => removeEntry(entry.id)}
-                  className="absolute right-2 top-2 rounded p-1 text-muted transition-colors hover:bg-white/[0.06] hover:text-snow"
-                  aria-label="Remover"
+            {entries.map((entry) => {
+              const v = entryValidations.get(entry.id) ?? {
+                invalidBtags: [],
+                isMixed: false,
+              };
+              const invalid = v.invalidBtags.length > 0;
+              const distintos = entry.parsed?.btags_distintos ?? [];
+              const borderColor = entry.error
+                ? "#ef4444"
+                : invalid
+                  ? "#ef4444"
+                  : entry.parsed
+                    ? v.isMixed
+                      ? "#f59e0b"
+                      : "#ff6b00"
+                    : "rgba(255,255,255,0.15)";
+
+              return (
+                <div
+                  key={entry.id}
+                  className="glass relative rounded-xl p-3"
+                  style={{ borderLeft: `3px solid ${borderColor}` }}
                 >
-                  <X size={14} />
-                </button>
-              </div>
-            ))}
+                  <div className="flex items-start gap-3 pr-8">
+                    <FileSpreadsheet
+                      size={18}
+                      strokeWidth={1.5}
+                      className={`mt-0.5 shrink-0 ${invalid ? "text-danger" : "text-bingo"}`}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm text-snow">
+                        {entry.file.name}
+                      </p>
+                      <p className="font-mono text-xs text-muted">
+                        {formatFileSize(entry.file.size)}
+                        {entry.parsed && distintos.length > 0 && (
+                          <>
+                            {" · BTAG "}
+                            <span
+                              className={
+                                invalid ? "text-danger" : "text-snow"
+                              }
+                            >
+                              {distintos
+                                .map((b) => `${b.btag} (${b.count})`)
+                                .join(", ")}
+                            </span>
+                            {v.isMixed && (
+                              <span className="ml-1 rounded bg-warning/[0.15] px-1.5 py-0.5 text-[9px] uppercase tracking-wide text-warning">
+                                misto
+                              </span>
+                            )}
+                            {" · "}
+                            {formatInt(entry.parsed.total_registros)} reg ·{" "}
+                            {formatInt(entry.parsed.total_ftd)} FTD
+                            {" · "}data{" "}
+                            {formatDateBR(entry.parsed.data_referencia)}
+                          </>
+                        )}
+                      </p>
+                      {invalid && (
+                        <p className="mt-1 flex items-start gap-1 text-xs text-danger">
+                          <AlertCircle
+                            size={12}
+                            className="mt-0.5 shrink-0"
+                          />
+                          BTAG(s){" "}
+                          <span className="font-mono">
+                            {v.invalidBtags.join(", ")}
+                          </span>{" "}
+                          não pertence(m) a{" "}
+                          {selectedExpert?.nome ?? "esse expert"}
+                        </p>
+                      )}
+                      {entry.error && (
+                        <p className="mt-1 text-xs text-danger">
+                          {entry.error}
+                        </p>
+                      )}
+                      {!entry.parsed && !entry.error && (
+                        <p className="mt-1 flex items-center gap-1 text-xs text-muted">
+                          <Loader2 size={10} className="animate-spin" />
+                          processando...
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeEntry(entry.id)}
+                    className="absolute right-2 top-2 rounded p-1 text-muted transition-colors hover:bg-white/[0.06] hover:text-snow"
+                    aria-label="Remover"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         )}
 
@@ -382,6 +537,23 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
           </div>
         )}
 
+        {/* Aviso geral se houver BTAG inválido */}
+        {anyBtagInvalid && (
+          <div
+            role="alert"
+            className="flex items-start gap-2 rounded bg-danger/[0.08] px-3 py-3 text-sm text-danger"
+            style={{ borderLeft: "3px solid #ef4444" }}
+          >
+            <AlertCircle size={16} className="mt-0.5 shrink-0" />
+            <span>
+              Um ou mais arquivos contém BTAG(s) que não pertencem a{" "}
+              {selectedExpert?.nome ?? "esse expert"}. Verifique se o arquivo
+              foi exportado corretamente ou se o cadastro de campanhas está
+              completo em /gestao.
+            </span>
+          </div>
+        )}
+
         {/* Preview consolidado */}
         {!dateConflict && parsedEntries.length > 0 && (
           <div className="glass space-y-3 rounded-2xl p-4">
@@ -398,7 +570,7 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
                 <thead className="border-b border-white/[0.06] text-left uppercase tracking-wide text-muted">
                   <tr>
                     <th className="px-3 py-2 font-medium">Arquivo</th>
-                    <th className="px-3 py-2 font-medium">BTAG</th>
+                    <th className="px-3 py-2 font-medium">BTAG(s)</th>
                     <th className="px-3 py-2 text-right font-medium">
                       Registros
                     </th>
@@ -409,26 +581,43 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
                   </tr>
                 </thead>
                 <tbody className="font-mono text-snow">
-                  {parsedEntries.map((e) => (
-                    <tr
-                      key={e.id}
-                      className="border-b border-white/[0.04] last:border-b-0"
-                    >
-                      <td className="truncate px-3 py-2">{e.file.name}</td>
-                      <td className="px-3 py-2 text-bingo">
-                        {e.parsed!.affiliate_id_detectado ?? "—"}
-                      </td>
-                      <td className="px-3 py-2 text-right">
-                        {formatInt(e.parsed!.total_registros)}
-                      </td>
-                      <td className="px-3 py-2 text-right">
-                        {formatInt(e.parsed!.total_ftd)}
-                      </td>
-                      <td className="px-3 py-2 text-right">
-                        R$ {formatNumber(e.parsed!.total_deposits)}
-                      </td>
-                    </tr>
-                  ))}
+                  {parsedEntries.map((e) => {
+                    const v = entryValidations.get(e.id) ?? {
+                      invalidBtags: [],
+                      isMixed: false,
+                    };
+                    const invalid = v.invalidBtags.length > 0;
+                    const distintos = e.parsed!.btags_distintos;
+                    return (
+                      <tr
+                        key={e.id}
+                        className="border-b border-white/[0.04] last:border-b-0"
+                      >
+                        <td className="truncate px-3 py-2">{e.file.name}</td>
+                        <td className="px-3 py-2">
+                          <span
+                            className={invalid ? "text-danger" : "text-bingo"}
+                          >
+                            {distintos
+                              .map((b) => b.btag)
+                              .join(", ") || "—"}
+                          </span>
+                          {v.isMixed && (
+                            <span className="ml-1 text-warning">(misto)</span>
+                          )}
+                        </td>
+                        <td className="px-3 py-2 text-right">
+                          {formatInt(e.parsed!.total_registros)}
+                        </td>
+                        <td className="px-3 py-2 text-right">
+                          {formatInt(e.parsed!.total_ftd)}
+                        </td>
+                        <td className="px-3 py-2 text-right">
+                          R$ {formatNumber(e.parsed!.total_deposits)}
+                        </td>
+                      </tr>
+                    );
+                  })}
                   <tr className="bg-bingo/[0.06] font-semibold">
                     <td className="px-3 py-2 uppercase tracking-wide text-bingo">
                       Total
@@ -458,7 +647,7 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
       </section>
 
       {/* Métricas Manuais — 1x global do dia */}
-      {parsedEntries.length > 0 && !dateConflict && (
+      {parsedEntries.length > 0 && !dateConflict && !anyBtagInvalid && (
         <section className="space-y-3">
           <div className="space-y-1">
             <h3 className="text-sm font-medium text-snow">
@@ -514,7 +703,7 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
       <button
         type="button"
         onClick={() => submit(false)}
-        disabled={!canSubmit || submitting || hasErrors}
+        disabled={!canSubmit || submitting}
         className={`btn-shine flex w-full items-center justify-center gap-2 rounded-lg bg-bingo-gradient px-3 py-3 text-sm font-medium text-ink transition-all hover:shadow-[0_0_24px_-4px_rgba(255,107,0,0.6)] disabled:shadow-none ${
           submitting
             ? "cursor-not-allowed opacity-60"

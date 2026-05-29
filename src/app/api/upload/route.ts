@@ -112,17 +112,19 @@ export async function POST(request: Request) {
   }
   const data_referencia = parsedList[0].parsed.data_referencia;
 
-  // Valida BTAGs
+  // Valida TODOS os BTAGs distintos de cada arquivo (não só o dominante)
   const btagsInvalidos: string[] = [];
   for (const { file, parsed } of parsedList) {
-    const btag = parsed.affiliate_id_detectado;
-    if (!btag) {
+    if (parsed.btags_distintos.length === 0) {
       btagsInvalidos.push(`"${file.name}" sem AffiliateId detectado`);
       continue;
     }
-    if (!btagSet.has(btag.trim())) {
+    const invalidos = parsed.btags_distintos
+      .map((b) => b.btag.trim())
+      .filter((b) => !btagSet.has(b));
+    if (invalidos.length > 0) {
       btagsInvalidos.push(
-        `"${file.name}" usa BTAG "${btag}" que não está cadastrado em ${expert.nome}`,
+        `"${file.name}" contém BTAG(s) não cadastrado(s) em ${expert.nome}: ${invalidos.join(", ")}`,
       );
     }
   }
