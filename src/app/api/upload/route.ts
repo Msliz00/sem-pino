@@ -4,6 +4,7 @@ import {
   parseRegistrations,
   type ParsedData,
 } from "@/lib/parsers/parseRegistrations";
+import { extractBtagFromFileName } from "@/lib/btag-from-filename";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -112,26 +113,29 @@ export async function POST(request: Request) {
   }
   const data_referencia = parsedList[0].parsed.data_referencia;
 
-  // Valida TODOS os BTAGs distintos de cada arquivo (não só o dominante)
-  const btagsInvalidos: string[] = [];
-  for (const { file, parsed } of parsedList) {
-    if (parsed.btags_distintos.length === 0) {
-      btagsInvalidos.push(`"${file.name}" sem AffiliateId detectado`);
+  // Extrai BTAG do nome de cada arquivo (fonte de verdade)
+  // e valida contra o cadastro do expert. A coluna AffiliateId é apenas
+  // diagnóstica (não bloqueia, só informa divergência via API).
+  const filenameBtags = new Map<File, string>();
+  const erros: string[] = [];
+  for (const { file } of parsedList) {
+    const { btag, error } = extractBtagFromFileName(file.name);
+    if (error || !btag) {
+      erros.push(`"${file.name}": ${error ?? "BTAG não identificado"}`);
       continue;
     }
-    const invalidos = parsed.btags_distintos
-      .map((b) => b.btag.trim())
-      .filter((b) => !btagSet.has(b));
-    if (invalidos.length > 0) {
-      btagsInvalidos.push(
-        `"${file.name}" contém BTAG(s) não cadastrado(s) em ${expert.nome}: ${invalidos.join(", ")}`,
+    if (!btagSet.has(btag.trim())) {
+      erros.push(
+        `"${file.name}" usa BTAG "${btag}" (extraído do nome) que não está cadastrado em ${expert.nome}`,
       );
+      continue;
     }
+    filenameBtags.set(file, btag);
   }
-  if (btagsInvalidos.length > 0) {
+  if (erros.length > 0) {
     return NextResponse.json(
       {
-        error: `Validação de BTAG falhou: ${btagsInvalidos.join(" · ")}`,
+        error: `Validação de BTAG falhou: ${erros.join(" · ")}`,
       },
       { status: 400 },
     );
@@ -156,10 +160,10 @@ export async function POST(request: Request) {
     );
   }
 
-  // Upload de cada arquivo pro storage com BTAG no path
+  // Upload de cada arquivo pro storage com BTAG (do filename) no path
   const storagePaths: string[] = [];
-  for (const { file, buffer, parsed } of parsedList) {
-    const btag = parsed.affiliate_id_detectado ?? "unknown";
+  for (const { file, buffer } of parsedList) {
+    const btag = filenameBtags.get(file) ?? "unknown";
     const safeBtag = btag.replace(/[^a-zA-Z0-9_-]/g, "_");
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const storagePath = `${expertSlug}/${data_referencia}/${safeBtag}_${Date.now()}_${safeName}`;
@@ -214,7 +218,7 @@ export async function POST(request: Request) {
 
   const breakdown: FileSummary[] = parsedList.map(({ file, parsed }) => ({
     arquivo: file.name,
-    btag: parsed.affiliate_id_detectado,
+    btag: filenameBtags.get(file) ?? null,
     registros: parsed.total_registros,
     ftd: parsed.total_ftd,
     data_referencia: parsed.data_referencia,

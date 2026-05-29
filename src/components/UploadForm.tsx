@@ -13,6 +13,7 @@ import {
   parseRegistrations,
   type ParsedData,
 } from "@/lib/parsers/parseRegistrations";
+import { extractBtagFromFileName } from "@/lib/btag-from-filename";
 import { ConflictDialog } from "@/components/ConflictDialog";
 
 type Expert = { id: string; slug: string; nome: string };
@@ -62,27 +63,42 @@ function uid() {
 }
 
 type EntryValidation = {
-  invalidBtags: string[];
-  isMixed: boolean;
+  btagFromName: string | null;
+  filenameError: string | null;
+  /** True se o BTAG do nome não pertence ao expert. Bloqueia salvar. */
+  notInCadastro: boolean;
+  /** True se BTAG do nome difere do AffiliateId dominante da coluna. Alerta amarelo, NÃO bloqueia. */
+  columnMismatch: boolean;
+  /** BTAG dominante da coluna AffiliateId, pra exibir no alerta. */
+  columnDominant: string | null;
+  /** Marca se a coluna tem múltiplos BTAGs distintos. */
+  columnMixed: boolean;
 };
 
 function validateEntry(
   entry: FileEntry,
   expertBtags: Set<string>,
+  cadastroLoaded: boolean,
 ): EntryValidation {
-  if (!entry.parsed) return { invalidBtags: [], isMixed: false };
-  const distintos = entry.parsed.btags_distintos;
-  if (distintos.length === 0) {
-    return { invalidBtags: ["(sem AffiliateId)"], isMixed: false };
-  }
-  // Se ainda não carregou o set, não acusa inválido (evita flash vermelho)
-  if (expertBtags.size === 0) {
-    return { invalidBtags: [], isMixed: distintos.length > 1 };
-  }
-  const invalidBtags = distintos
-    .map((b) => b.btag.trim())
-    .filter((b) => !expertBtags.has(b));
-  return { invalidBtags, isMixed: distintos.length > 1 };
+  const { btag, error } = extractBtagFromFileName(entry.file.name);
+  const columnDominant = entry.parsed?.affiliate_id_detectado ?? null;
+  const columnMixed = (entry.parsed?.btags_distintos.length ?? 0) > 1;
+  const columnMismatch =
+    !!btag &&
+    !!columnDominant &&
+    btag.trim() !== columnDominant.trim();
+
+  const notInCadastro =
+    !!btag && cadastroLoaded && !expertBtags.has(btag.trim());
+
+  return {
+    btagFromName: btag,
+    filenameError: error,
+    notInCadastro,
+    columnMismatch,
+    columnDominant,
+    columnMixed,
+  };
 }
 
 export function UploadForm({ experts }: { experts: Expert[] }) {
@@ -158,17 +174,20 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
   );
   const dateConflict = dataSet.size > 1;
 
-  // Validação de BTAG por arquivo (eager — só quando o set já foi carregado)
+  // Validação por arquivo: extrai BTAG do nome e cruza com cadastro.
+  const cadastroLoaded = expertBtags.size > 0;
   const entryValidations = new Map<string, EntryValidation>();
   for (const entry of entries) {
-    entryValidations.set(entry.id, validateEntry(entry, expertBtags));
+    entryValidations.set(
+      entry.id,
+      validateEntry(entry, expertBtags, cadastroLoaded),
+    );
   }
-  const anyBtagInvalid =
-    expertBtags.size > 0 &&
-    entries.some((e) => {
-      const v = entryValidations.get(e.id);
-      return v ? v.invalidBtags.length > 0 : false;
-    });
+  const anyBtagInvalid = entries.some((e) => {
+    const v = entryValidations.get(e.id);
+    if (!v) return false;
+    return !!v.filenameError || v.notInCadastro;
+  });
 
   // Totais consolidados (preview)
   const totals = parsedEntries.reduce(
@@ -416,18 +435,18 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
         {entries.length > 0 && (
           <div className="space-y-2">
             {entries.map((entry) => {
-              const v = entryValidations.get(entry.id) ?? {
-                invalidBtags: [],
-                isMixed: false,
-              };
-              const invalid = v.invalidBtags.length > 0;
-              const distintos = entry.parsed?.btags_distintos ?? [];
+              const v = entryValidations.get(entry.id);
+              const hasFilenameError = !!v?.filenameError;
+              const notInCadastro = !!v?.notInCadastro;
+              const isInvalid = hasFilenameError || notInCadastro;
+              const isWarning = !isInvalid && !!v?.columnMismatch;
+
               const borderColor = entry.error
                 ? "#ef4444"
-                : invalid
+                : isInvalid
                   ? "#ef4444"
                   : entry.parsed
-                    ? v.isMixed
+                    ? isWarning
                       ? "#f59e0b"
                       : "#ff6b00"
                     : "rgba(255,255,255,0.15)";
@@ -442,7 +461,7 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
                     <FileSpreadsheet
                       size={18}
                       strokeWidth={1.5}
-                      className={`mt-0.5 shrink-0 ${invalid ? "text-danger" : "text-bingo"}`}
+                      className={`mt-0.5 shrink-0 ${isInvalid ? "text-danger" : isWarning ? "text-warning" : "text-bingo"}`}
                     />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm text-snow">
@@ -450,43 +469,57 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
                       </p>
                       <p className="font-mono text-xs text-muted">
                         {formatFileSize(entry.file.size)}
-                        {entry.parsed && distintos.length > 0 && (
+                        {v?.btagFromName && (
                           <>
                             {" · BTAG "}
                             <span
                               className={
-                                invalid ? "text-danger" : "text-snow"
+                                isInvalid ? "text-danger" : "text-snow"
                               }
                             >
-                              {distintos
-                                .map((b) => `${b.btag} (${b.count})`)
-                                .join(", ")}
+                              {v.btagFromName}
                             </span>
-                            {v.isMixed && (
-                              <span className="ml-1 rounded bg-warning/[0.15] px-1.5 py-0.5 text-[9px] uppercase tracking-wide text-warning">
-                                misto
-                              </span>
-                            )}
+                            <span className="ml-1 text-[10px] uppercase tracking-wide text-muted">
+                              (do nome)
+                            </span>
+                          </>
+                        )}
+                        {entry.parsed && (
+                          <>
                             {" · "}
                             {formatInt(entry.parsed.total_registros)} reg ·{" "}
                             {formatInt(entry.parsed.total_ftd)} FTD
-                            {" · "}data{" "}
+                            {" · data "}
                             {formatDateBR(entry.parsed.data_referencia)}
                           </>
                         )}
                       </p>
-                      {invalid && (
+
+                      {hasFilenameError && (
                         <p className="mt-1 flex items-start gap-1 text-xs text-danger">
-                          <AlertCircle
-                            size={12}
-                            className="mt-0.5 shrink-0"
-                          />
-                          BTAG(s){" "}
-                          <span className="font-mono">
-                            {v.invalidBtags.join(", ")}
-                          </span>{" "}
-                          não pertence(m) a{" "}
+                          <AlertCircle size={12} className="mt-0.5 shrink-0" />
+                          {v?.filenameError}
+                        </p>
+                      )}
+                      {notInCadastro && v?.btagFromName && (
+                        <p className="mt-1 flex items-start gap-1 text-xs text-danger">
+                          <AlertCircle size={12} className="mt-0.5 shrink-0" />
+                          BTAG{" "}
+                          <span className="font-mono">{v.btagFromName}</span>{" "}
+                          não está cadastrado em{" "}
                           {selectedExpert?.nome ?? "esse expert"}
+                        </p>
+                      )}
+                      {isWarning && v?.columnDominant && v.btagFromName && (
+                        <p className="mt-1 flex items-start gap-1 text-xs text-warning">
+                          <AlertCircle size={12} className="mt-0.5 shrink-0" />
+                          ⚠ Nome indica{" "}
+                          <span className="font-mono">{v.btagFromName}</span>,
+                          coluna AffiliateId tem{" "}
+                          <span className="font-mono">{v.columnDominant}</span>
+                          {v.columnMixed && " (misto)"} dominante — usando{" "}
+                          <span className="font-mono">{v.btagFromName}</span>{" "}
+                          (do nome)
                         </p>
                       )}
                       {entry.error && (
@@ -570,7 +603,7 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
                 <thead className="border-b border-white/[0.06] text-left uppercase tracking-wide text-muted">
                   <tr>
                     <th className="px-3 py-2 font-medium">Arquivo</th>
-                    <th className="px-3 py-2 font-medium">BTAG(s)</th>
+                    <th className="px-3 py-2 font-medium">BTAG (do nome)</th>
                     <th className="px-3 py-2 text-right font-medium">
                       Registros
                     </th>
@@ -582,12 +615,11 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
                 </thead>
                 <tbody className="font-mono text-snow">
                   {parsedEntries.map((e) => {
-                    const v = entryValidations.get(e.id) ?? {
-                      invalidBtags: [],
-                      isMixed: false,
-                    };
-                    const invalid = v.invalidBtags.length > 0;
-                    const distintos = e.parsed!.btags_distintos;
+                    const v = entryValidations.get(e.id);
+                    const isInvalid =
+                      !!v && (!!v.filenameError || v.notInCadastro);
+                    const isWarning =
+                      !isInvalid && !!v?.columnMismatch;
                     return (
                       <tr
                         key={e.id}
@@ -596,14 +628,23 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
                         <td className="truncate px-3 py-2">{e.file.name}</td>
                         <td className="px-3 py-2">
                           <span
-                            className={invalid ? "text-danger" : "text-bingo"}
+                            className={
+                              isInvalid
+                                ? "text-danger"
+                                : isWarning
+                                  ? "text-warning"
+                                  : "text-bingo"
+                            }
                           >
-                            {distintos
-                              .map((b) => b.btag)
-                              .join(", ") || "—"}
+                            {v?.btagFromName ?? "—"}
                           </span>
-                          {v.isMixed && (
-                            <span className="ml-1 text-warning">(misto)</span>
+                          {isWarning && (
+                            <span
+                              className="ml-1 text-warning"
+                              title={`Coluna AffiliateId: ${v?.columnDominant ?? "—"}`}
+                            >
+                              ⚠
+                            </span>
                           )}
                         </td>
                         <td className="px-3 py-2 text-right">
