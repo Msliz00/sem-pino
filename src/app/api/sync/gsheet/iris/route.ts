@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { readIrisGSheet, IRIS_BLOCKS } from "@/lib/gsheet-reader";
 
 export const runtime = "nodejs";
@@ -8,9 +8,17 @@ export const dynamic = "force-dynamic";
 const EXPERT_SLUG = "iris-aviator";
 
 export async function POST() {
-  // Sem auth dedicada ainda — token de webhook vem numa próxima etapa.
-  // O botão manual no /upload já roda autenticado (cookies da sessão).
-  const supabase = await createClient();
+  // Escrita de backend: usa service role key (bypassa RLS), sem sessão.
+  // Já pronto pro webhook futuro sem cookies. Token de auth vem numa etapa adiante.
+  let supabase;
+  try {
+    supabase = createAdminClient();
+  } catch {
+    return NextResponse.json(
+      { error: "SUPABASE_SERVICE_ROLE_KEY não configurada" },
+      { status: 500 },
+    );
+  }
 
   let rows;
   try {
