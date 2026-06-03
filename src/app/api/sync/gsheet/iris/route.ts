@@ -13,6 +13,12 @@ const EXPERT_SLUG = "iris-aviator";
 // bearer nunca valida. O admin client NÃO é usado aqui — só pra escrita.
 async function isAuthorized(request: Request): Promise<boolean> {
   const expected = process.env.SYNC_WEBHOOK_TOKEN;
+  console.log("SYNC_AUTH_DEBUG", JSON.stringify({
+    hasEnv: Boolean(process.env.SYNC_WEBHOOK_TOKEN),
+    expectedLen: process.env.SYNC_WEBHOOK_TOKEN?.length ?? null,
+    hasAuthHeader: Boolean(request.headers.get("authorization")),
+    tokenLen: (request.headers.get("authorization") ?? "").match(/^Bearer (.+)$/)?.[1]?.length ?? null
+  }));
   if (expected) {
     const authHeader = request.headers.get("authorization") ?? "";
     const match = authHeader.match(/^Bearer (.+)$/);
