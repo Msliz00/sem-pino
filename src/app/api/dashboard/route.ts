@@ -22,7 +22,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const expert = searchParams.get("expert") || "todos";
 
-  const refs = await getReferencias();
+  const refs = await getReferencias(expert);
   const hojeInputs = await getMetricasForDate(expert, refs.hoje);
   const ontemInputs = await getMetricasForDate(expert, refs.ontem);
 

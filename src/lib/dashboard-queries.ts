@@ -29,11 +29,13 @@ function maxStr(a: string | null, b: string | null): string | null {
 
 type DateTable = "uploads_diarios" | "metricas_diarias_btag";
 
-// Última data de uma tabela (opcionalmente anterior a `before`).
+// Última data de uma tabela (opcionalmente anterior a `before` e/ou filtrada
+// por expert). Ambas as tabelas têm a coluna expert_id.
 async function latestDate(
   supabase: Awaited<ReturnType<typeof createClient>>,
   table: DateTable,
   before: string | null,
+  expertId: string | null,
 ): Promise<string | null> {
   const col = table === "uploads_diarios" ? "data_referencia" : "data";
   let q = supabase
@@ -42,24 +44,32 @@ async function latestDate(
     .order(col, { ascending: false })
     .limit(1);
   if (before) q = q.lt(col, before);
+  if (expertId) q = q.eq("expert_id", expertId);
   const { data } = await q;
   return (data?.[0] as { ref?: string } | undefined)?.ref ?? null;
 }
 
-// hoje/ontem considerando AS DUAS fontes — assim um dia que só tem dado na
-// gSheet (ou só no upload) ainda é capturado como referência.
-export async function getReferencias(): Promise<Referencias> {
+// hoje/ontem = maior data disponível em QUALQUER das duas fontes, respeitando
+// o filtro de expert. Assim um expert que só tem gSheet (sem upload) ainda
+// rende data de referência — e vice-versa.
+export async function getReferencias(
+  expertSlug: ExpertSlug = "todos",
+): Promise<Referencias> {
   const supabase = await createClient();
 
+  const expert = await resolveExpertId(supabase, expertSlug);
+  if (!expert.ok) return { hoje: null, ontem: null };
+  const expertId = expert.expertId;
+
   const hoje = maxStr(
-    await latestDate(supabase, "uploads_diarios", null),
-    await latestDate(supabase, "metricas_diarias_btag", null),
+    await latestDate(supabase, "uploads_diarios", null, expertId),
+    await latestDate(supabase, "metricas_diarias_btag", null, expertId),
   );
   if (!hoje) return { hoje: null, ontem: null };
 
   const ontem = maxStr(
-    await latestDate(supabase, "uploads_diarios", hoje),
-    await latestDate(supabase, "metricas_diarias_btag", hoje),
+    await latestDate(supabase, "uploads_diarios", hoje, expertId),
+    await latestDate(supabase, "metricas_diarias_btag", hoje, expertId),
   );
   return { hoje, ontem };
 }
