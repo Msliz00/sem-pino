@@ -131,5 +131,21 @@ export async function POST(request: Request) {
     synced = count ?? toUpsert.length;
   }
 
-  return NextResponse.json({ synced, errors });
+  // Sync concluído com sucesso → grava timestamp em sync_status (indicador
+  // secundário). expert.id é o uuid da Iris resolvido acima. Falha aqui NÃO
+  // derruba a resposta de sucesso: loga e segue.
+  const syncedAt = new Date().toISOString();
+  const { error: statusErr } = await supabase
+    .from("sync_status")
+    .upsert(
+      { expert_id: expert.id, fonte: "gsheet", synced_at: syncedAt },
+      { onConflict: "expert_id,fonte" },
+    );
+  if (statusErr) {
+    console.error(
+      `[sync/gsheet/iris] falha ao gravar sync_status: ${statusErr.message}`,
+    );
+  }
+
+  return NextResponse.json({ synced, errors, synced_at: syncedAt });
 }
