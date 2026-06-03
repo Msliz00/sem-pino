@@ -1,6 +1,6 @@
 import {
   getReferencias,
-  getUploadsForDate,
+  getMetricasForDate,
 } from "@/lib/dashboard-queries";
 import { calcMetricas, ZERO_INPUTS } from "@/lib/metricas";
 import { DashboardGrid } from "@/components/DashboardGrid";
@@ -8,8 +8,8 @@ import { PageHeader } from "@/components/PageHeader";
 
 export default async function DashboardPage() {
   const refs = await getReferencias();
-  const hojeInputs = await getUploadsForDate("todos", refs.hoje);
-  const ontemInputs = await getUploadsForDate("todos", refs.ontem);
+  const hojeInputs = await getMetricasForDate("todos", refs.hoje);
+  const ontemInputs = await getMetricasForDate("todos", refs.ontem);
 
   return (
     <div className="space-y-6">

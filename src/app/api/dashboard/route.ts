@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import {
   getReferencias,
-  getUploadsForDate,
+  getMetricasForDate,
 } from "@/lib/dashboard-queries";
 import { calcMetricas, ZERO_INPUTS } from "@/lib/metricas";
 
@@ -22,9 +22,9 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const expert = searchParams.get("expert") || "todos";
 
-  const refs = await getReferencias();
-  const hojeInputs = await getUploadsForDate(expert, refs.hoje);
-  const ontemInputs = await getUploadsForDate(expert, refs.ontem);
+  const refs = await getReferencias(expert);
+  const hojeInputs = await getMetricasForDate(expert, refs.hoje);
+  const ontemInputs = await getMetricasForDate(expert, refs.ontem);
 
   return NextResponse.json({
     hoje: calcMetricas(hojeInputs ?? ZERO_INPUTS),
