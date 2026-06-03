@@ -1,11 +1,15 @@
 import { google } from "googleapis";
 
-// BTAGs ativos na gSheet gerencial da Iris e suas colunas (DATA, REG, FTD, DEP, NGR).
-// Cada bloco ocupa 5 colunas adjacentes; linhas de dados vão de 3 a 33 (até 31 dias).
+// BTAGs ativos na gSheet gerencial da Iris. Cada bloco ocupa 5 colunas
+// adjacentes (DATA, REG, FTD, DEP, NGR) a partir de `startCol` (índice 0-based):
+//   38436 -> col AI (34) · 41400 -> col AO (40) · 41954 -> col AU (46)
+// Linhas de dados vão de 3 a 33 (até 31 dias por mês).
+export const BLOCK_WIDTH = 5;
+
 export const IRIS_BLOCKS = [
-  { btag: "38436", label: "BINGO", cols: "AI:AM" },
-  { btag: "41400", label: "Iris AV", cols: "AO:AS" },
-  { btag: "41954", label: "Recuperação", cols: "AU:AY" },
+  { btag: "38436", label: "BINGO", startCol: 34 },
+  { btag: "41400", label: "Iris AV", startCol: 40 },
+  { btag: "41954", label: "Recuperação", startCol: 46 },
 ] as const;
 
 const DATA_FIRST_ROW = 3;
@@ -95,28 +99,27 @@ export async function readIrisGSheet(): Promise<IrisMetricRow[]> {
 
   const sheets = getSheetsClient();
 
-  // Lista as abas pra processar só as mensais (ignora "2026").
+  // Lista as abas mensais (ignora "2026") junto com a largura real do grid,
+  // pra não pedir colunas além do que cada aba tem.
   const meta = await sheets.spreadsheets.get({
     spreadsheetId,
-    fields: "sheets.properties.title",
+    fields: "sheets.properties(title,gridProperties.columnCount)",
   });
   const monthlySheets = (meta.data.sheets ?? [])
-    .map((s) => s.properties?.title ?? "")
-    .filter((title) => title && !IGNORED_SHEETS.has(title.trim()));
+    .map((s) => ({
+      title: s.properties?.title ?? "",
+      columnCount: s.properties?.gridProperties?.columnCount ?? 0,
+    }))
+    .filter((s) => s.title && !IGNORED_SHEETS.has(s.title.trim()));
 
   if (monthlySheets.length === 0) return [];
 
-  // Monta os ranges de cada bloco em cada aba mensal e busca tudo de uma vez.
-  const ranges: string[] = [];
-  for (const sheet of monthlySheets) {
-    const safe = sheet.replace(/'/g, "''");
-    for (const block of IRIS_BLOCKS) {
-      const [c1, c2] = block.cols.split(":");
-      ranges.push(
-        `'${safe}'!${c1}${DATA_FIRST_ROW}:${c2}${DATA_LAST_ROW}`,
-      );
-    }
-  }
+  // Busca o grid completo de cada aba (range só por linha, a partir da col A),
+  // depois fatia os 3 blocos de BTAG em memória. Assim larguras de aba
+  // variáveis não quebram a leitura.
+  const ranges = monthlySheets.map(
+    (s) => `'${s.title.replace(/'/g, "''")}'!${DATA_FIRST_ROW}:${DATA_LAST_ROW}`,
+  );
 
   const batch = await sheets.spreadsheets.values.batchGet({
     spreadsheetId,
@@ -128,32 +131,43 @@ export async function readIrisGSheet(): Promise<IrisMetricRow[]> {
   const valueRanges = batch.data.valueRanges ?? [];
   const rows: IrisMetricRow[] = [];
 
-  valueRanges.forEach((vr, idx) => {
-    const block = IRIS_BLOCKS[idx % IRIS_BLOCKS.length];
-    const grid = (vr.values ?? []) as CellValue[][];
+  monthlySheets.forEach((sheet, idx) => {
+    const grid = (valueRanges[idx]?.values ?? []) as CellValue[][];
+    let blocksRead = 0;
 
-    for (const line of grid) {
-      const data = parseDateCell(line[0]);
-      const registros = Math.round(toNumber(line[1]));
-      const ftd = Math.round(toNumber(line[2]));
-      const depositos = toNumber(line[3]);
-      const ngr = toNumber(line[4]);
+    for (const block of IRIS_BLOCKS) {
+      // Só lê o bloco se a aba tiver colunas suficientes pra cobri-lo inteiro.
+      if (sheet.columnCount < block.startCol + BLOCK_WIDTH) continue;
+      blocksRead++;
 
-      // Descarta linhas sem data ou com todos os 4 valores zerados.
-      if (!data) continue;
-      if (registros === 0 && ftd === 0 && depositos === 0 && ngr === 0) {
-        continue;
+      for (const line of grid) {
+        const cells = line.slice(block.startCol, block.startCol + BLOCK_WIDTH);
+        const data = parseDateCell(cells[0]);
+        const registros = Math.round(toNumber(cells[1]));
+        const ftd = Math.round(toNumber(cells[2]));
+        const depositos = toNumber(cells[3]);
+        const ngr = toNumber(cells[4]);
+
+        // Descarta linhas sem data ou com todos os 4 valores zerados.
+        if (!data) continue;
+        if (registros === 0 && ftd === 0 && depositos === 0 && ngr === 0) {
+          continue;
+        }
+
+        rows.push({
+          data,
+          btag: block.btag,
+          registros,
+          ftd,
+          depositos,
+          ngr,
+        });
       }
-
-      rows.push({
-        data,
-        btag: block.btag,
-        registros,
-        ftd,
-        depositos,
-        ngr,
-      });
     }
+
+    console.log(
+      `[gsheet-reader] aba "${sheet.title}" (${sheet.columnCount} cols): ${blocksRead}/${IRIS_BLOCKS.length} BTAGs lidos`,
+    );
   });
 
   return rows;
