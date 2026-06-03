@@ -7,6 +7,7 @@ import {
   X,
   AlertCircle,
   Loader2,
+  RefreshCw,
 } from "lucide-react";
 import {
   parseRegistrations,
@@ -64,6 +65,40 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
   const [submitting, setSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<FeedbackBanner>(null);
   const [conflict, setConflict] = useState<ConflictState>(null);
+
+  const [syncing, setSyncing] = useState(false);
+  const [syncToast, setSyncToast] = useState<FeedbackBanner>(null);
+
+  const syncGSheet = async () => {
+    setSyncing(true);
+    setSyncToast(null);
+    try {
+      const res = await fetch("/api/sync/gsheet/iris", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) {
+        setSyncToast({
+          kind: "error",
+          message: data.error ?? "Erro ao sincronizar gSheet.",
+        });
+        return;
+      }
+      const errs: string[] = data.errors ?? [];
+      setSyncToast({
+        kind: errs.length > 0 ? "error" : "success",
+        message:
+          `${data.synced} linha(s) sincronizada(s)` +
+          (errs.length > 0 ? ` · ${errs.join(" · ")}` : ""),
+      });
+      router.refresh();
+    } catch (err) {
+      setSyncToast({
+        kind: "error",
+        message: err instanceof Error ? err.message : "Erro de rede.",
+      });
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const canSubmit = !!expertSlug && !!file && !!parsedData && !parseError;
   const showPreview = !!file && !!parsedData;
@@ -187,6 +222,37 @@ export function UploadForm({ experts }: { experts: Expert[] }) {
             </option>
           ))}
         </select>
+      </section>
+
+      {/* Sync gSheet (temporário, pra testar) */}
+      <section className="space-y-2">
+        <div className="flex items-center justify-end">
+          <button
+            type="button"
+            onClick={syncGSheet}
+            disabled={syncing}
+            className="flex items-center gap-1.5 rounded-md border border-white/[0.12] bg-white/[0.03] px-2.5 py-1.5 text-xs text-muted transition-colors hover:bg-white/[0.06] hover:text-snow disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {syncing ? (
+              <Loader2 size={13} className="animate-spin" />
+            ) : (
+              <RefreshCw size={13} />
+            )}
+            {syncing ? "Sincronizando..." : "Sincronizar gSheet"}
+          </button>
+        </div>
+        {syncToast && (
+          <p
+            role="alert"
+            className={`rounded border-l-2 px-3 py-2 text-xs ${
+              syncToast.kind === "success"
+                ? "border-success bg-success/[0.08] text-success"
+                : "border-danger bg-danger/[0.08] text-danger"
+            }`}
+          >
+            {syncToast.message}
+          </p>
+        )}
       </section>
 
       {/* Upload */}
