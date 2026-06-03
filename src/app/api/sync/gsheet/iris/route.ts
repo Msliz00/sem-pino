@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import { readIrisGSheet, IRIS_BLOCKS } from "@/lib/gsheet-reader";
 
 export const runtime = "nodejs";
@@ -7,7 +8,29 @@ export const dynamic = "force-dynamic";
 
 const EXPERT_SLUG = "iris-aviator";
 
-export async function POST() {
+// Libera se: (1) Bearer token bater exatamente com SYNC_WEBHOOK_TOKEN, ou
+// (2) houver sessão Supabase autenticada. Sem token na env, o caminho do
+// bearer nunca valida. O admin client NÃO é usado aqui — só pra escrita.
+async function isAuthorized(request: Request): Promise<boolean> {
+  const expected = process.env.SYNC_WEBHOOK_TOKEN;
+  if (expected) {
+    const authHeader = request.headers.get("authorization") ?? "";
+    const match = authHeader.match(/^Bearer (.+)$/);
+    if (match && match[1] === expected) return true;
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return !!user;
+}
+
+export async function POST(request: Request) {
+  if (!(await isAuthorized(request))) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
   // Escrita de backend: usa service role key (bypassa RLS), sem sessão.
   // Já pronto pro webhook futuro sem cookies. Token de auth vem numa etapa adiante.
   let supabase;
@@ -108,5 +131,21 @@ export async function POST() {
     synced = count ?? toUpsert.length;
   }
 
-  return NextResponse.json({ synced, errors });
+  // Sync concluído com sucesso → grava timestamp em sync_status (indicador
+  // secundário). expert.id é o uuid da Iris resolvido acima. Falha aqui NÃO
+  // derruba a resposta de sucesso: loga e segue.
+  const syncedAt = new Date().toISOString();
+  const { error: statusErr } = await supabase
+    .from("sync_status")
+    .upsert(
+      { expert_id: expert.id, fonte: "gsheet", synced_at: syncedAt },
+      { onConflict: "expert_id,fonte" },
+    );
+  if (statusErr) {
+    console.error(
+      `[sync/gsheet/iris] falha ao gravar sync_status: ${statusErr.message}`,
+    );
+  }
+
+  return NextResponse.json({ synced, errors, synced_at: syncedAt });
 }
