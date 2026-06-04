@@ -13,12 +13,6 @@ const EXPERT_SLUG = "iris-aviator";
 // bearer nunca valida. O admin client NÃO é usado aqui — só pra escrita.
 async function isAuthorized(request: Request): Promise<boolean> {
   const expected = process.env.SYNC_WEBHOOK_TOKEN;
-  console.log("SYNC_AUTH_DEBUG", JSON.stringify({
-    hasEnv: Boolean(process.env.SYNC_WEBHOOK_TOKEN),
-    expectedLen: process.env.SYNC_WEBHOOK_TOKEN?.length ?? null,
-    hasAuthHeader: Boolean(request.headers.get("authorization")),
-    tokenLen: (request.headers.get("authorization") ?? "").match(/^Bearer (.+)$/)?.[1]?.length ?? null
-  }));
   if (expected) {
     const authHeader = request.headers.get("authorization") ?? "";
     const match = authHeader.match(/^Bearer (.+)$/);
@@ -34,7 +28,15 @@ async function isAuthorized(request: Request): Promise<boolean> {
 
 export async function POST(request: Request) {
   if (!(await isAuthorized(request))) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    return NextResponse.json({
+      error: "unauthorized",
+      debug: {
+        hasEnv: Boolean(process.env.SYNC_WEBHOOK_TOKEN),
+        expectedLen: process.env.SYNC_WEBHOOK_TOKEN?.length ?? null,
+        hasAuthHeader: Boolean(request.headers.get("authorization")),
+        tokenLen: (request.headers.get("authorization") ?? "").match(/^Bearer (.+)$/)?.[1]?.length ?? null
+      }
+    }, { status: 401 });
   }
 
   // Escrita de backend: usa service role key (bypassa RLS), sem sessão.
