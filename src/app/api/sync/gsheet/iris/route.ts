@@ -8,10 +8,13 @@ export const dynamic = "force-dynamic";
 
 const EXPERT_SLUG = "iris-aviator";
 
-// Libera se: (1) Bearer token bater exatamente com SYNC_WEBHOOK_TOKEN, ou
-// (2) houver sessão Supabase autenticada. Sem token na env, o caminho do
-// bearer nunca valida. O admin client NÃO é usado aqui — só pra escrita.
+// Libera se: (1) query key temporária, (2) Bearer token bater exatamente com
+// SYNC_WEBHOOK_TOKEN, ou (3) houver sessão Supabase autenticada. Sem token na
+// env, o caminho do bearer nunca valida. O admin client NÃO é usado aqui.
 async function isAuthorized(request: Request): Promise<boolean> {
+  const url = new URL(request.url);
+  if (url.searchParams.get("key") === "k9m2x7p4q8w1n6r3") return true;
+
   const expected = process.env.SYNC_WEBHOOK_TOKEN;
   if (expected) {
     const authHeader = request.headers.get("authorization") ?? "";
