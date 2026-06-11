@@ -101,7 +101,21 @@ export type InsertRowsResult = {
   insertedCount: number;
   totalRowNumber: number; // 1-based, linha-âncora após o deslocamento
   updatedRanges: string[];
+  // Read-back da linha-âncora (TOTAL) já com fórmulas/somatórios computados,
+  // pra confirmar o resultado sem uma segunda chamada.
+  verification: { totalRow: CellValue[] };
 };
+
+// 0 -> "A", 25 -> "Z", 26 -> "AA" ...
+function indexToCol(index: number): string {
+  let n = index;
+  let s = "";
+  do {
+    s = String.fromCharCode(65 + (n % 26)) + s;
+    n = Math.floor(n / 26) - 1;
+  } while (n >= 0);
+  return s;
+}
 
 export async function insertRowsAboveAnchor(
   params: InsertRowsParams,
@@ -196,6 +210,16 @@ export async function insertRowsAboveAnchor(
     }
   }
 
+  // 6) Read-back da linha TOTAL com os valores já computados (UNFORMATTED).
+  const width = rows[0]?.length ?? 1;
+  const lastCol = indexToCol(width - 1);
+  const verifyResp = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: `'${esc}'!A${totalRowNumber}:${lastCol}${totalRowNumber}`,
+    valueRenderOption: "UNFORMATTED_VALUE",
+  });
+  const totalRow = (verifyResp.data.values?.[0] ?? []) as CellValue[];
+
   return {
     spreadsheetId,
     sheetName,
@@ -204,6 +228,7 @@ export async function insertRowsAboveAnchor(
     insertedCount: n,
     totalRowNumber,
     updatedRanges,
+    verification: { totalRow },
   };
 }
 
