@@ -72,6 +72,141 @@ export type WriteSaldoResult = {
   replaced: boolean;
 };
 
+// ── Inserção de linhas numa aba existente (acima de uma linha-âncora) ──────
+// Diferente de writeSaldoSheet (que cria/recria do zero): aqui a aba já existe
+// e tem dados. Insere N linhas logo ACIMA da linha-âncora (ex.: "TOTAL"),
+// herdando a formatação da linha de cima (inheritFromBefore), preenche os
+// valores e, opcionalmente, atualiza células da própria âncora (ex.: somatórios
+// do TOTAL). Não apaga nada — operação aditiva.
+
+export type InsertRowsParams = {
+  spreadsheetId: string;
+  sheetName: string;
+  // Coluna onde procurar a linha-âncora (ex.: "A").
+  anchorColumn: string;
+  // Texto exato (case-insensitive) da âncora (ex.: "TOTAL"). Usa a ÚLTIMA
+  // ocorrência, que é onde costuma ficar a linha de totais.
+  anchorValue: string;
+  // Linhas a inserir acima da âncora. Strings "=..." viram fórmula.
+  rows: CellValue[][];
+  // Atualizações na linha-âncora após o deslocamento: { "C": 4254, "L": 18217 }.
+  totalUpdates?: Record<string, CellValue>;
+};
+
+export type InsertRowsResult = {
+  spreadsheetId: string;
+  sheetName: string;
+  sheetId: number;
+  insertedAtRow: number; // 1-based, primeira linha nova
+  insertedCount: number;
+  totalRowNumber: number; // 1-based, linha-âncora após o deslocamento
+  updatedRanges: string[];
+};
+
+export async function insertRowsAboveAnchor(
+  params: InsertRowsParams,
+): Promise<InsertRowsResult> {
+  const { spreadsheetId, sheetName, anchorColumn, anchorValue, rows } = params;
+  const esc = sheetName.replace(/'/g, "''");
+  const sheets = getSheetsWriteClient();
+
+  // 1) Resolve o sheetId da aba.
+  const meta = await sheets.spreadsheets.get({
+    spreadsheetId,
+    fields: "sheets.properties(sheetId,title)",
+  });
+  const sheet = (meta.data.sheets ?? []).find(
+    (s) => s.properties?.title === sheetName,
+  );
+  if (!sheet?.properties) {
+    throw new Error("sheet-not-found");
+  }
+  const sheetId = sheet.properties.sheetId!;
+
+  // 2) Localiza a linha-âncora lendo só a coluna de busca (última ocorrência).
+  const col = anchorColumn.trim().toUpperCase();
+  const got = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: `'${esc}'!${col}:${col}`,
+  });
+  const colValues = got.data.values ?? [];
+  let anchorRow0 = -1; // 0-based
+  for (let i = colValues.length - 1; i >= 0; i--) {
+    const v = colValues[i]?.[0];
+    if (typeof v === "string" && v.trim().toUpperCase() === anchorValue.toUpperCase()) {
+      anchorRow0 = i;
+      break;
+    }
+  }
+  if (anchorRow0 < 0) {
+    throw new Error("anchor-not-found");
+  }
+
+  const n = rows.length;
+
+  // 3) Insere N linhas em branco na posição da âncora, empurrando-a pra baixo.
+  //    inheritFromBefore: herda a formatação da linha imediatamente acima
+  //    (última linha de dados) → mantém a identidade visual existente.
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId,
+    requestBody: {
+      requests: [
+        {
+          insertDimension: {
+            range: {
+              sheetId,
+              dimension: "ROWS",
+              startIndex: anchorRow0,
+              endIndex: anchorRow0 + n,
+            },
+            inheritFromBefore: true,
+          },
+        },
+      ],
+    },
+  });
+
+  const updatedRanges: string[] = [];
+
+  // 4) Preenche as linhas novas (USER_ENTERED p/ fórmulas e números BR).
+  const insertStartRow = anchorRow0 + 1; // 1-based
+  const writeResp = await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: `'${esc}'!A${insertStartRow}`,
+    valueInputOption: "USER_ENTERED",
+    requestBody: { values: rows },
+  });
+  if (writeResp.data.updatedRange) updatedRanges.push(writeResp.data.updatedRange);
+
+  // 5) Atualiza a linha-âncora (TOTAL), agora deslocada por N.
+  const totalRowNumber = anchorRow0 + n + 1; // 1-based
+  const totalUpdates = params.totalUpdates ?? {};
+  const totalCols = Object.keys(totalUpdates);
+  if (totalCols.length > 0) {
+    const data = totalCols.map((c) => ({
+      range: `'${esc}'!${c.trim().toUpperCase()}${totalRowNumber}`,
+      values: [[totalUpdates[c]]],
+    }));
+    const batchResp = await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId,
+      requestBody: { valueInputOption: "USER_ENTERED", data },
+    });
+    for (const r of batchResp.data.responses ?? []) {
+      if (r.updatedRange) updatedRanges.push(r.updatedRange);
+    }
+  }
+
+  return {
+    spreadsheetId,
+    sheetName,
+    sheetId,
+    insertedAtRow: insertStartRow,
+    insertedCount: n,
+    totalRowNumber,
+    updatedRanges,
+  };
+}
+
 // "#RRGGBB" -> {red,green,blue} normalizado 0..1 pro Sheets API.
 function hexToRgb(hex: string): sheets_v4.Schema$Color {
   const h = hex.replace("#", "");
