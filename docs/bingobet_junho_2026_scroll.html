@@ -78,6 +78,7 @@
   .ctbl td{padding:12px;text-align:right;border-bottom:1px solid var(--line)}
   .ctbl .fmt{display:inline-flex;align-items:center;gap:8px;font-weight:bold;color:var(--txt)}
   .ctbl .dotc{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 
   /* funnel conteúdo (novo bloco) */
   .cfunnel{display:flex;flex-direction:column;gap:8px;margin-top:34px}
@@ -124,6 +125,7 @@
   .wk2b .rb{background:linear-gradient(180deg,#FF8C3A,#FF6B00)}
   .wk2b .fb{background:linear-gradient(180deg,#6bb4ff,#4a9eff)}
   .wk2lab{font-size:12px;color:var(--mut);font-weight:900}
+  @media(max-width:430px){.wk2{gap:8px}.wk2b{gap:3px}.wk2b span{width:18px}}
   .wk-row{display:flex;align-items:flex-end;gap:14px;margin-top:34px;height:210px}
   .wbar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px}
   .wbar .bar{width:100%;max-width:74px;border-radius:8px 8px 0 0;transition:height 1s cubic-bezier(.2,.8,.2,1);height:0}
@@ -188,6 +190,8 @@
   .reco-t{font-weight:900;font-size:15px;color:var(--txt);margin-bottom:5px}
   .reco-d{font-size:13.5px;color:var(--mut);line-height:1.55}
   .reco-m{font-size:12.5px;color:var(--orange);margin-top:8px;font-weight:600}
+  .reco-dono{font-size:11px;color:var(--mut);margin-top:6px;text-transform:uppercase;letter-spacing:.8px;font-weight:700}
+  .reco-dono b{color:var(--txt)}
   /* cascade */
   .cascade{display:flex;flex-direction:column;gap:12px;margin-top:34px}
   .csrow{display:grid;grid-template-columns:1fr 280px;align-items:center;gap:18px}
@@ -225,19 +229,19 @@
   <p class="sub reveal" style="margin-top:16px">Este documento consolida a <b>performance de conversão</b> (registros, FTD, depósitos) e a <b>atividade de conteúdo</b> do Instagram da BingoBet em junho de 2026, com os <b>primeiros dias de julho já em acompanhamento</b>. Role para navegar pelos blocos.</p>
   <div class="onb-card reveal">
     <div class="oitem">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="#FF6B00" stroke-width="2"/><path d="M3 9h18M8 4v5" stroke="#FF6B00" stroke-width="2"/></svg>
+      <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="#FF6B00" stroke-width="2"/><path d="M3 9h18M8 4v5" stroke="#FF6B00" stroke-width="2"/></svg>
       <div><div class="t">Período</div><div class="v">01/06 a 02/07/2026</div></div>
     </div>
     <div class="oitem">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 20V10M10 20V4M16 20v-7M20 20H2" stroke="#FF6B00" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 20V10M10 20V4M16 20v-7M20 20H2" stroke="#FF6B00" stroke-width="2" stroke-linecap="round"/></svg>
       <div><div class="t">Fonte de conversão</div><div class="v">Painel afiliado · UX-38560</div></div>
     </div>
     <div class="oitem">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="#FF6B00" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="#FF6B00" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="#FF6B00"/></svg>
+      <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="#FF6B00" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="#FF6B00" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="#FF6B00"/></svg>
       <div><div class="t">Fonte de conteúdo</div><div class="v">Instagram · @instabingo</div></div>
     </div>
     <div class="oitem">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#FF6B00" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#FF6B00" stroke-width="2"/></svg>
+      <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#FF6B00" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#FF6B00" stroke-width="2"/></svg>
       <div><div class="t">Métrica-chave</div><div class="v">Conversão registro → FTD</div></div>
     </div>
   </div>
@@ -278,7 +282,7 @@
   <h2 class="reveal">A base que gerou o alcance</h2>
   <div class="split">
     <div class="donut-wrap reveal">
-      <svg id="donut" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <svg id="donut" role="img" aria-label="Composição dos 162 posts de junho por formato: 78% reels, 16% imagens, 6% carrosséis." viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
         <circle cx="100" cy="100" r="70" fill="none" stroke="#2a2a2a" stroke-width="26"/>
         <circle class="seg" id="seg1" cx="100" cy="100" r="70" fill="none" stroke="#FF6B00" stroke-width="26" stroke-dasharray="0 999" transform="rotate(-90 100 100)"/>
         <circle class="seg" id="seg2" cx="100" cy="100" r="70" fill="none" stroke="#4a9eff" stroke-width="26" stroke-dasharray="0 999" transform="rotate(-90 100 100)"/>
@@ -299,39 +303,39 @@
       <li><b>Pauta Copa</b> ampliou a distribuição orgânica sem custo de mídia.</li>
     </ul>
   </div>
-  <div class="readhint reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>O círculo mostra os 162 posts do mês divididos por tipo. <b>Quanto maior o pedaço laranja, mais o mês dependeu de vídeo curto (reel)</b> — que hoje domina quase 8 de cada 10 posts.</div></div>
+  <div class="readhint reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>O círculo mostra os 162 posts do mês divididos por tipo. <b>Quanto maior o pedaço laranja, mais o mês dependeu de vídeo curto (reel)</b> — que hoje domina quase 8 de cada 10 posts.</div></div>
 </div></section>
 <section style="background:var(--bg2)"><div class="wrap">
   <div class="kicker reveal">Conteúdo · leitura detalhada</div>
   <h2 class="reveal">O que o conteúdo entregou</h2>
   <div class="icon-grid tilt">
     <div class="icard reveal tilt-in">
-      <div class="ic3d"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#FF6B00"/></svg></div>
+      <div class="ic3d"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#FF6B00"/></svg></div>
       <div class="n">78%</div><div class="t">Domínio de reels</div>
       <div class="d">126 dos 162 posts. <b>Vídeo curto é o canal</b> de distribuição principal — imagem estática ficou como reforço.</div>
     </div>
     <div class="icard reveal tilt-in">
-      <div class="ic3d"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17l6-6 4 4 8-8" stroke="#FF6B00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ic3d"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 17l6-6 4 4 8-8" stroke="#FF6B00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="n">5,4/dia</div><div class="t">Cadência de publicação</div>
       <div class="d"><b>Volume foi o multiplicador.</b> Salto de ~11 posts/mês (início do semestre) para 162 no mês.</div>
     </div>
     <div class="icard reveal tilt-in">
-      <div class="ic3d"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#FF6B00" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#FF6B00" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <div class="ic3d"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#FF6B00" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#FF6B00" stroke-width="2" stroke-linecap="round"/></svg></div>
       <div class="n">7.654</div><div class="t">Views médias por post</div>
       <div class="d">1,24M views ÷ 162 posts. <b>Cada post rendeu mais</b> por entrar numa cadência que o algoritmo premia.</div>
     </div>
     <div class="icard reveal tilt-in">
-      <div class="ic3d"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-10a4 4 0 018-1 4 4 0 018 1c0 5.5-9 10-9 10z" stroke="#FF6B00" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div class="ic3d"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-10a4 4 0 018-1 4 4 0 018 1c0 5.5-9 10-9 10z" stroke="#FF6B00" stroke-width="2" stroke-linejoin="round"/></svg></div>
       <div class="n">64%</div><div class="t">Alcance sobre views</div>
       <div class="d">797K alcance / 1,24M views. <b>Boa taxa de contas únicas</b> — distribuição foi para gente nova, não só recorrente.</div>
     </div>
     <div class="icard reveal tilt-in">
-      <div class="ic3d"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H5.2L4 17.5V4z" stroke="#FF6B00" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <div class="ic3d"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H5.2L4 17.5V4z" stroke="#FF6B00" stroke-width="2" stroke-linejoin="round"/></svg></div>
       <div class="n">36 posts</div><div class="t">Fora de reels</div>
       <div class="d">26 imagens + 10 carrosséis. <b>Carrossel é o menos usado</b> (6%) — espaço para testar conteúdo educativo.</div>
     </div>
     <div class="icard reveal tilt-in">
-      <div class="ic3d"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3-8 4 16 3-8h4" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ic3d"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3-8 4 16 3-8h4" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="n">0,04%</div><div class="t">Alcance → registro</div>
       <div class="d">797K alcance geraram 318 registros. <b>O gargalo não é conteúdo, é o clique</b> para o link da bio.</div>
     </div>
@@ -347,13 +351,13 @@
     <div class="cf"><div class="cl"><b>Imagens</b>reforço de oferta</div><div class="ctrack"><div class="cfill" data-w="21" style="background:linear-gradient(90deg,#4a9eff,#2d7fd6)">26</div></div><div class="cv">16%</div></div>
     <div class="cf"><div class="cl"><b>Carrosséis</b>educativo</div><div class="ctrack"><div class="cfill" data-w="8" style="background:linear-gradient(90deg,#a06bff,#7d47d6)">10</div></div><div class="cv">6%</div></div>
   </div>
-  <table class="ctbl reveal">
+  <div class="tblwrap"><table class="ctbl reveal">
     <tr><th>Formato</th><th>Posts</th><th>Share</th><th>Papel no mês</th></tr>
     <tr><td><span class="fmt"><span class="dotc" style="background:#FF6B00"></span>Reels</span></td><td>126</td><td>78%</td><td style="color:var(--mut)">Motor de alcance e views</td></tr>
     <tr><td><span class="fmt"><span class="dotc" style="background:#4a9eff"></span>Imagens</span></td><td>26</td><td>16%</td><td style="color:var(--mut)">Reforço de identidade/oferta</td></tr>
     <tr><td><span class="fmt"><span class="dotc" style="background:#a06bff"></span>Carrosséis</span></td><td>10</td><td>6%</td><td style="color:var(--mut)">Conteúdo educativo/explicativo</td></tr>
     <tr><td style="color:var(--orange);font-weight:900">Total</td><td style="color:var(--orange);font-weight:900">162</td><td style="color:var(--orange);font-weight:900">100%</td><td style="color:var(--mut)">1,24M views · 797K alcance</td></tr>
-  </table>
+  </table></div>
   <p class="sub reveal" style="margin-top:20px;font-size:13px"><b>Nota:</b> métrica por post individual (views, alcance, top performers) depende do export bruto do Instagram de junho em layout 18 colunas, ainda não disponível nesta base.</p>
 </div></section>
 
@@ -369,7 +373,7 @@
     <div class="csrow break"><div class="csbar" data-w="14" style="background:linear-gradient(90deg,#e74c3c,#b8392c)"><span>318 registros</span></div><div class="csv" style="color:#f0958c"><b>quebra: 0,04% do alcance</b></div></div>
     <div class="csrow"><div class="csbar" data-w="10" style="background:linear-gradient(90deg,#2ecc71,#22a35a)"><span>212 FTD</span></div><div class="csv" style="color:#7be0a4">66,7% dos registros — recupera aqui</div></div>
   </div>
-  <div class="readhint reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>Cada barra é menor porque uma parte do público não avança para a próxima etapa. <b>A barra vermelha é onde a maior perda acontece</b> — é ali que está o problema a resolver.</div></div>
+  <div class="readhint reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>Cada barra é menor porque uma parte do público não avança para a próxima etapa. <b>A barra vermelha é onde a maior perda acontece</b> — é ali que está o problema a resolver.</div></div>
   <div class="direct reveal">→ <b>O que o cruzamento revela:</b> o conteúdo não é o problema. Views e alcance estão saudáveis e a conversão registro→FTD é recorde. <b>A perda brutal está num único degrau</b>: alcance→registro (0,04%). De cada 2.500 pessoas alcançadas pelo conteúdo, só 1 clica e registra. O gargalo é o clique para a bio, não o post.</div>
 </div></section>
 
@@ -378,12 +382,12 @@
   <div class="kicker reveal">Conteúdo × conversão · formato</div>
   <h2 class="reveal">Reel traz volume, não traz clique</h2>
   <p class="sub reveal">78% do conteúdo foi reel. Cruzando o papel de cada formato no funil com a qualidade do tráfego que gerou.</p>
-  <table class="ctbl reveal">
+  <div class="tblwrap"><table class="ctbl reveal">
     <tr><th>Formato</th><th>Share</th><th>Papel no funil</th><th>Efeito na conversão</th></tr>
     <tr><td><span class="fmt"><span class="dotc" style="background:#FF6B00"></span>Reels</span></td><td>78%</td><td style="color:var(--mut)">Topo — alcance e views</td><td style="color:var(--mut)">Enche o topo, mas clique fraco</td></tr>
     <tr><td><span class="fmt"><span class="dotc" style="background:#4a9eff"></span>Imagens</span></td><td>16%</td><td style="color:var(--mut)">Meio — oferta e identidade</td><td style="color:var(--mut)">Reforça, não puxa registro</td></tr>
     <tr><td><span class="fmt"><span class="dotc" style="background:#a06bff"></span>Carrosséis</span></td><td>6%</td><td style="color:var(--mut)">Meio — educativo, retenção</td><td style="color:var(--green)">Maior potencial de clique, subusado</td></tr>
-  </table>
+  </table></div>
   <div class="direct reveal">→ <b>O que o cruzamento revela:</b> o mix de junho foi <b>quase todo topo de funil</b>. Reel gera view e alcance mas leva pouca gente ao link. O formato que historicamente puxa clique qualificado — carrossel com CTA — respondeu por só 6%. A audiência que chegou converteu a 66,7%, então o tráfego é bom: <b>falta formato de meio de funil que empurre para o clique</b>.</div>
 </div></section>
 
@@ -393,7 +397,7 @@
   <h2 class="reveal">O conteúdo não parou. O clique parou.</h2>
   <p class="sub reveal">Cadência de publicação constante o mês todo (5,4 posts/dia). Cruzando com o registro semanal, que <b>despencou no fechamento</b>.</p>
   <div class="chart-box reveal">
-    <svg id="cadChart" class="chart" viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
+    <svg id="cadChart" role="img" aria-label="Cadência versus ritmo de registro: a linha pontilhada de posts permanece constante ao longo do mês enquanto as barras de registros caem na última semana." class="chart" viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
       <line x1="50" y1="230" x2="860" y2="230" stroke="#2a2a2a"/>
       <!-- linha de conteúdo constante (pontos laranja, mesma altura) -->
       <line id="cadFlat" x1="80" y1="90" x2="830" y2="90" stroke="#FF6B00" stroke-width="2.5" stroke-dasharray="6 4" opacity="0"/>
@@ -410,7 +414,7 @@
     </svg>
   </div>
   <div class="chart-leg reveal"><span><b style="background:#FF6B00;border-style:dashed;border-width:1px 0"></b>Posts/dia (constante)</span><span><b style="background:#4a9eff"></b>Registros/semana</span></div>
-  <div class="readhint reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>A linha laranja pontilhada fica <b>sempre na mesma altura</b> — o time nunca parou de postar. As barras azuis é que despencam no final. <b>Quando uma métrica é reta e a outra cai junto, o problema não é quem produziu — é quem devia reagir.</b></div></div>
+  <div class="readhint reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>A linha laranja pontilhada fica <b>sempre na mesma altura</b> — o time nunca parou de postar. As barras azuis é que despencam no final. <b>Quando uma métrica é reta e a outra cai junto, o problema não é quem produziu — é quem devia reagir.</b></div></div>
 </div></section>
 
 <!-- CRUZAMENTO 4: O QUE FALTA -->
@@ -420,17 +424,17 @@
   <p class="sub reveal">Três perguntas que só o export bruto de junho (layout 18 colunas, com views e link por post) responde:</p>
   <div class="icon-grid tilt">
     <div class="icard reveal tilt-in">
-      <div class="ic3d"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#FF6B00" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="#FF6B00" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <div class="ic3d"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#FF6B00" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="#FF6B00" stroke-width="2" stroke-linecap="round"/></svg></div>
       <div class="t">Qual reel gerou cada pico?</div>
       <div class="d">Ligar o post individual ao dia de pico de registro no painel. <b>Hoje só vemos o agregado.</b></div>
     </div>
     <div class="icard reveal tilt-in">
-      <div class="ic3d"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 20V4M4 8h12l-2-2M4 14h9l-2-2" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ic3d"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 20V4M4 8h12l-2-2M4 14h9l-2-2" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="t">Qual formato converte melhor?</div>
       <div class="d">Cruzar tipo de post com FTD do dia. <b>Saber se carrossel realmente puxa mais clique</b> que reel.</div>
     </div>
     <div class="icard reveal tilt-in">
-      <div class="ic3d"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#FF6B00" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#FF6B00" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <div class="ic3d"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#FF6B00" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#FF6B00" stroke-width="2" stroke-linecap="round"/></svg></div>
       <div class="t">Qual horário rende registro?</div>
       <div class="d">Sábado e quarta convertem 86% e 83%. <b>Confirmar se são os dias de maior tração de reel.</b></div>
     </div>
@@ -453,7 +457,7 @@
     <div><div class="p">9,4×</div><div class="t">depósitos por FTD</div></div>
     <div><div class="p">R$116</div><div class="t">ticket médio</div></div>
   </div>
-  <div class="readhint reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>Cada bloco vai encolhendo porque parte das pessoas some no caminho. Aqui <b>quase não há perda</b> — de quem se registra, a maioria vira cliente pagante. Esse é o oposto do problema visto no bloco anterior.</div></div>
+  <div class="readhint reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>Cada bloco vai encolhendo porque parte das pessoas some no caminho. Aqui <b>quase não há perda</b> — de quem se registra, a maioria vira cliente pagante. Esse é o oposto do problema visto no bloco anterior.</div></div>
 </div></section>
 
 <!-- LINHA -->
@@ -462,7 +466,7 @@
   <h2 class="reveal">Registros e FTD, dia a dia</h2>
   <p class="sub reveal">Volume consistente até o dia 29, <b>queda no fechamento</b>.</p>
   <div class="chart-box reveal">
-    <svg id="lineChart" class="chart" viewBox="0 0 920 320" xmlns="http://www.w3.org/2000/svg">
+    <svg id="lineChart" role="img" aria-label="Registros e FTD dia a dia em junho: as duas linhas caem juntas na última semana do mês." class="chart" viewBox="0 0 920 320" xmlns="http://www.w3.org/2000/svg">
       <line x1="40" y1="280" x2="900" y2="280" stroke="#2a2a2a"/>
       <line x1="40" y1="200" x2="900" y2="200" stroke="#222" stroke-dasharray="3"/>
       <line x1="40" y1="120" x2="900" y2="120" stroke="#222" stroke-dasharray="3"/>
@@ -479,7 +483,7 @@
     </svg>
   </div>
   <div class="chart-leg reveal"><span><b style="background:#FF6B00"></b>Registros</span><span><b style="background:#4a9eff"></b>FTD</span></div>
-  <div class="readhint reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>Cada ponto é um dia. <b>Linha laranja alta</b> = muita gente se cadastrando naquele dia. <b>Linha azul alta</b> = muita gente depositando. Quando as duas caem juntas no fim do gráfico, é o mês perdendo força.</div></div>
+  <div class="readhint reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>Cada ponto é um dia. <b>Linha laranja alta</b> = muita gente se cadastrando naquele dia. <b>Linha azul alta</b> = muita gente depositando. Quando as duas caem juntas no fim do gráfico, é o mês perdendo força.</div></div>
 </div></section>
 
 <!-- BARRAS SEMANA (duplas: reg + ftd) -->
@@ -520,16 +524,16 @@
     </div>
   </div>
   <div class="chart-leg reveal"><span><b style="background:#FF6B00"></b>Registros</span><span><b style="background:#4a9eff"></b>FTD</span></div>
-  <table class="ctbl reveal" style="margin-top:30px">
+  <div class="tblwrap"><table class="ctbl reveal" style="margin-top:30px">
     <tr><th>Semana</th><th>Registros</th><th>FTD</th><th>Conversão</th></tr>
     <tr><td>01–07</td><td>54</td><td>66</td><td style="color:var(--green);font-weight:900">122%*</td></tr>
     <tr><td>08–14</td><td>83</td><td>42</td><td>51%</td></tr>
     <tr><td>15–21</td><td>82</td><td>54</td><td>66%</td></tr>
     <tr><td>22–28</td><td>83</td><td>45</td><td>54%</td></tr>
     <tr><td>29–30</td><td style="color:var(--red);font-weight:900">16</td><td>5</td><td style="color:var(--red)">31%</td></tr>
-  </table>
+  </table></div>
   <p class="sub reveal" style="margin-top:16px;font-size:13px">*A semana 1 passa de 100% porque FTDs de registros de maio caíram nesses dias (defasagem registro→depósito). Não é performance da semana, é resíduo do período anterior.</p>
-  <div class="readhint reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>Cada coluna é uma semana do mês. <b>A última coluna (29–30) é muito mais baixa</b> que as outras quatro — é o mês perdendo ritmo bem no fim, não algo gradual.</div></div>
+  <div class="readhint reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>Cada coluna é uma semana do mês. <b>A última coluna (29–30) é muito mais baixa</b> que as outras quatro — é o mês perdendo ritmo bem no fim, não algo gradual.</div></div>
 </div></section>
 
 <!-- DIA DA SEMANA -->
@@ -546,7 +550,7 @@
     <div class="drow reveal"><div class="d">TER</div><div class="track"><div class="fill" data-w="64" style="background:linear-gradient(90deg,#c85400,#FF6B00)"></div></div><div class="pc">55%</div></div>
     <div class="drow reveal"><div class="d">DOM</div><div class="track"><div class="fill" data-w="57" style="background:linear-gradient(90deg,#b8392c,#e74c3c)"></div></div><div class="pc">49%</div></div>
   </div>
-  <div class="readhint reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>Barra maior = naquele dia, quem se registra tem mais chance de virar cliente pagante. <b>Verde é bom, vermelho é abaixo da média do mês.</b> Domingo é o único dia abaixo de 50%.</div></div>
+  <div class="readhint reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>Barra maior = naquele dia, quem se registra tem mais chance de virar cliente pagante. <b>Verde é bom, vermelho é abaixo da média do mês.</b> Domingo é o único dia abaixo de 50%.</div></div>
 </div></section>
 
 <!-- CALENDÁRIO -->
@@ -557,7 +561,7 @@
   <div class="cal-head reveal"><span>SEG</span><span>TER</span><span>QUA</span><span>QUI</span><span>SEX</span><span>SÁB</span><span>DOM</span></div>
   <div class="cal reveal" id="cal"></div>
   <div class="legend reveal"><span><b style="background:var(--green)"></b>NGR positivo</span><span><b style="background:var(--red)"></b>NGR negativo</span></div>
-  <div class="readhint reveal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>É um calendário do mês. <b>Cada quadrado verde é um dia em que a casa lucrou mais do que pagou</b>; vermelho é o contrário. Repare que os vermelhos ficam todos na primeira metade do mês.</div></div>
+  <div class="readhint reveal"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v6M12 22l-4-4M12 22l4-4M4 10l8-6 8 6" stroke="#FF6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><span class="rlab">Leia assim</span>É um calendário do mês. <b>Cada quadrado verde é um dia em que a casa lucrou mais do que pagou</b>; vermelho é o contrário. Repare que os vermelhos ficam todos na primeira metade do mês.</div></div>
 </div></section>
 
 <!-- LEITURA 1: CONVERSÃO -->
@@ -675,6 +679,7 @@
         <div class="reco-t">Encurtar alcance → registro</div>
         <div class="reco-d">CTA agressivo no topo dos reels de maior tração (link na bio, comentário fixado, sticker de link).</div>
         <div class="reco-m">Meta: dobrar a taxa alcance→registro (0,04% → 0,1%) sem aumentar volume de conteúdo.</div>
+        <div class="reco-dono">Dono: <b>00BABY</b></div>
       </div>
     </div>
     <div class="reco">
@@ -683,6 +688,7 @@
         <div class="reco-t">Sustentar volume na última semana</div>
         <div class="reco-d">Cadência de conteúdo já é constante — o ajuste é de captação/CTA na virada do mês, não de produção.</div>
         <div class="reco-m">Meta: piso de 60 registros por semana, mesmo em semana de fechamento.</div>
+        <div class="reco-dono">Dono: <b>00BABY</b></div>
       </div>
     </div>
     <div class="reco">
@@ -691,6 +697,7 @@
         <div class="reco-t">Reforçar domingo</div>
         <div class="reco-d">Pior dia de conversão (49%). Testar pauta e horário específicos para o dia.</div>
         <div class="reco-m">Meta: domingo ≥60% de conversão.</div>
+        <div class="reco-dono">Dono: <b>00BABY</b></div>
       </div>
     </div>
     <div class="reco">
@@ -699,6 +706,7 @@
         <div class="reco-t">Testar carrossel educativo</div>
         <div class="reco-d">Formato subutilizado (6%) com maior potencial de reter atenção e empurrar clique — reel domina o topo, falta o meio de funil.</div>
         <div class="reco-m">Meta: elevar share de carrossel para 15%+.</div>
+        <div class="reco-dono">Dono: <b>00BABY</b></div>
       </div>
     </div>
     <div class="reco">
@@ -707,6 +715,7 @@
         <div class="reco-t">Investigar dias negativos de NGR</div>
         <div class="reco-d">7 dias negativos concentrados na 1ª quinzena — checar origem (bônus, cashback, saques grandes) antes que se repita em julho.</div>
         <div class="reco-m">Meta: máximo 3 dias negativos por mês.</div>
+        <div class="reco-dono">Dono: <b>00BABY</b></div>
       </div>
     </div>
     <div class="reco">
