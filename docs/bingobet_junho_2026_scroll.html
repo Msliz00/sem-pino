@@ -32,7 +32,7 @@
   .tilt{perspective:1200px}
   .tilt-in{transform:rotateX(14deg) translateY(30px);opacity:0;transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .8s ease;transform-style:preserve-3d}
   .tilt-in.on{transform:rotateX(0) translateY(0);opacity:1}
-  .icard,.kpi,.cbox{transition:transform .4s ease,box-shadow .4s ease;transform-style:preserve-3d}
+  .icard,.kpi,.cbox{transition:transform .4s ease,box-shadow .4s ease;transform-style:flat;overflow:hidden}
   .icard:hover,.kpi:hover,.cbox:hover{transform:translateY(-6px) rotateX(4deg) rotateY(-3deg);box-shadow:0 18px 34px rgba(0,0,0,.45)}
   .ic3d{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;background:linear-gradient(145deg,#2a1608,#1c1c1c);box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 8px 18px rgba(255,107,0,.18);transform:rotateX(8deg) rotateY(-8deg);transition:transform .4s ease}
   .icard:hover .ic3d{transform:rotateX(0) rotateY(0) scale(1.08)}
@@ -196,7 +196,7 @@
   .cascade{display:flex;flex-direction:column;gap:12px;margin-top:34px}
   .csrow{display:grid;grid-template-columns:1fr 280px;align-items:center;gap:18px}
   @media(max-width:680px){.csrow{grid-template-columns:1fr}}
-  .csbar{height:46px;border-radius:9px;width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1);display:flex;align-items:center;padding-left:16px;color:#111;font-weight:900;font-size:15px;min-width:90px}
+  .csbar{height:46px;border-radius:9px;width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1);display:flex;align-items:center;padding:0 16px;color:#111;font-weight:900;font-size:15px;min-width:168px;white-space:nowrap}
   .csrow.break .csbar{color:#fff}
   .csv{font-size:13px;color:var(--mut)}
   .csv b{color:var(--txt)}
@@ -795,7 +795,7 @@ if(casc){const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting
       const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
       dot.setAttribute('cx',w.x);dot.setAttribute('cy',90);dot.setAttribute('r',0);dot.setAttribute('fill','#FF6B00');
       dot.dataset.r=6; dotsG.appendChild(dot);
-      const h=(w.reg/maxReg)*130;
+      const h=Math.max((w.reg/maxReg)*105,30);
       const bar=document.createElementNS('http://www.w3.org/2000/svg','rect');
       bar.setAttribute('x',w.x-22);bar.setAttribute('y',baseY);bar.setAttribute('width',44);bar.setAttribute('height',0);
       bar.setAttribute('rx',6);
