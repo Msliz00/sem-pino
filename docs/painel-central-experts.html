@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de Operações · BingoBet · Painel Experts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#08070a; --ink-2:#0d0c10;
+  --orange-500:#ff6b00; --orange-400:#ff8a3c;
+  --fog:rgba(255,255,255,0.55); --snow:#f5f5f7;
+  --green:#4ade80; --red:#ef4444; --yellow:#facc15; --blue:#5b9dff;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+html,body{background:var(--ink);color:var(--snow);font-family:"Bricolage Grotesque",system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+.serif-accent{font-family:"Instrument Serif",Georgia,serif;font-style:italic;color:var(--orange-400)}
+a{color:inherit;text-decoration:none}
+
+/* background */
+.bg-live{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);animation:drift 20s ease-in-out infinite}
+.orb-1{width:480px;height:480px;background:radial-gradient(circle,rgba(255,107,0,0.30) 0%,transparent 70%);top:-12%;left:-8%}
+.orb-2{width:380px;height:380px;background:radial-gradient(circle,rgba(255,138,60,0.22) 0%,transparent 70%);bottom:-12%;right:-6%;animation-delay:-7s}
+.orb-3{width:280px;height:280px;background:radial-gradient(circle,rgba(255,107,0,0.18) 0%,transparent 70%);top:42%;right:28%;animation-delay:-13s}
+.bg-live::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.035) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 75%)}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-30px) scale(1.1)}66%{transform:translate(-20px,20px) scale(0.95)}}
+@keyframes shine{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.glass{background:rgba(20,18,24,0.55);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border:1px solid rgba(255,255,255,0.08)}
+.glass-strong{background:rgba(13,12,16,0.75);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);border:1px solid rgba(255,255,255,0.10)}
+
+.brand{font-weight:700;display:inline-flex;align-items:center;gap:2px;font-size:24px;letter-spacing:-0.02em}
+.brand .bet{background:linear-gradient(135deg,#ff8a3c 0%,#ff6b00 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* layout */
+.app{display:flex;width:100%;position:relative;z-index:1}
+.sidebar{width:240px;min-height:100vh;padding:22px 18px;position:relative;z-index:10;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,0.08)}
+.sub-brand{margin-top:6px;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--fog)}
+.nav{display:flex;flex-direction:column;gap:4px;margin-top:32px;flex:1}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:11px;color:var(--fog);font-weight:500;font-size:14px;cursor:pointer;transition:all .2s ease}
+.nav-item:hover{color:var(--snow);background:rgba(255,255,255,0.05)}
+.nav-item.active{background:rgba(255,107,0,0.15);color:var(--orange-400);border:1px solid rgba(255,107,0,0.3)}
+.nav-item svg{width:18px;height:18px;flex-shrink:0}
+.user-card{border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin-top:16px;display:flex;align-items:center;gap:12px}
+.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#ff8a3c 0%,#ff6b00 100%);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--ink);box-shadow:0 0 20px rgba(255,107,0,0.4);flex-shrink:0}
+.user-card .u-name{font-size:13px;font-weight:600}
+.user-card .u-mail{font-size:10px;color:var(--fog)}
+
+.main{flex:1;padding:36px 40px;position:relative;z-index:1;min-width:0}
+.mobilebar{display:none}
+
+/* header */
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:8px}
+.page-title{font-size:44px;font-weight:600;letter-spacing:-0.02em;line-height:1.05}
+.page-sub{font-family:"JetBrains Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--fog);margin-top:12px}
+.livedot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);margin-right:7px;vertical-align:middle;animation:fadeInUp .6s}
+.hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.datechip{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--snow);padding:10px 16px;border-radius:12px}
+.datechip b{color:var(--orange-400)}
+
+/* expert pills */
+.experts-pills{display:flex;gap:6px;align-items:center;padding:6px;border-radius:14px;flex-wrap:wrap}
+.expert-pill{padding:9px 15px;border-radius:10px;background:transparent;border:none;cursor:pointer;color:var(--fog);font-family:"Bricolage Grotesque";font-size:13px;font-weight:500;transition:all .3s ease;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.expert-pill:hover{color:var(--snow)}
+.expert-pill.active{background:linear-gradient(135deg,#ff8a3c 0%,#ff6b00 100%);color:var(--ink);font-weight:700;box-shadow:0 0 26px rgba(255,107,0,0.4)}
+.expert-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--fog);transition:all .3s}
+.expert-pill.active .dot{background:var(--ink)}
+
+.section-title{font-family:"JetBrains Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--fog);margin:34px 0 14px;display:flex;align-items:center;gap:10px}
+.section-title::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.07)}
+
+/* KPI grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{border-radius:16px;padding:20px;transition:all .4s cubic-bezier(0.34,1.56,0.64,1);position:relative;overflow:hidden}
+.kpi:hover{transform:translateY(-5px);border-color:rgba(255,107,0,0.5);box-shadow:0 18px 50px rgba(255,107,0,0.18)}
+.kpi-label{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:var(--fog);margin-bottom:8px}
+.kpi-value{font-size:28px;font-weight:600;letter-spacing:-0.01em;line-height:1}
+.kpi-value .u{font-size:15px;color:var(--fog);font-weight:500;margin-right:2px}
+.kpi-delta{font-family:"JetBrains Mono",monospace;font-size:11px;margin-top:9px;display:flex;align-items:center;gap:5px}
+.kpi-delta.up{color:var(--green)}.kpi-delta.down{color:var(--red)}.kpi-delta.flat{color:var(--fog)}
+
+/* generic panel */
+.grid-2{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;align-items:start}
+.grid-2>.panel{min-width:0}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.panel{border-radius:18px;padding:22px}
+.panel h3{font-size:17px;font-weight:600;margin-bottom:4px}
+.panel .psub{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--fog);margin-bottom:16px}
+
+/* ranking table */
+.rank{width:100%;border-collapse:collapse;font-size:14px}
+.rank th{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--fog);text-align:right;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,0.08);font-weight:500}
+.rank th:first-child,.rank td:first-child{text-align:left}
+.rank td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.05);text-align:right}
+.rank tr:last-child td{border-bottom:none}
+.rank tr.on{background:rgba(255,107,0,0.06)}
+.rank .who{display:flex;align-items:center;gap:10px;font-weight:600}
+.rank .adot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.rank .barc{position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,0.06);width:110px;margin-top:6px;overflow:hidden}
+.rank .barf{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,#ff8a3c,#ff6b00)}
+.tag{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.08em;padding:2px 7px;border-radius:5px;border:1px solid rgba(255,255,255,0.12);color:var(--fog)}
+.tag.bingo{color:var(--orange-400);border-color:rgba(255,138,60,0.4)}
+.tag.reals{color:var(--blue);border-color:rgba(91,157,255,0.4)}
+
+/* status ops */
+.opsrow{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;border-radius:11px;background:rgba(255,255,255,0.02);margin-bottom:8px;border:1px solid rgba(255,255,255,0.05)}
+.opsrow .who{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px}
+.status{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.08em;padding:4px 10px;border-radius:7px;display:flex;align-items:center;gap:6px}
+.status.ok{color:var(--green);background:rgba(74,222,128,0.1)}
+.status.wait{color:var(--red);background:rgba(239,68,68,0.12);animation:fadeInUp .5s}
+.status .s-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.ops-summary{display:flex;align-items:baseline;gap:8px;margin-bottom:14px}
+.ops-summary .big{font-size:30px;font-weight:700}
+
+/* funnel */
+.funnel{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+.frow{display:grid;grid-template-columns:120px 1fr;align-items:center;gap:14px}
+.fbar{height:42px;border-radius:9px;display:flex;align-items:center;padding:0 14px;color:var(--ink);font-weight:700;font-size:14px;min-width:120px;white-space:nowrap;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.fmeta{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--fog)}
+.fmeta b{color:var(--snow)}
+.flabel{font-family:"JetBrains Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--fog);text-align:right}
+
+/* campanhas */
+.camp-head{display:flex;gap:10px;margin-bottom:14px}
+.camp-stat{flex:1;border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,0.07)}
+.camp-stat .n{font-size:26px;font-weight:700}
+.camp-stat .l{font-family:"JetBrains Mono",monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--fog);margin-top:2px}
+.camplist{display:flex;flex-direction:column;gap:7px}
+.campitem{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:9px;background:rgba(255,255,255,0.02);font-size:13px}
+.campitem .cn{font-weight:600}
+.campitem .cx{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--fog)}
+
+/* trend chart */
+.chart-wrap{margin-top:6px}
+.legend{display:flex;gap:18px;margin-bottom:10px}
+.legend span{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--fog);display:flex;align-items:center;gap:7px}
+.legend .lk{width:14px;height:3px;border-radius:2px}
+
+.foot{margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.foot .mono{font-size:10px;color:var(--fog);letter-spacing:0.08em}
+.preview-flag{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--yellow);border:1px solid rgba(250,204,21,0.35);background:rgba(250,204,21,0.08);padding:6px 12px;border-radius:8px;letter-spacing:0.06em}
+
+.reveal{opacity:0;animation:fadeInUp .6s ease forwards}
+
+/* responsive */
+@media(max-width:1080px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}}
+@media(max-width:860px){
+  .sidebar{display:none}
+  .main{padding:18px 16px}
+  .mobilebar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(255,255,255,0.08)}
+  .page-title{font-size:32px}
+  .hdr-right{align-items:flex-start;width:100%}
+}
+@media(max-width:520px){
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi-value{font-size:22px}
+  .frow{grid-template-columns:84px 1fr;gap:8px}
+  .rank .barc{display:none}
+}
+</style>
+</head>
+<body>
+<div class="bg-live"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+<div class="mobilebar glass-strong">
+  <div class="brand">Bingo<span class="bet">Bet</span></div>
+  <div class="mono" style="font-size:10px;color:var(--fog);letter-spacing:.12em">CENTRAL · EXPERTS</div>
+</div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar glass-strong">
+    <div>
+      <div class="brand">Bingo<span class="bet">Bet</span></div>
+      <div class="sub-brand mono">Painel Experts</div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Central</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M20 20H2"/></svg>Dashboard</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg>Histórico</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M7 9l5-5 5 5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20h16"/></svg>Upload</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M3 17l5-4 4 3 3-2 6 5"/></svg>Criativos</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.1A1.6 1.6 0 006 19.4l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003.3 15H3a2 2 0 110-4h.1A1.6 1.6 0 004.6 9l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010 5.6V3a2 2 0 114 0v.1A1.6 1.6 0 0018.4 6l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-1.1 2.7H21a2 2 0 110 4z"/></svg>Gestão</div>
+    </nav>
+    <div class="user-card">
+      <div class="avatar">B</div>
+      <div><div class="u-name">00BABY</div><div class="u-mail mono">operações</div></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header reveal">
+      <div>
+        <div class="page-title">Central de <span class="serif-accent">operações</span></div>
+        <div class="page-sub"><span class="livedot"></span>Visão consolidada · <span id="scope">todos os experts</span></div>
+      </div>
+      <div class="hdr-right">
+        <div class="datechip glass">Referência · <b id="refdate">24 set 2026</b></div>
+        <div class="experts-pills glass" id="pills"></div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="section-title">Indicadores do dia · vs ontem</div>
+    <div class="kpi-grid" id="kpis"></div>
+
+    <!-- STATUS OPS + CAMPANHAS -->
+    <div class="grid-2" style="margin-top:8px">
+      <div class="panel glass reveal">
+        <h3>Ranking de experts</h3>
+        <div class="psub">ordenado por registros · hoje</div>
+        <div class="tblwrap"><table class="rank"><thead>
+          <tr><th>Expert</th><th>Invest.</th><th>Reg.</th><th>FTD</th><th>Reg→FTD</th><th>CPA</th><th>NGR</th></tr>
+        </thead><tbody id="rankbody"></tbody></table></div>
+      </div>
+      <div class="panel glass reveal">
+        <h3>Status de dados · hoje</h3>
+        <div class="psub">upload diário por expert</div>
+        <div class="ops-summary"><span class="big" id="opsdone">4</span><span class="mono" style="color:var(--fog)">de 5 experts subiram · <b id="opsmiss" style="color:var(--red)">1 pendente</b></span></div>
+        <div id="opsrows"></div>
+      </div>
+    </div>
+
+    <!-- FUNIL + CAMPANHAS -->
+    <div class="grid-2" style="margin-top:24px">
+      <div class="panel glass reveal">
+        <h3>Funil operacional</h3>
+        <div class="psub" id="funscope">clique → entrada → registro → FTD · todos</div>
+        <div class="funnel" id="funnel"></div>
+      </div>
+      <div class="panel glass reveal">
+        <h3>Campanhas ativas</h3>
+        <div class="psub">por marca</div>
+        <div class="camp-head">
+          <div class="camp-stat"><div class="n" style="color:var(--orange-400)">6</div><div class="l">BINGO</div></div>
+          <div class="camp-stat"><div class="n" style="color:var(--blue)">4</div><div class="l">REALS</div></div>
+          <div class="camp-stat"><div class="n">10</div><div class="l">total ativas</div></div>
+        </div>
+        <div class="camplist">
+          <div class="campitem"><span class="cn">Larissa · Bingo Turbo</span><span class="cx tag bingo">UX-38560</span></div>
+          <div class="campitem"><span class="cn">Gabriel · Reals Prime</span><span class="cx tag reals">UX-41022</span></div>
+          <div class="campitem"><span class="cn">Rafa · Bingo Noturno</span><span class="cx tag bingo">UX-39114</span></div>
+          <div class="campitem"><span class="cn">Vitor · Reals Cash</span><span class="cx tag reals">UX-40877</span></div>
+          <div class="campitem"><span class="cn">Nanda · Bingo Premiado</span><span class="cx tag bingo">UX-38921</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TREND -->
+    <div class="section-title">Tendência · últimos 14 dias (consolidado)</div>
+    <div class="panel glass reveal">
+      <div class="legend">
+        <span><span class="lk" style="background:#ff6b00"></span>Registros</span>
+        <span><span class="lk" style="background:#5b9dff"></span>FTD</span>
+      </div>
+      <div class="chart-wrap"><svg id="trend" viewBox="0 0 920 260" width="100%" role="img" aria-label="Linha de registros e FTD nos últimos 14 dias, ambos em tendência de alta."></svg></div>
+    </div>
+
+    <div class="foot">
+      <div class="mono">BingoBet · Painel Experts — Central de Operações · preview</div>
+      <div class="preview-flag">PREVIEW · dados mock — pendente ligação ao Supabase</div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ---- dados mock (inputs-base; tudo derivado em JS p/ consistência) ----
+const EXPERTS=[
+  {key:"larissa",nome:"Larissa",marcas:["bingo"],cor:"#ff6b00",up:{feito:true,hora:"08:12"},
+    hoje:{inv:1240,cli:3100,ent:920,reg:118,ftd:79,dep:41200,ngr:6800,wag:210000},
+    ontem:{inv:1180,cli:2980,ent:870,reg:109,ftd:71,dep:38400,ngr:6300,wag:198000}},
+  {key:"gabriel",nome:"Gabriel",marcas:["reals"],cor:"#5b9dff",up:{feito:true,hora:"07:48"},
+    hoje:{inv:1520,cli:3800,ent:1050,reg:96,ftd:61,dep:33500,ngr:5100,wag:180000},
+    ontem:{inv:1490,cli:3720,ent:1010,reg:101,ftd:64,dep:34800,ngr:5400,wag:186000}},
+  {key:"rafa",nome:"Rafa",marcas:["bingo","reals"],cor:"#ff8a3c",up:{feito:true,hora:"09:03"},
+    hoje:{inv:980,cli:2450,ent:610,reg:74,ftd:46,dep:22800,ngr:3900,wag:150000},
+    ontem:{inv:940,cli:2360,ent:585,reg:70,ftd:41,dep:20900,ngr:3500,wag:141000}},
+  {key:"vitor",nome:"Vitor",marcas:["reals"],cor:"#a06bff",up:{feito:true,hora:"10:21"},
+    hoje:{inv:820,cli:2050,ent:560,reg:63,ftd:38,dep:21300,ngr:3200,wag:112000},
+    ontem:{inv:800,cli:1990,ent:540,reg:60,ftd:37,dep:20600,ngr:3050,wag:108000}},
+  {key:"nanda",nome:"Nanda",marcas:["bingo"],cor:"#4ade80",up:{feito:false,hora:null},
+    hoje:{inv:640,cli:1700,ent:430,reg:52,ftd:35,dep:18900,ngr:2700,wag:96000},
+    ontem:{inv:660,cli:1740,ent:445,reg:55,ftd:36,dep:19400,ngr:2800,wag:99000}},
+];
+const trendReg=[312,298,331,356,340,372,365,381,358,394,377,402,388,403];
+const trendFtd=[201,193,214,229,222,240,236,247,231,255,244,258,250,259];
+
+const nf=new Intl.NumberFormat('pt-BR');
+const brl=n=>'R$'+nf.format(Math.round(n));
+const brlk=n=>n>=1000?'R$'+(n/1000).toFixed(n>=100000?0:1).replace('.',',')+'k':brl(n);
+const pct=n=>n==null?'—':(n*100).toFixed(1).replace('.',',')+'%';
+const sum=(a,f)=>a.reduce((s,x)=>s+f(x),0);
+
+function agg(list){
+  const g=k=>sum(list,e=>e.hoje[k]), go=k=>sum(list,e=>e.ontem[k]);
+  return {
+    hoje:{inv:g('inv'),cli:g('cli'),ent:g('ent'),reg:g('reg'),ftd:g('ftd'),dep:g('dep'),ngr:g('ngr'),wag:g('wag')},
+    ontem:{inv:go('inv'),cli:go('cli'),ent:go('ent'),reg:go('reg'),ftd:go('ftd'),dep:go('dep'),ngr:go('ngr'),wag:go('wag')}
+  };
+}
+const div=(a,b)=>b?a/b:null;
+function metrics(d){return{
+  inv:d.inv, reg:d.reg, ftd:d.ftd, ngr:d.ngr, dep:d.dep,
+  cpa:div(d.inv,d.reg), regFtd:div(d.ftd,d.reg), ticket:div(d.dep,d.ftd),
+  cliEnt:div(d.ent,d.cli), entFtd:div(d.ftd,d.ent), depNgr:div(d.ngr,d.dep)
+};}
+const varp=(a,b)=>b?((a-b)/b):null;
+
+let current="todos";
+
+function render(){
+  const list = current==="todos"?EXPERTS:EXPERTS.filter(e=>e.key===current);
+  const a=agg(list); const m=metrics(a.hoje); const mo=metrics(a.ontem);
+  document.getElementById('scope').textContent = current==="todos"?"todos os experts":EXPERTS.find(e=>e.key===current).nome;
+  document.getElementById('funscope').textContent = "clique → entrada → registro → FTD · "+(current==="todos"?"todos":EXPERTS.find(e=>e.key===current).nome);
+
+  // KPIs
+  const kpis=[
+    {l:"Investimento",v:brlk(m.inv),d:varp(m.inv,mo.inv),info:true},
+    {l:"Registros",v:nf.format(m.reg),d:varp(m.reg,mo.reg)},
+    {l:"FTD",v:nf.format(m.ftd),d:varp(m.ftd,mo.ftd)},
+    {l:"Conversão Reg→FTD",v:pct(m.regFtd),d:varp(m.regFtd,mo.regFtd)},
+    {l:"NGR",v:brlk(m.ngr),d:varp(m.ngr,mo.ngr)},
+    {l:"Ticket médio",v:brl(m.ticket),d:varp(m.ticket,mo.ticket)},
+    {l:"CPA · custo/registro",v:brl(m.cpa),d:varp(m.cpa,mo.cpa),inv:true},
+    {l:"Depósitos",v:brlk(m.dep),d:varp(m.dep,mo.dep)},
+  ];
+  document.getElementById('kpis').innerHTML=kpis.map((k,i)=>{
+    let cls="flat",arrow="→",good=k.d;
+    if(k.inv&&k.d!=null) good=-k.d; // p/ custo (CPA), cair é bom
+    if(k.d!=null&&Math.abs(k.d)>=0.001){arrow=k.d>0?"▲":"▼";cls=k.info?"flat":(good>0?"up":"down");}
+    const dtxt=k.d==null?"—":arrow+" "+Math.abs(k.d*100).toFixed(1).replace('.',',')+"%";
+    return `<div class="kpi glass reveal" style="animation-delay:${i*0.05}s">
+      <div class="kpi-label">${k.l}</div>
+      <div class="kpi-value">${k.v}</div>
+      <div class="kpi-delta ${cls}">${dtxt}<span style="color:var(--fog)">vs ontem</span></div>
+    </div>`;
+  }).join('');
+
+  // Ranking (sempre todos, destaca selecionado)
+  const ranked=[...EXPERTS].sort((x,y)=>y.hoje.reg-x.hoje.reg);
+  const maxReg=Math.max(...EXPERTS.map(e=>e.hoje.reg));
+  document.getElementById('rankbody').innerHTML=ranked.map(e=>{
+    const mm=metrics(e.hoje);
+    const on=current!=="todos"&&current===e.key;
+    return `<tr class="${on?'on':''}">
+      <td><div class="who"><span class="adot" style="background:${e.cor}"></span>${e.nome}
+        ${e.marcas.map(x=>`<span class="tag ${x}">${x.toUpperCase()}</span>`).join(' ')}</div>
+        <div class="barc"><div class="barf" style="width:${(e.hoje.reg/maxReg*100).toFixed(0)}%"></div></div></td>
+      <td class="mono">${brlk(mm.inv)}</td><td class="mono"><b>${mm.reg}</b></td>
+      <td class="mono">${mm.ftd}</td><td class="mono">${pct(mm.regFtd)}</td>
+      <td class="mono">${brl(mm.cpa)}</td><td class="mono">${brlk(mm.ngr)}</td></tr>`;
+  }).join('');
+
+  // Funil
+  const f=a.hoje;
+  const steps=[
+    {l:"Cliques",v:f.cli,c:"linear-gradient(90deg,#ff8a3c,#ff6b00)",base:f.cli},
+    {l:"Entradas grupo",v:f.ent,c:"linear-gradient(90deg,#ff7a20,#e8650d)",rel:div(f.ent,f.cli)},
+    {l:"Registros",v:f.reg,c:"linear-gradient(90deg,#e8650d,#c85400)",rel:div(f.reg,f.ent)},
+    {l:"FTD",v:f.ftd,c:"linear-gradient(90deg,#4ade80,#22a35a)",rel:div(f.ftd,f.reg)},
+  ];
+  document.getElementById('funnel').innerHTML=steps.map((s,i)=>{
+    const w=Math.max((s.v/f.cli)*100,16);
+    const meta=i===0?`<b>base</b>`:`<b>${pct(s.rel)}</b> da etapa anterior`;
+    return `<div class="frow"><div class="flabel">${s.l}</div>
+      <div><div class="fbar" style="width:${w}%;background:${s.c}">${nf.format(s.v)}</div>
+      <div class="fmeta" style="margin-top:4px">${meta}</div></div></div>`;
+  }).join('');
+}
+
+// pills
+function buildPills(){
+  const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...EXPERTS];
+  document.getElementById('pills').innerHTML=items.map(e=>
+    `<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}">
+      <span class="dot" style="background:${e.cor||e.cor}"></span>${e.nome}</button>`).join('');
+  document.querySelectorAll('.expert-pill').forEach(b=>b.onclick=()=>{
+    current=b.dataset.k;
+    document.querySelectorAll('.expert-pill').forEach(x=>x.classList.toggle('active',x===b));
+    render();
+  });
+}
+
+// status ops
+function buildOps(){
+  const done=EXPERTS.filter(e=>e.up.feito).length;
+  document.getElementById('opsdone').textContent=done;
+  document.getElementById('opsmiss').textContent=(EXPERTS.length-done)+" pendente";
+  document.getElementById('opsrows').innerHTML=EXPERTS.map(e=>
+    `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div>
+     ${e.up.feito
+        ?`<div class="status ok"><span class="s-dot"></span>subiu ${e.up.hora}</div>`
+        :`<div class="status wait"><span class="s-dot"></span>pendente</div>`}</div>`).join('');
+}
+
+// trend chart
+function buildTrend(){
+  const W=920,H=260,pad={l:44,r:16,t:16,b:26};
+  const max=Math.max(...trendReg)*1.1;
+  const x=i=>pad.l+(i/(trendReg.length-1))*(W-pad.l-pad.r);
+  const y=v=>H-pad.b-(v/max)*(H-pad.t-pad.b);
+  const line=(arr,col)=>{
+    const d=arr.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
+    const dots=arr.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3" fill="${col}"/>`).join('');
+    return `<path d="${d}" fill="none" stroke="${col}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}`;
+  };
+  let grid='';
+  for(let g=0;g<=4;g++){const gy=(pad.t+(g/4)*(H-pad.t-pad.b)).toFixed(0);grid+=`<line x1="${pad.l}" y1="${gy}" x2="${W-pad.r}" y2="${gy}" stroke="rgba(255,255,255,0.06)"/>`;}
+  const labels=['D-13','','','','D-9','','','','D-5','','','','D-1','hoje']
+    .map((t,i)=>t?`<text x="${x(i).toFixed(1)}" y="${H-8}" fill="rgba(255,255,255,0.4)" font-size="10" font-family="JetBrains Mono" text-anchor="middle">${t}</text>`:'').join('');
+  document.getElementById('trend').innerHTML=grid+line(trendReg,'#ff6b00')+line(trendFtd,'#5b9dff')+labels;
+}
+
+document.getElementById('refdate').textContent="24 set 2026";
+buildPills(); buildOps(); buildTrend(); render();
+</script>
+</body>
+</html>
