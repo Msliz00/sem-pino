@@ -160,7 +160,85 @@ a{color:inherit;text-decoration:none}
   .kpi-value{font-size:22px}
   .frow{grid-template-columns:84px 1fr;gap:8px}
   .rank .barc{display:none}
+  .cv-grid{grid-template-columns:1fr}
+  .frow-form,.frow-form3{grid-template-columns:1fr!important}
 }
+
+/* multi-page router */
+.page{display:none;animation:fadeInUp .4s ease}
+.page.active{display:block}
+.mobilenav{display:none}
+.mnav-item{white-space:nowrap;padding:8px 14px;border-radius:9px;font-size:13px;font-weight:600;color:var(--fog);cursor:pointer;flex-shrink:0}
+.mnav-item.active{background:rgba(255,107,0,0.15);color:var(--orange-400);border:1px solid rgba(255,107,0,0.3)}
+@media(max-width:860px){
+  .mobilenav{display:flex;gap:4px;overflow-x:auto;padding:8px 12px;position:sticky;top:52px;z-index:19;border-bottom:1px solid rgba(255,255,255,0.08)}
+  .mobilenav::-webkit-scrollbar{display:none}
+}
+
+/* dashboard */
+.dash-grid{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1080px){.dash-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.dash-grid{grid-template-columns:1fr 1fr}}
+
+/* histórico table */
+.histtable td:first-child{font-family:"JetBrains Mono",monospace;font-weight:600}
+.sig{font-family:"JetBrains Mono",monospace;font-size:10px;padding:3px 9px;border-radius:6px}
+.sig.up{color:var(--green);background:rgba(74,222,128,0.1)}
+.sig.down{color:var(--red);background:rgba(239,68,68,0.12)}
+
+/* upload */
+.up-tabs{display:flex;gap:6px;padding:6px;border-radius:12px;background:rgba(20,18,24,0.6);border:1px solid rgba(255,255,255,0.08)}
+.up-tab{flex:1;padding:10px;border-radius:9px;background:transparent;border:none;cursor:pointer;color:var(--fog);font-family:inherit;font-size:13px;font-weight:600;transition:all .25s}
+.up-tab:hover{color:var(--snow)}
+.up-tab.active{background:linear-gradient(135deg,#ff8a3c,#ff6b00);color:var(--ink)}
+.frow-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.frow-form3{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.label{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--fog);display:block;margin-bottom:7px}
+.input{background:rgba(20,18,24,0.6);border:1px solid rgba(255,255,255,0.1);color:var(--snow);border-radius:10px;padding:11px 14px;width:100%;font-family:inherit;font-size:14px;transition:border .2s,box-shadow .2s}
+.input:focus{outline:none;border-color:rgba(255,107,0,0.5);box-shadow:0 0 0 3px rgba(255,107,0,0.15)}
+select.input{cursor:pointer}
+.dropzone{margin-top:16px;border:1.5px dashed rgba(255,255,255,0.16);border-radius:14px;padding:34px 20px;text-align:center;color:var(--fog);cursor:pointer;transition:all .25s}
+.dropzone:hover{border-color:rgba(255,107,0,0.5);background:rgba(255,107,0,0.05);color:var(--snow)}
+.dz-ic{font-size:30px;color:var(--orange-400);margin-bottom:8px}
+.btn-orange{background:linear-gradient(135deg,#ff8a3c,#ff6b00);color:var(--ink);font-weight:700;border-radius:12px;padding:12px 24px;border:none;cursor:pointer;font-family:inherit;font-size:14px;box-shadow:0 0 30px rgba(255,107,0,0.25);transition:all .2s}
+.btn-orange:hover{box-shadow:0 0 50px rgba(255,107,0,0.4);transform:translateY(-1px)}
+.btn-ghost{background:rgba(255,255,255,0.05);color:var(--snow);border:1px solid rgba(255,255,255,0.1);border-radius:11px;padding:10px 18px;cursor:pointer;font-family:inherit;font-size:13px;transition:all .2s}
+.btn-ghost:hover{border-color:rgba(255,107,0,0.5);background:rgba(255,107,0,0.08)}
+.btn-ghost.sm{padding:7px 13px;font-size:12px}
+
+/* filter pills (criativos) */
+.filter-pills{display:flex;gap:6px;padding:6px;border-radius:14px;flex-wrap:wrap}
+.filter-pill{padding:8px 14px;border-radius:9px;background:transparent;border:none;cursor:pointer;color:var(--fog);font-family:"JetBrains Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;transition:all .25s}
+.filter-pill:hover{color:var(--snow)}
+.filter-pill.active{background:linear-gradient(135deg,#ff8a3c,#ff6b00);color:var(--ink);font-weight:700}
+
+/* criativos grid */
+.cv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px}
+@media(max-width:1080px){.cv-grid{grid-template-columns:repeat(2,1fr)}}
+.cv-card{border-radius:14px;overflow:hidden;transition:all .35s cubic-bezier(0.34,1.56,0.64,1)}
+.cv-card:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(0,0,0,0.4)}
+.cv-thumb{height:120px;display:flex;align-items:center;justify-content:center;position:relative}
+.cv-thumb .fmt{position:absolute;top:8px;left:8px;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.06em;padding:3px 8px;border-radius:6px;background:rgba(8,7,10,0.6);color:var(--snow)}
+.cv-thumb .ic{font-size:34px;opacity:0.9}
+.cv-body{padding:14px}
+.cv-body .t{font-weight:600;font-size:14px;margin-bottom:3px}
+.cv-body .who{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--fog);margin-bottom:10px}
+.cv-metrics{display:flex;gap:14px;font-size:12px}
+.cv-metrics b{display:block;font-size:15px}
+.cv-metrics span{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--fog);text-transform:uppercase}
+.cv-status{font-family:"JetBrains Mono",monospace;font-size:9px;padding:3px 8px;border-radius:6px;margin-top:10px;display:inline-block}
+.cv-status.ativo{color:var(--green);background:rgba(74,222,128,0.1)}
+.cv-status.teste{color:var(--yellow);background:rgba(250,204,21,0.1)}
+.cv-status.pausado{color:var(--fog);background:rgba(255,255,255,0.06)}
+
+/* gestão */
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.gitem{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:11px;background:rgba(255,255,255,0.02);margin-bottom:8px;border:1px solid rgba(255,255,255,0.05)}
+.gitem .who{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;flex-wrap:wrap}
+.gedit{background:none;border:none;color:var(--fog);cursor:pointer;font-family:"JetBrains Mono",monospace;font-size:11px;transition:color .2s}
+.gedit:hover{color:var(--orange-400)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(13,12,16,0.95);border:1px solid rgba(255,107,0,0.4);color:var(--snow);padding:12px 22px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:all .3s;z-index:99;box-shadow:0 8px 30px rgba(0,0,0,0.5)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -170,6 +248,14 @@ a{color:inherit;text-decoration:none}
   <div class="brand">Bingo<span class="bet">Bet</span></div>
   <div class="mono" style="font-size:10px;color:var(--fog);letter-spacing:.12em">CENTRAL · EXPERTS</div>
 </div>
+<nav class="mobilenav glass-strong">
+  <div class="mnav-item active" data-page="central">Central</div>
+  <div class="mnav-item" data-page="dashboard">Dashboard</div>
+  <div class="mnav-item" data-page="historico">Histórico</div>
+  <div class="mnav-item" data-page="upload">Upload</div>
+  <div class="mnav-item" data-page="criativos">Criativos</div>
+  <div class="mnav-item" data-page="gestao">Gestão</div>
+</nav>
 
 <div class="app">
   <!-- SIDEBAR -->
@@ -179,12 +265,12 @@ a{color:inherit;text-decoration:none}
       <div class="sub-brand mono">Painel Experts</div>
     </div>
     <nav class="nav">
-      <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Central</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M20 20H2"/></svg>Dashboard</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg>Histórico</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M7 9l5-5 5 5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20h16"/></svg>Upload</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M3 17l5-4 4 3 3-2 6 5"/></svg>Criativos</div>
-      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.1A1.6 1.6 0 006 19.4l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003.3 15H3a2 2 0 110-4h.1A1.6 1.6 0 004.6 9l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010 5.6V3a2 2 0 114 0v.1A1.6 1.6 0 0018.4 6l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-1.1 2.7H21a2 2 0 110 4z"/></svg>Gestão</div>
+      <div class="nav-item active" data-page="central"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Central</div>
+      <div class="nav-item" data-page="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M20 20H2"/></svg>Dashboard</div>
+      <div class="nav-item" data-page="historico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg>Histórico</div>
+      <div class="nav-item" data-page="upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M7 9l5-5 5 5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20h16"/></svg>Upload</div>
+      <div class="nav-item" data-page="criativos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M3 17l5-4 4 3 3-2 6 5"/></svg>Criativos</div>
+      <div class="nav-item" data-page="gestao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.1A1.6 1.6 0 006 19.4l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003.3 15H3a2 2 0 110-4h.1A1.6 1.6 0 004.6 9l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010 5.6V3a2 2 0 114 0v.1A1.6 1.6 0 0018.4 6l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-1.1 2.7H21a2 2 0 110 4z"/></svg>Gestão</div>
     </nav>
     <div class="user-card">
       <div class="avatar">B</div>
@@ -194,6 +280,7 @@ a{color:inherit;text-decoration:none}
 
   <!-- MAIN -->
   <main class="main">
+   <section class="page active" id="page-central">
     <div class="page-header reveal">
       <div>
         <div class="page-title">Central de <span class="serif-accent">operações</span></div>
@@ -262,6 +349,111 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="chart-wrap"><svg id="trend" viewBox="0 0 920 260" width="100%" role="img" aria-label="Linha de registros e FTD nos últimos 14 dias, ambos em tendência de alta."></svg></div>
     </div>
+   </section>
+
+   <!-- ============ DASHBOARD ============ -->
+   <section class="page" id="page-dashboard">
+    <div class="page-header reveal">
+      <div><div class="page-title">Dashboard</div>
+        <div class="page-sub"><span class="livedot"></span>Métricas completas · <span id="dscope">todos os experts</span></div></div>
+      <div class="hdr-right">
+        <div class="datechip glass">Referência · <b>24 set 2026</b></div>
+        <div class="experts-pills glass" id="dpills"></div>
+      </div>
+    </div>
+    <div class="section-title">Indicadores do dia · hoje vs ontem</div>
+    <div class="kpi-grid dash-grid" id="dkpis"></div>
+   </section>
+
+   <!-- ============ HISTÓRICO ============ -->
+   <section class="page" id="page-historico">
+    <div class="page-header reveal">
+      <div><div class="page-title">Histórico</div>
+        <div class="page-sub"><span class="livedot"></span>Uploads diários consolidados · últimos 14 dias</div></div>
+      <div class="hdr-right"><div class="datechip glass"><b>14</b> dias</div></div>
+    </div>
+    <div class="panel glass" style="margin-top:12px">
+      <div class="tblwrap"><table class="rank histtable"><thead>
+        <tr><th>Data</th><th>Registros</th><th>FTD</th><th>Reg→FTD</th><th>Investimento</th><th>NGR</th><th>Sinal</th></tr>
+      </thead><tbody id="histbody"></tbody></table></div>
+    </div>
+   </section>
+
+   <!-- ============ UPLOAD ============ -->
+   <section class="page" id="page-upload">
+    <div class="page-header reveal">
+      <div><div class="page-title">Upload</div>
+        <div class="page-sub"><span class="livedot"></span>Envio do relatório diário por expert</div></div>
+    </div>
+    <div class="grid-2" style="margin-top:12px">
+      <div class="panel glass">
+        <div class="up-tabs" id="uptabs">
+          <button class="up-tab active" data-tab="planilha">Planilha (.xlsx)</button>
+          <button class="up-tab" data-tab="manual">Manual</button>
+          <button class="up-tab" data-tab="drive">Google Drive</button>
+        </div>
+        <div class="frow-form" style="margin-top:18px">
+          <div><label class="label">Expert</label><select class="input" id="upexpert"></select></div>
+          <div><label class="label">Data de referência</label><input class="input" type="date" value="2026-09-24"></div>
+        </div>
+        <div class="up-pane" data-pane="planilha">
+          <div class="dropzone"><div class="dz-ic">↑</div><div>Arraste o <b>.xlsx</b> aqui ou clique para selecionar</div><div class="mono" style="font-size:10px;color:var(--fog);margin-top:6px">layout 18 colunas · parser automático</div></div>
+        </div>
+        <div class="up-pane" data-pane="manual" hidden>
+          <div class="frow-form3">
+            <div><label class="label">Investimento</label><input class="input" placeholder="R$ 0,00"></div>
+            <div><label class="label">Cliques</label><input class="input" placeholder="0"></div>
+            <div><label class="label">Entradas grupo</label><input class="input" placeholder="0"></div>
+            <div><label class="label">Registros</label><input class="input" placeholder="0"></div>
+            <div><label class="label">FTD</label><input class="input" placeholder="0"></div>
+            <div><label class="label">Depósitos</label><input class="input" placeholder="R$ 0,00"></div>
+            <div><label class="label">NGR</label><input class="input" placeholder="R$ 0,00"></div>
+            <div><label class="label">Wagering</label><input class="input" placeholder="R$ 0,00"></div>
+          </div>
+        </div>
+        <div class="up-pane" data-pane="drive" hidden>
+          <div class="frow-form"><div style="grid-column:1/-1"><label class="label">Link da pasta / arquivo no Google Drive</label><input class="input" placeholder="https://drive.google.com/..."></div></div>
+          <div class="mono" style="font-size:11px;color:var(--fog);margin-top:10px">importa e casa colunas automaticamente · confirma antes de gravar</div>
+        </div>
+        <button class="btn-orange" style="margin-top:18px" onclick="fakeSave(this)">Enviar relatório</button>
+      </div>
+      <div class="panel glass">
+        <h3>Status de envio · hoje</h3>
+        <div class="psub">quem já subiu o diário</div>
+        <div id="uprows"></div>
+      </div>
+    </div>
+   </section>
+
+   <!-- ============ CRIATIVOS ============ -->
+   <section class="page" id="page-criativos">
+    <div class="page-header reveal">
+      <div><div class="page-title">Criativos</div>
+        <div class="page-sub"><span class="livedot"></span>Biblioteca de criativos · <span id="cvcount">8</span> ativos</div></div>
+      <div class="hdr-right"><div class="filter-pills glass" id="cvfilter"></div></div>
+    </div>
+    <div class="cv-grid" id="cvgrid"></div>
+   </section>
+
+   <!-- ============ GESTÃO ============ -->
+   <section class="page" id="page-gestao">
+    <div class="page-header reveal">
+      <div><div class="page-title">Gestão</div>
+        <div class="page-sub"><span class="livedot"></span>Experts e campanhas</div></div>
+    </div>
+    <div class="grid-2" style="margin-top:12px">
+      <div class="panel glass">
+        <div class="panel-head"><h3>Experts</h3><button class="btn-ghost sm" onclick="fakeSave(this,'+ Novo expert')">+ Novo expert</button></div>
+        <div class="psub">6 cadastrados</div>
+        <div id="gexperts"></div>
+      </div>
+      <div class="panel glass">
+        <div class="panel-head"><h3>Campanhas</h3><button class="btn-ghost sm" onclick="fakeSave(this,'+ Nova campanha')">+ Nova campanha</button></div>
+        <div class="psub">7 ativas · por marca</div>
+        <div id="gcamps"></div>
+      </div>
+    </div>
+   </section>
 
     <div class="foot">
       <div class="mono">BingoBet · Painel Experts — Central de Operações · preview</div>
@@ -423,8 +615,143 @@ function buildTrend(){
   document.getElementById('trend').innerHTML=grid+line(trendReg,'#ff6b00')+line(trendFtd,'#5b9dff')+labels;
 }
 
+// ---------- DASHBOARD ----------
+let dscope="todos";
+function buildDPills(){
+  const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...EXPERTS];
+  document.getElementById('dpills').innerHTML=items.map(e=>
+    `<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}"><span class="dot" style="background:${e.cor}"></span>${e.nome}</button>`).join('');
+  document.querySelectorAll('#dpills .expert-pill').forEach(b=>b.onclick=()=>{
+    dscope=b.dataset.k;document.querySelectorAll('#dpills .expert-pill').forEach(x=>x.classList.toggle('active',x===b));renderDash();});
+}
+function renderDash(){
+  const list=dscope==="todos"?EXPERTS:EXPERTS.filter(e=>e.key===dscope);
+  const a=agg(list),h=a.hoje,o=a.ontem;
+  document.getElementById('dscope').textContent=dscope==="todos"?"todos os experts":EXPERTS.find(e=>e.key===dscope).nome;
+  const d=(x,y)=>varp(x,y);
+  const rows=[
+    {l:"Investimento",v:brlk(h.inv),dl:d(h.inv,o.inv),info:1},
+    {l:"Cliques",v:nf.format(h.cli),dl:d(h.cli,o.cli)},
+    {l:"CPC · custo/clique",v:brl2(div(h.inv,h.cli)),dl:d(div(h.inv,h.cli),div(o.inv,o.cli)),cost:1},
+    {l:"Entradas grupo",v:nf.format(h.ent),dl:d(h.ent,o.ent)},
+    {l:"Clique→Entrada",v:pct(div(h.ent,h.cli)),dl:d(div(h.ent,h.cli),div(o.ent,o.cli))},
+    {l:"Custo/lead",v:brl2(div(h.inv,h.ent)),dl:d(div(h.inv,h.ent),div(o.inv,o.ent)),cost:1},
+    {l:"Registros",v:nf.format(h.reg),dl:d(h.reg,o.reg)},
+    {l:"CPA · custo/registro",v:brl2(div(h.inv,h.reg)),dl:d(div(h.inv,h.reg),div(o.inv,o.reg)),cost:1},
+    {l:"FTD",v:nf.format(h.ftd),dl:d(h.ftd,o.ftd)},
+    {l:"Reg→FTD",v:pct(div(h.ftd,h.reg)),dl:d(div(h.ftd,h.reg),div(o.ftd,o.reg))},
+    {l:"Entrada→FTD",v:pct(div(h.ftd,h.ent)),dl:d(div(h.ftd,h.ent),div(o.ftd,o.ent))},
+    {l:"Depósitos",v:brlk(h.dep),dl:d(h.dep,o.dep)},
+    {l:"Ticket médio",v:brl(div(h.dep,h.ftd)),dl:d(div(h.dep,h.ftd),div(o.dep,o.ftd))},
+    {l:"NGR",v:brlk(h.ngr),dl:d(h.ngr,o.ngr)},
+    {l:"Depósito→NGR",v:pct(div(h.ngr,h.dep)),dl:d(div(h.ngr,h.dep),div(o.ngr,o.dep))},
+    {l:"Wagering",v:brlk(h.wag),dl:d(h.wag,o.wag)},
+  ];
+  document.getElementById('dkpis').innerHTML=rows.map((k,i)=>{
+    let cls="flat",ar="→",good=k.dl; if(k.cost&&k.dl!=null)good=-k.dl;
+    if(k.dl!=null&&Math.abs(k.dl)>=0.001){ar=k.dl>0?"▲":"▼";cls=k.info?"flat":(good>0?"up":"down");}
+    const dt=k.dl==null?"—":ar+" "+Math.abs(k.dl*100).toFixed(1).replace('.',',')+"%";
+    return `<div class="kpi glass reveal" style="animation-delay:${i*0.03}s"><div class="kpi-label">${k.l}</div><div class="kpi-value">${k.v}</div><div class="kpi-delta ${cls}">${dt}<span style="color:var(--fog)">vs ontem</span></div></div>`;
+  }).join('');
+}
+const brl2=n=>n==null?'—':'R$'+n.toFixed(2).replace('.',',');
+
+// ---------- HISTÓRICO ----------
+function buildHist(){
+  const days=trendReg.length;
+  const today=new Date(2026,8,24);
+  const meses=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  let html='';
+  for(let i=days-1;i>=0;i--){
+    const dt=new Date(today); dt.setDate(today.getDate()-(days-1-i));
+    const reg=trendReg[i],ftd=trendFtd[i];
+    const inv=Math.round(reg*12.9), ngr=Math.round(reg*52.8);
+    const prev=i>0?trendReg[i-1]:reg; const up=reg>=prev;
+    html+=`<tr><td>${dt.getDate()} ${meses[dt.getMonth()]}</td><td class="mono"><b>${nf.format(reg)}</b></td>
+      <td class="mono">${nf.format(ftd)}</td><td class="mono">${pct(ftd/reg)}</td>
+      <td class="mono">${brlk(inv)}</td><td class="mono">${brlk(ngr)}</td>
+      <td><span class="sig ${up?'up':'down'}">${up?'▲ alta':'▼ baixa'}</span></td></tr>`;
+  }
+  document.getElementById('histbody').innerHTML=html;
+}
+
+// ---------- UPLOAD ----------
+function buildUpload(){
+  document.getElementById('upexpert').innerHTML=EXPERTS.map(e=>`<option>${e.nome}</option>`).join('');
+  document.getElementById('uprows').innerHTML=EXPERTS.map(e=>
+    `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div>
+     ${e.up.feito?`<div class="status ok"><span class="s-dot"></span>subiu ${e.up.hora}</div>`:`<div class="status wait"><span class="s-dot"></span>pendente</div>`}</div>`).join('');
+  document.querySelectorAll('.up-tab').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('.up-tab').forEach(x=>x.classList.toggle('active',x===t));
+    document.querySelectorAll('.up-pane').forEach(p=>p.hidden=p.dataset.pane!==t.dataset.tab);
+  });
+}
+
+// ---------- CRIATIVOS ----------
+const CRIATIVOS=[
+  {t:"Bingo Turbo · Hook 1",who:"Lucas Striz",fmt:"Reel",st:"ativo",views:"48,2k",ctr:"3,1%",cor:"#ff6b00"},
+  {t:"Reals Prime · Depoimento",who:"Lucas Striz",fmt:"Reel",st:"ativo",views:"31,7k",ctr:"2,7%",cor:"#5b9dff"},
+  {t:"Iris · Oferta boas-vindas",who:"IrisAv",fmt:"Imagem",st:"teste",views:"12,4k",ctr:"1,9%",cor:"#ff8a3c"},
+  {t:"Belodi · Passo a passo",who:"BelodiAv",fmt:"Carrossel",st:"ativo",views:"22,9k",ctr:"4,2%",cor:"#a06bff"},
+  {t:"Suh · Aviator ao vivo",who:"SuhAviator",fmt:"Reel",st:"ativo",views:"27,5k",ctr:"3,4%",cor:"#4ade80"},
+  {t:"Marques · Bônus relâmpago",who:"MarquesAv",fmt:"Imagem",st:"pausado",views:"9,1k",ctr:"1,4%",cor:"#f7b955"},
+  {t:"Caio · Live premiada",who:"Caioleta",fmt:"Reel",st:"teste",views:"15,8k",ctr:"2,2%",cor:"#ff6b00"},
+  {t:"Bingo Noturno · Recap",who:"IrisAv",fmt:"Carrossel",st:"ativo",views:"19,3k",ctr:"3,8%",cor:"#5b9dff"},
+];
+let cvfilter="todos";
+const fmtIcon={Reel:"▶",Imagem:"▦",Carrossel:"❏"};
+function buildCriativos(){
+  const filters=["todos","Reel","Imagem","Carrossel"];
+  document.getElementById('cvfilter').innerHTML=filters.map(f=>
+    `<button class="filter-pill ${f===cvfilter?'active':''}" data-f="${f}">${f==='todos'?'Todos':f+'s'}</button>`).join('');
+  document.querySelectorAll('#cvfilter .filter-pill').forEach(b=>b.onclick=()=>{cvfilter=b.dataset.f;buildCriativos();});
+  const list=cvfilter==="todos"?CRIATIVOS:CRIATIVOS.filter(c=>c.fmt===cvfilter);
+  document.getElementById('cvcount').textContent=list.length;
+  document.getElementById('cvgrid').innerHTML=list.map(c=>
+    `<div class="cv-card glass"><div class="cv-thumb" style="background:linear-gradient(135deg,${c.cor}33,${c.cor}0d)">
+      <span class="fmt">${c.fmt.toUpperCase()}</span><span class="ic" style="color:${c.cor}">${fmtIcon[c.fmt]}</span></div>
+      <div class="cv-body"><div class="t">${c.t}</div><div class="who">${c.who}</div>
+        <div class="cv-metrics"><div><b>${c.views}</b><span>views</span></div><div><b>${c.ctr}</b><span>ctr</span></div></div>
+        <div class="cv-status ${c.st}">${c.st}</div></div></div>`).join('');
+}
+
+// ---------- GESTÃO ----------
+function buildGestao(){
+  document.getElementById('gexperts').innerHTML=EXPERTS.map(e=>
+    `<div class="gitem"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}${e.apelido?` <span class="mono" style="font-size:9px;color:var(--fog)">· ${e.apelido}</span>`:''}
+      ${e.marcas.map(x=>`<span class="tag ${x}">${x.toUpperCase()}</span>`).join(' ')}</div>
+      <button class="gedit" onclick="fakeSave(this,'Editar ${e.nome}')">editar</button></div>`).join('');
+  const camps=[["Lucas Striz","Bingo Turbo","bingo","UX-38560"],["Lucas Striz","Reals Prime","reals","UX-41022"],
+    ["IrisAv","Bingo Noturno","bingo","UX-39114"],["BelodiAv","Bingo Premiado","bingo","UX-38921"],
+    ["SuhAviator","Bingo Cash","bingo","UX-40877"],["MarquesAv","Bingo Prime","bingo","UX-40233"],
+    ["Caioleta","Bingo Live","bingo","UX-41560"]];
+  document.getElementById('gcamps').innerHTML=camps.map(c=>
+    `<div class="gitem"><div class="who">${c[0]} · ${c[1]} <span class="tag ${c[2]}">${c[2].toUpperCase()}</span></div>
+      <span class="mono" style="font-size:10px;color:var(--fog)">${c[3]}</span></div>`).join('');
+}
+
+// ---------- toast (ações de preview) ----------
+function fakeSave(btn,msg){
+  const t=document.createElement('div'); t.className='toast';
+  t.textContent=(msg||'Enviado')+' · preview — grava de verdade quando ligado ao Supabase';
+  document.body.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},2600);
+}
+
+// ---------- ROUTER ----------
+const TITLES={central:"CENTRAL",dashboard:"DASHBOARD",historico:"HISTÓRICO",upload:"UPLOAD",criativos:"CRIATIVOS",gestao:"GESTÃO"};
+function go(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
+  document.querySelectorAll('.nav-item,.mnav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
+  const mb=document.querySelector('.mobilebar .mono'); if(mb) mb.textContent=TITLES[page]+' · EXPERTS';
+  window.scrollTo(0,0);
+  if(page==='dashboard') renderDash();
+}
+document.querySelectorAll('.nav-item[data-page],.mnav-item[data-page]').forEach(n=>n.onclick=()=>go(n.dataset.page));
+
 document.getElementById('refdate').textContent="24 set 2026";
 buildPills(); buildOps(); buildTrend(); render();
+buildDPills(); renderDash(); buildHist(); buildUpload(); buildCriativos(); buildGestao();
 </script>
 </body>
 </html>
