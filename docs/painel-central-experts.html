@@ -221,7 +221,7 @@ a{color:inherit;text-decoration:none}
       <div class="panel glass reveal">
         <h3>Status de dados · hoje</h3>
         <div class="psub">upload diário por expert</div>
-        <div class="ops-summary"><span class="big" id="opsdone">4</span><span class="mono" style="color:var(--fog)">de 5 experts subiram · <b id="opsmiss" style="color:var(--red)">1 pendente</b></span></div>
+        <div class="ops-summary"><span class="big" id="opsdone">5</span><span class="mono" style="color:var(--fog)">de <span id="opstotal">6</span> experts subiram · <b id="opsmiss" style="color:var(--red)">1 pendente</b></span></div>
         <div id="opsrows"></div>
       </div>
     </div>
@@ -238,15 +238,17 @@ a{color:inherit;text-decoration:none}
         <div class="psub">por marca</div>
         <div class="camp-head">
           <div class="camp-stat"><div class="n" style="color:var(--orange-400)">6</div><div class="l">BINGO</div></div>
-          <div class="camp-stat"><div class="n" style="color:var(--blue)">4</div><div class="l">REALS</div></div>
-          <div class="camp-stat"><div class="n">10</div><div class="l">total ativas</div></div>
+          <div class="camp-stat"><div class="n" style="color:var(--blue)">1</div><div class="l">REALS</div></div>
+          <div class="camp-stat"><div class="n">7</div><div class="l">total ativas</div></div>
         </div>
         <div class="camplist">
-          <div class="campitem"><span class="cn">Larissa · Bingo Turbo</span><span class="cx tag bingo">UX-38560</span></div>
-          <div class="campitem"><span class="cn">Gabriel · Reals Prime</span><span class="cx tag reals">UX-41022</span></div>
-          <div class="campitem"><span class="cn">Rafa · Bingo Noturno</span><span class="cx tag bingo">UX-39114</span></div>
-          <div class="campitem"><span class="cn">Vitor · Reals Cash</span><span class="cx tag reals">UX-40877</span></div>
-          <div class="campitem"><span class="cn">Nanda · Bingo Premiado</span><span class="cx tag bingo">UX-38921</span></div>
+          <div class="campitem"><span class="cn">Lucas Striz · Bingo Turbo</span><span class="cx tag bingo">UX-38560</span></div>
+          <div class="campitem"><span class="cn">Lucas Striz · Reals Prime</span><span class="cx tag reals">UX-41022</span></div>
+          <div class="campitem"><span class="cn">IrisAv · Bingo Noturno</span><span class="cx tag bingo">UX-39114</span></div>
+          <div class="campitem"><span class="cn">BelodiAv · Bingo Premiado</span><span class="cx tag bingo">UX-38921</span></div>
+          <div class="campitem"><span class="cn">SuhAviator · Bingo Cash</span><span class="cx tag bingo">UX-40877</span></div>
+          <div class="campitem"><span class="cn">MarquesAv · Bingo Prime</span><span class="cx tag bingo">UX-40233</span></div>
+          <div class="campitem"><span class="cn">Caioleta · Bingo Live</span><span class="cx tag bingo">UX-41560</span></div>
         </div>
       </div>
     </div>
@@ -271,24 +273,27 @@ a{color:inherit;text-decoration:none}
 <script>
 // ---- dados mock (inputs-base; tudo derivado em JS p/ consistência) ----
 const EXPERTS=[
-  {key:"larissa",nome:"Larissa",marcas:["bingo"],cor:"#ff6b00",up:{feito:true,hora:"08:12"},
+  {key:"lucas",nome:"Lucas Striz",apelido:"Professor",marcas:["bingo","reals"],cor:"#ff6b00",up:{feito:true,hora:"08:12"},
     hoje:{inv:1240,cli:3100,ent:920,reg:118,ftd:79,dep:41200,ngr:6800,wag:210000},
     ontem:{inv:1180,cli:2980,ent:870,reg:109,ftd:71,dep:38400,ngr:6300,wag:198000}},
-  {key:"gabriel",nome:"Gabriel",marcas:["reals"],cor:"#5b9dff",up:{feito:true,hora:"07:48"},
+  {key:"iris",nome:"IrisAv",marcas:["bingo"],cor:"#5b9dff",up:{feito:true,hora:"07:48"},
     hoje:{inv:1520,cli:3800,ent:1050,reg:96,ftd:61,dep:33500,ngr:5100,wag:180000},
     ontem:{inv:1490,cli:3720,ent:1010,reg:101,ftd:64,dep:34800,ngr:5400,wag:186000}},
-  {key:"rafa",nome:"Rafa",marcas:["bingo","reals"],cor:"#ff8a3c",up:{feito:true,hora:"09:03"},
+  {key:"belodi",nome:"BelodiAv",marcas:["bingo"],cor:"#ff8a3c",up:{feito:true,hora:"09:03"},
     hoje:{inv:980,cli:2450,ent:610,reg:74,ftd:46,dep:22800,ngr:3900,wag:150000},
     ontem:{inv:940,cli:2360,ent:585,reg:70,ftd:41,dep:20900,ngr:3500,wag:141000}},
-  {key:"vitor",nome:"Vitor",marcas:["reals"],cor:"#a06bff",up:{feito:true,hora:"10:21"},
+  {key:"suh",nome:"SuhAviator",marcas:["bingo"],cor:"#a06bff",up:{feito:true,hora:"10:21"},
     hoje:{inv:820,cli:2050,ent:560,reg:63,ftd:38,dep:21300,ngr:3200,wag:112000},
     ontem:{inv:800,cli:1990,ent:540,reg:60,ftd:37,dep:20600,ngr:3050,wag:108000}},
-  {key:"nanda",nome:"Nanda",marcas:["bingo"],cor:"#4ade80",up:{feito:false,hora:null},
+  {key:"marques",nome:"MarquesAv",marcas:["bingo"],cor:"#4ade80",up:{feito:false,hora:null},
     hoje:{inv:640,cli:1700,ent:430,reg:52,ftd:35,dep:18900,ngr:2700,wag:96000},
     ontem:{inv:660,cli:1740,ent:445,reg:55,ftd:36,dep:19400,ngr:2800,wag:99000}},
+  {key:"caio",nome:"Caioleta",marcas:["bingo"],cor:"#f7b955",up:{feito:true,hora:"08:40"},
+    hoje:{inv:720,cli:1850,ent:490,reg:58,ftd:33,dep:17600,ngr:2500,wag:104000},
+    ontem:{inv:700,cli:1810,ent:475,reg:54,ftd:31,dep:16900,ngr:2400,wag:100000}},
 ];
-const trendReg=[312,298,331,356,340,372,365,381,358,394,377,402,388,403];
-const trendFtd=[201,193,214,229,222,240,236,247,231,255,244,258,250,259];
+const trendReg=[355,340,372,388,376,410,402,428,415,442,430,455,447,461];
+const trendFtd=[225,216,236,247,240,260,255,272,264,281,273,289,284,292];
 
 const nf=new Intl.NumberFormat('pt-BR');
 const brl=n=>'R$'+nf.format(Math.round(n));
@@ -349,7 +354,7 @@ function render(){
     const mm=metrics(e.hoje);
     const on=current!=="todos"&&current===e.key;
     return `<tr class="${on?'on':''}">
-      <td><div class="who"><span class="adot" style="background:${e.cor}"></span>${e.nome}
+      <td><div class="who"><span class="adot" style="background:${e.cor}"></span><span style="white-space:nowrap">${e.nome}</span>${e.apelido?`<span class="mono" style="font-size:9px;color:var(--fog);font-weight:400;white-space:nowrap">· ${e.apelido}</span>`:''}
         ${e.marcas.map(x=>`<span class="tag ${x}">${x.toUpperCase()}</span>`).join(' ')}</div>
         <div class="barc"><div class="barf" style="width:${(e.hoje.reg/maxReg*100).toFixed(0)}%"></div></div></td>
       <td class="mono">${brlk(mm.inv)}</td><td class="mono"><b>${mm.reg}</b></td>
@@ -391,6 +396,7 @@ function buildPills(){
 function buildOps(){
   const done=EXPERTS.filter(e=>e.up.feito).length;
   document.getElementById('opsdone').textContent=done;
+  document.getElementById('opstotal').textContent=EXPERTS.length;
   document.getElementById('opsmiss').textContent=(EXPERTS.length-done)+" pendente";
   document.getElementById('opsrows').innerHTML=EXPERTS.map(e=>
     `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div>
