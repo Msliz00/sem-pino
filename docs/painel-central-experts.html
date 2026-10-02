@@ -167,6 +167,13 @@ a{color:inherit;text-decoration:none}
 /* multi-page router */
 .page{display:none;animation:fadeInUp .4s ease}
 .page.active{display:block}
+.messel{width:auto!important;padding:9px 13px;font-size:13px;cursor:pointer;background:rgba(20,18,24,0.6);border:1px solid rgba(255,255,255,0.1);color:var(--snow);border-radius:11px;font-family:inherit}
+.messel:focus{outline:none;border-color:rgba(255,107,0,0.5)}
+.resrow{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:7px;border:1px solid rgba(255,255,255,0.05)}
+.resrow .who{display:flex;align-items:center;gap:9px;font-weight:600;font-size:13px}
+.resval{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700}
+.pos{color:var(--green)} .neg{color:var(--red)}
+.kpi-value.pos{color:var(--green)} .kpi-value.neg{color:var(--red)}
 .mobilenav{display:none}
 .mnav-item{white-space:nowrap;padding:8px 14px;border-radius:9px;font-size:13px;font-weight:600;color:var(--fog);cursor:pointer;flex-shrink:0}
 .mnav-item.active{background:rgba(255,107,0,0.15);color:var(--orange-400);border:1px solid rgba(255,107,0,0.3)}
@@ -287,29 +294,29 @@ select.input{cursor:pointer}
         <div class="page-sub"><span class="livedot"></span>Visão consolidada · <span id="scope">todos os experts</span></div>
       </div>
       <div class="hdr-right">
-        <div class="datechip glass">Referência · <b id="refdate">24 set 2026</b></div>
+        <select class="input messel" aria-label="mês"></select>
         <div class="experts-pills glass" id="pills"></div>
       </div>
     </div>
 
     <!-- KPIs -->
-    <div class="section-title">Indicadores do dia · vs ontem</div>
+    <div class="section-title" id="kpititle">Indicadores do mês · vs mês anterior</div>
     <div class="kpi-grid" id="kpis"></div>
 
-    <!-- STATUS OPS + CAMPANHAS -->
+    <!-- RANKING + RESULTADO -->
     <div class="grid-2" style="margin-top:8px">
       <div class="panel glass reveal">
         <h3>Ranking de experts</h3>
-        <div class="psub">ordenado por registros · hoje</div>
+        <div class="psub" id="rankpsub">ordenado por resultado</div>
         <div class="tblwrap"><table class="rank"><thead>
-          <tr><th>Expert</th><th>Invest.</th><th>Reg.</th><th>FTD</th><th>Reg→FTD</th><th>CPA</th><th>NGR</th></tr>
+          <tr><th>Expert</th><th>Gasto</th><th>Reg.</th><th>FTD</th><th>NGR</th><th>Resultado</th></tr>
         </thead><tbody id="rankbody"></tbody></table></div>
       </div>
       <div class="panel glass reveal">
-        <h3>Status de dados · hoje</h3>
-        <div class="psub">upload diário por expert</div>
-        <div class="ops-summary"><span class="big" id="opsdone">5</span><span class="mono" style="color:var(--fog)">de <span id="opstotal">6</span> experts subiram · <b id="opsmiss" style="color:var(--red)">1 pendente</b></span></div>
-        <div id="opsrows"></div>
+        <h3>Resultado do mês</h3>
+        <div class="psub" id="resscope">NGR − Gasto</div>
+        <div class="ops-summary"><span class="big" id="resbig">—</span><span class="mono" id="restag" style="color:var(--fog)"></span></div>
+        <div id="resrows"></div>
       </div>
     </div>
 
@@ -317,31 +324,19 @@ select.input{cursor:pointer}
     <div class="grid-2" style="margin-top:24px">
       <div class="panel glass reveal">
         <h3>Funil operacional</h3>
-        <div class="psub" id="funscope">clique → entrada → registro → FTD · todos</div>
+        <div class="psub" id="funscope">leads → registros → FTD</div>
         <div class="funnel" id="funnel"></div>
       </div>
       <div class="panel glass reveal">
-        <h3>Campanhas ativas</h3>
-        <div class="psub">por marca</div>
-        <div class="camp-head">
-          <div class="camp-stat"><div class="n" style="color:var(--orange-400)">6</div><div class="l">BINGO</div></div>
-          <div class="camp-stat"><div class="n" style="color:var(--blue)">1</div><div class="l">REALS</div></div>
-          <div class="camp-stat"><div class="n">7</div><div class="l">total ativas</div></div>
-        </div>
-        <div class="camplist">
-          <div class="campitem"><span class="cn">Lucas Striz · Bingo Turbo</span><span class="cx tag bingo">UX-38560</span></div>
-          <div class="campitem"><span class="cn">Lucas Striz · Reals Prime</span><span class="cx tag reals">UX-41022</span></div>
-          <div class="campitem"><span class="cn">IrisAv · Bingo Noturno</span><span class="cx tag bingo">UX-39114</span></div>
-          <div class="campitem"><span class="cn">BelodiAv · Bingo Premiado</span><span class="cx tag bingo">UX-38921</span></div>
-          <div class="campitem"><span class="cn">SuhAviator · Bingo Cash</span><span class="cx tag bingo">UX-40877</span></div>
-          <div class="campitem"><span class="cn">MarquesAv · Bingo Prime</span><span class="cx tag bingo">UX-40233</span></div>
-          <div class="campitem"><span class="cn">Caioleta · Bingo Live</span><span class="cx tag bingo">UX-41560</span></div>
-        </div>
+        <h3>Campanhas por expert</h3>
+        <div class="psub">IDs reais das planilhas</div>
+        <div class="camp-head" id="camphead"></div>
+        <div class="camplist" id="camplist"></div>
       </div>
     </div>
 
     <!-- TREND -->
-    <div class="section-title">Tendência · últimos 14 dias (consolidado)</div>
+    <div class="section-title">Tendência mensal · 2026 (consolidado)</div>
     <div class="panel glass reveal">
       <div class="legend">
         <span><span class="lk" style="background:#ff6b00"></span>Registros</span>
@@ -357,11 +352,11 @@ select.input{cursor:pointer}
       <div><div class="page-title">Dashboard</div>
         <div class="page-sub"><span class="livedot"></span>Métricas completas · <span id="dscope">todos os experts</span></div></div>
       <div class="hdr-right">
-        <div class="datechip glass">Referência · <b>24 set 2026</b></div>
+        <select class="input messel" aria-label="mês"></select>
         <div class="experts-pills glass" id="dpills"></div>
       </div>
     </div>
-    <div class="section-title">Indicadores do dia · hoje vs ontem</div>
+    <div class="section-title">Métricas do mês · vs mês anterior</div>
     <div class="kpi-grid dash-grid" id="dkpis"></div>
    </section>
 
@@ -369,12 +364,12 @@ select.input{cursor:pointer}
    <section class="page" id="page-historico">
     <div class="page-header reveal">
       <div><div class="page-title">Histórico</div>
-        <div class="page-sub"><span class="livedot"></span>Uploads diários consolidados · últimos 14 dias</div></div>
-      <div class="hdr-right"><div class="datechip glass"><b>14</b> dias</div></div>
+        <div class="page-sub"><span class="livedot"></span>Diário consolidado do mês · <span id="histscope">setembro</span></div></div>
+      <div class="hdr-right"><select class="input messel" aria-label="mês"></select></div>
     </div>
     <div class="panel glass" style="margin-top:12px">
       <div class="tblwrap"><table class="rank histtable"><thead>
-        <tr><th>Data</th><th>Registros</th><th>FTD</th><th>Reg→FTD</th><th>Investimento</th><th>NGR</th><th>Sinal</th></tr>
+        <tr><th>Dia</th><th>Gasto</th><th>Leads</th><th>Registros</th><th>FTD</th><th>Reg→FTD</th><th>Depósitos</th><th>NGR</th><th>Resultado</th></tr>
       </thead><tbody id="histbody"></tbody></table></div>
     </div>
    </section>
@@ -462,296 +457,245 @@ select.input{cursor:pointer}
   </main>
 </div>
 
+<script src="painel-dados.js"></script>
 <script>
-// ---- dados mock (inputs-base; tudo derivado em JS p/ consistência) ----
-const EXPERTS=[
-  {key:"lucas",nome:"Lucas Striz",apelido:"Professor",marcas:["bingo","reals"],cor:"#ff6b00",up:{feito:true,hora:"08:12"},
-    hoje:{inv:1240,cli:3100,ent:920,reg:118,ftd:79,dep:41200,ngr:6800,wag:210000},
-    ontem:{inv:1180,cli:2980,ent:870,reg:109,ftd:71,dep:38400,ngr:6300,wag:198000}},
-  {key:"iris",nome:"IrisAv",marcas:["bingo"],cor:"#5b9dff",up:{feito:true,hora:"07:48"},
-    hoje:{inv:1520,cli:3800,ent:1050,reg:96,ftd:61,dep:33500,ngr:5100,wag:180000},
-    ontem:{inv:1490,cli:3720,ent:1010,reg:101,ftd:64,dep:34800,ngr:5400,wag:186000}},
-  {key:"belodi",nome:"BelodiAv",marcas:["bingo"],cor:"#ff8a3c",up:{feito:true,hora:"09:03"},
-    hoje:{inv:980,cli:2450,ent:610,reg:74,ftd:46,dep:22800,ngr:3900,wag:150000},
-    ontem:{inv:940,cli:2360,ent:585,reg:70,ftd:41,dep:20900,ngr:3500,wag:141000}},
-  {key:"suh",nome:"SuhAviator",marcas:["bingo"],cor:"#a06bff",up:{feito:true,hora:"10:21"},
-    hoje:{inv:820,cli:2050,ent:560,reg:63,ftd:38,dep:21300,ngr:3200,wag:112000},
-    ontem:{inv:800,cli:1990,ent:540,reg:60,ftd:37,dep:20600,ngr:3050,wag:108000}},
-  {key:"marques",nome:"MarquesAv",marcas:["bingo"],cor:"#4ade80",up:{feito:false,hora:null},
-    hoje:{inv:640,cli:1700,ent:430,reg:52,ftd:35,dep:18900,ngr:2700,wag:96000},
-    ontem:{inv:660,cli:1740,ent:445,reg:55,ftd:36,dep:19400,ngr:2800,wag:99000}},
-  {key:"caio",nome:"Caioleta",marcas:["bingo"],cor:"#f7b955",up:{feito:true,hora:"08:40"},
-    hoje:{inv:720,cli:1850,ent:490,reg:58,ftd:33,dep:17600,ngr:2500,wag:104000},
-    ontem:{inv:700,cli:1810,ent:475,reg:54,ftd:31,dep:16900,ngr:2400,wag:100000}},
-];
-const trendReg=[355,340,372,388,376,410,402,428,415,442,430,455,447,461];
-const trendFtd=[225,216,236,247,240,260,255,272,264,281,273,289,284,292];
+const D = window.DADOS;
+const capt = s => s[0]+s.slice(1).toLowerCase();
+let MES = D.mesAtual, current="todos", dscope="todos";
 
 const nf=new Intl.NumberFormat('pt-BR');
-const brl=n=>'R$'+nf.format(Math.round(n));
-const brlk=n=>n>=1000?'R$'+(n/1000).toFixed(n>=100000?0:1).replace('.',',')+'k':brl(n);
+const brl=n=>'R$ '+nf.format(Math.round(n||0));
+function brlk(n){n=n||0;const a=Math.abs(n);const s=n<0?'-':'';
+  if(a>=1e6)return s+'R$ '+(a/1e6).toFixed(2).replace('.',',')+'M';
+  if(a>=1e3)return s+'R$ '+(a/1e3).toFixed(1).replace('.',',')+'k';
+  return s+'R$ '+nf.format(Math.round(a));}
 const pct=n=>n==null?'—':(n*100).toFixed(1).replace('.',',')+'%';
-const sum=(a,f)=>a.reduce((s,x)=>s+f(x),0);
-
-function agg(list){
-  const g=k=>sum(list,e=>e.hoje[k]), go=k=>sum(list,e=>e.ontem[k]);
-  return {
-    hoje:{inv:g('inv'),cli:g('cli'),ent:g('ent'),reg:g('reg'),ftd:g('ftd'),dep:g('dep'),ngr:g('ngr'),wag:g('wag')},
-    ontem:{inv:go('inv'),cli:go('cli'),ent:go('ent'),reg:go('reg'),ftd:go('ftd'),dep:go('dep'),ngr:go('ngr'),wag:go('wag')}
-  };
-}
 const div=(a,b)=>b?a/b:null;
-function metrics(d){return{
-  inv:d.inv, reg:d.reg, ftd:d.ftd, ngr:d.ngr, dep:d.dep,
-  cpa:div(d.inv,d.reg), regFtd:div(d.ftd,d.reg), ticket:div(d.dep,d.ftd),
-  cliEnt:div(d.ent,d.cli), entFtd:div(d.ftd,d.ent), depNgr:div(d.ngr,d.dep)
-};}
-const varp=(a,b)=>b?((a-b)/b):null;
+const varp=(a,b)=>(b&&isFinite(b))?((a-b)/b):null;
+const EXPERTS=D.experts, ATIVOS=EXPERTS.filter(e=>!e.pendente);
+const mesAnt=m=>{const i=D.meses.indexOf(m);return i>0?D.meses[i-1]:null;};
 
-let current="todos";
+function somaMes(list,mes){const t={g:0,le:0,r:0,f:0,d:0,n:0};let any=false;
+  list.forEach(e=>{const m=e.meses[mes];if(m){any=true;t.g+=m.g;t.le+=m.le;t.r+=m.r;t.f+=m.f;t.d+=m.d;t.n+=m.n;}});
+  return any?t:null;}
+function met(t){if(!t)return null;return{gasto:t.g,leads:t.le,reg:t.r,ftd:t.f,dep:t.d,ngr:t.n,
+  resultado:t.n-t.g,custoLead:div(t.g,t.le),cpa:div(t.g,t.r),custoFtd:div(t.g,t.f),
+  regFtd:div(t.f,t.r),ticket:div(t.d,t.f),roi:t.g?((t.n-t.g)/t.g):null,leadReg:div(t.r,t.le)};}
 
-function render(){
-  const list = current==="todos"?EXPERTS:EXPERTS.filter(e=>e.key===current);
-  const a=agg(list); const m=metrics(a.hoje); const mo=metrics(a.ontem);
-  document.getElementById('scope').textContent = current==="todos"?"todos os experts":EXPERTS.find(e=>e.key===current).nome;
-  document.getElementById('funscope').textContent = "clique → entrada → registro → FTD · "+(current==="todos"?"todos":EXPERTS.find(e=>e.key===current).nome);
-
-  // KPIs
-  const kpis=[
-    {l:"Investimento",v:brlk(m.inv),d:varp(m.inv,mo.inv),info:true},
-    {l:"Registros",v:nf.format(m.reg),d:varp(m.reg,mo.reg)},
-    {l:"FTD",v:nf.format(m.ftd),d:varp(m.ftd,mo.ftd)},
-    {l:"Conversão Reg→FTD",v:pct(m.regFtd),d:varp(m.regFtd,mo.regFtd)},
-    {l:"NGR",v:brlk(m.ngr),d:varp(m.ngr,mo.ngr)},
-    {l:"Ticket médio",v:brl(m.ticket),d:varp(m.ticket,mo.ticket)},
-    {l:"CPA · custo/registro",v:brl(m.cpa),d:varp(m.cpa,mo.cpa),inv:true},
-    {l:"Depósitos",v:brlk(m.dep),d:varp(m.dep,mo.dep)},
-  ];
-  document.getElementById('kpis').innerHTML=kpis.map((k,i)=>{
-    let cls="flat",arrow="→",good=k.d;
-    if(k.inv&&k.d!=null) good=-k.d; // p/ custo (CPA), cair é bom
-    if(k.d!=null&&Math.abs(k.d)>=0.001){arrow=k.d>0?"▲":"▼";cls=k.info?"flat":(good>0?"up":"down");}
-    const dtxt=k.d==null?"—":arrow+" "+Math.abs(k.d*100).toFixed(1).replace('.',',')+"%";
-    return `<div class="kpi glass reveal" style="animation-delay:${i*0.05}s">
-      <div class="kpi-label">${k.l}</div>
-      <div class="kpi-value">${k.v}</div>
-      <div class="kpi-delta ${cls}">${dtxt}<span style="color:var(--fog)">vs ontem</span></div>
-    </div>`;
-  }).join('');
-
-  // Ranking (sempre todos, destaca selecionado)
-  const ranked=[...EXPERTS].sort((x,y)=>y.hoje.reg-x.hoje.reg);
-  const maxReg=Math.max(...EXPERTS.map(e=>e.hoje.reg));
-  document.getElementById('rankbody').innerHTML=ranked.map(e=>{
-    const mm=metrics(e.hoje);
-    const on=current!=="todos"&&current===e.key;
-    return `<tr class="${on?'on':''}">
-      <td><div class="who"><span class="adot" style="background:${e.cor}"></span><span style="white-space:nowrap">${e.nome}</span>${e.apelido?`<span class="mono" style="font-size:9px;color:var(--fog);font-weight:400;white-space:nowrap">· ${e.apelido}</span>`:''}
-        ${e.marcas.map(x=>`<span class="tag ${x}">${x.toUpperCase()}</span>`).join(' ')}</div>
-        <div class="barc"><div class="barf" style="width:${(e.hoje.reg/maxReg*100).toFixed(0)}%"></div></div></td>
-      <td class="mono">${brlk(mm.inv)}</td><td class="mono"><b>${mm.reg}</b></td>
-      <td class="mono">${mm.ftd}</td><td class="mono">${pct(mm.regFtd)}</td>
-      <td class="mono">${brl(mm.cpa)}</td><td class="mono">${brlk(mm.ngr)}</td></tr>`;
-  }).join('');
-
-  // Funil
-  const f=a.hoje;
-  const steps=[
-    {l:"Cliques",v:f.cli,c:"linear-gradient(90deg,#ff8a3c,#ff6b00)",base:f.cli},
-    {l:"Entradas grupo",v:f.ent,c:"linear-gradient(90deg,#ff7a20,#e8650d)",rel:div(f.ent,f.cli)},
-    {l:"Registros",v:f.reg,c:"linear-gradient(90deg,#e8650d,#c85400)",rel:div(f.reg,f.ent)},
-    {l:"FTD",v:f.ftd,c:"linear-gradient(90deg,#4ade80,#22a35a)",rel:div(f.ftd,f.reg)},
-  ];
-  document.getElementById('funnel').innerHTML=steps.map((s,i)=>{
-    const w=Math.max((s.v/f.cli)*100,16);
-    const meta=i===0?`<b>base</b>`:`<b>${pct(s.rel)}</b> da etapa anterior`;
-    return `<div class="frow"><div class="flabel">${s.l}</div>
-      <div><div class="fbar" style="width:${w}%;background:${s.c}">${nf.format(s.v)}</div>
-      <div class="fmeta" style="margin-top:4px">${meta}</div></div></div>`;
-  }).join('');
+function kpi(label,valHTML,delta,mode,i){
+  let cls="flat",ar="→";let good=delta;if(mode==='cost'&&delta!=null)good=-delta;
+  if(delta!=null&&Math.abs(delta)>=0.001){ar=delta>0?"▲":"▼";cls=(mode==='neutral'||mode==='none')?"flat":(good>0?"up":"down");}
+  const dt=mode==='none'?'':(delta==null?'—':ar+' '+Math.abs(delta*100).toFixed(1).replace('.',',')+'%');
+  const sub=mode==='none'?'':'<span style="color:var(--fog)">vs '+capt(mesAnt(MES)||'')+'</span>';
+  return `<div class="kpi glass reveal" style="animation-delay:${i*0.03}s"><div class="kpi-label">${label}</div>
+    <div class="kpi-value">${valHTML}</div><div class="kpi-delta ${cls}">${dt} ${sub}</div></div>`;
 }
+const signCls=n=>n>=0?'pos':'neg';
 
-// pills
-function buildPills(){
-  const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...EXPERTS];
-  document.getElementById('pills').innerHTML=items.map(e=>
-    `<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}">
-      <span class="dot" style="background:${e.cor||e.cor}"></span>${e.nome}</button>`).join('');
-  document.querySelectorAll('.expert-pill').forEach(b=>b.onclick=()=>{
-    current=b.dataset.k;
-    document.querySelectorAll('.expert-pill').forEach(x=>x.classList.toggle('active',x===b));
-    render();
+// ---------- SELETOR DE MÊS ----------
+function buildMesSel(){
+  document.querySelectorAll('.messel').forEach(sel=>{
+    sel.innerHTML=D.meses.slice().reverse().map(m=>`<option value="${m}" ${m===MES?'selected':''}>${capt(m)} ${D.ano}</option>`).join('');
+    sel.onchange=()=>{MES=sel.value;document.querySelectorAll('.messel').forEach(s=>s.value=MES);renderAll();};
   });
 }
 
-// status ops
-function buildOps(){
-  const done=EXPERTS.filter(e=>e.up.feito).length;
-  document.getElementById('opsdone').textContent=done;
-  document.getElementById('opstotal').textContent=EXPERTS.length;
-  document.getElementById('opsmiss').textContent=(EXPERTS.length-done)+" pendente";
-  document.getElementById('opsrows').innerHTML=EXPERTS.map(e=>
-    `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div>
-     ${e.up.feito
-        ?`<div class="status ok"><span class="s-dot"></span>subiu ${e.up.hora}</div>`
-        :`<div class="status wait"><span class="s-dot"></span>pendente</div>`}</div>`).join('');
+// ---------- CENTRAL ----------
+function buildPills(){
+  const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...ATIVOS];
+  document.getElementById('pills').innerHTML=items.map(e=>
+    `<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}"><span class="dot" style="background:${e.cor}"></span>${e.nome}</button>`).join('');
+  document.querySelectorAll('#pills .expert-pill').forEach(b=>b.onclick=()=>{current=b.dataset.k;
+    document.querySelectorAll('#pills .expert-pill').forEach(x=>x.classList.toggle('active',x===b));renderCentral();});
 }
-
-// trend chart
-function buildTrend(){
-  const W=920,H=260,pad={l:44,r:16,t:16,b:26};
-  const max=Math.max(...trendReg)*1.1;
-  const x=i=>pad.l+(i/(trendReg.length-1))*(W-pad.l-pad.r);
-  const y=v=>H-pad.b-(v/max)*(H-pad.t-pad.b);
-  const line=(arr,col)=>{
-    const d=arr.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
-    const dots=arr.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3" fill="${col}"/>`).join('');
-    return `<path d="${d}" fill="none" stroke="${col}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}`;
-  };
-  let grid='';
-  for(let g=0;g<=4;g++){const gy=(pad.t+(g/4)*(H-pad.t-pad.b)).toFixed(0);grid+=`<line x1="${pad.l}" y1="${gy}" x2="${W-pad.r}" y2="${gy}" stroke="rgba(255,255,255,0.06)"/>`;}
-  const labels=['D-13','','','','D-9','','','','D-5','','','','D-1','hoje']
-    .map((t,i)=>t?`<text x="${x(i).toFixed(1)}" y="${H-8}" fill="rgba(255,255,255,0.4)" font-size="10" font-family="JetBrains Mono" text-anchor="middle">${t}</text>`:'').join('');
-  document.getElementById('trend').innerHTML=grid+line(trendReg,'#ff6b00')+line(trendFtd,'#5b9dff')+labels;
+function renderCentral(){
+  const list=current==="todos"?ATIVOS:ATIVOS.filter(e=>e.key===current);
+  const prev=mesAnt(MES);
+  const m=met(somaMes(list,MES)), mo=prev?met(somaMes(list,prev)):null;
+  document.getElementById('scope').textContent=(current==="todos"?"todos os experts":ATIVOS.find(e=>e.key===current).nome)+" · "+capt(MES);
+  document.getElementById('kpititle').textContent="Indicadores de "+capt(MES)+(prev?" · vs "+capt(prev):"");
+  if(!m){document.getElementById('kpis').innerHTML='<div class="kpi glass" style="grid-column:1/-1;color:var(--fog)">Sem dados neste mês.</div>';}
+  else{
+    const g=k=>mo?mo[k]:null;
+    const cards=[
+      kpi("Gasto",brlk(m.gasto),varp(m.gasto,g('gasto')),'neutral',0),
+      kpi("Leads",nf.format(m.leads),varp(m.leads,g('leads')),'good',1),
+      kpi("Registros",nf.format(m.reg),varp(m.reg,g('reg')),'good',2),
+      kpi("FTD",nf.format(m.ftd),varp(m.ftd,g('ftd')),'good',3),
+      kpi("Conversão Reg→FTD",pct(m.regFtd),varp(m.regFtd,g('regFtd')),'good',4),
+      kpi("Depósitos",brlk(m.dep),varp(m.dep,g('dep')),'good',5),
+      kpi("NGR",brlk(m.ngr),varp(m.ngr,g('ngr')),'good',6),
+      kpi("Resultado · NGR−Gasto",`<span class="${signCls(m.resultado)}">${brlk(m.resultado)}</span>`,varp(m.resultado,g('resultado')),'good',7),
+    ];
+    document.getElementById('kpis').innerHTML=cards.join('');
+  }
+  // ranking por resultado (todos os ativos, no mês)
+  document.getElementById('rankpsub').textContent="ordenado por resultado · "+capt(MES);
+  const rk=ATIVOS.map(e=>({e,m:met(e.meses[MES])})).filter(x=>x.m).sort((a,b)=>b.m.resultado-a.m.resultado);
+  document.getElementById('rankbody').innerHTML=rk.map(({e,m})=>{
+    const on=current!=="todos"&&current===e.key;
+    return `<tr class="${on?'on':''}"><td><div class="who"><span class="adot" style="background:${e.cor}"></span><span style="white-space:nowrap">${e.nome}</span> ${e.marcas.map(x=>`<span class="tag ${x}">${x.toUpperCase()}</span>`).join(' ')}</div></td>
+      <td class="mono">${brlk(m.gasto)}</td><td class="mono"><b>${nf.format(m.reg)}</b></td><td class="mono">${nf.format(m.ftd)}</td>
+      <td class="mono">${brlk(m.ngr)}</td>
+      <td class="mono ${signCls(m.resultado)}"><b>${brlk(m.resultado)}</b></td></tr>`;
+  }).join('');
+  // resultado do mês (consolidado todos ativos)
+  const all=met(somaMes(ATIVOS,MES));
+  document.getElementById('resscope').textContent="NGR − Gasto · "+capt(MES);
+  if(all){document.getElementById('resbig').innerHTML=`<span class="${signCls(all.resultado)}">${brlk(all.resultado)}</span>`;
+    const pos=rk.filter(x=>x.m.resultado>=0).length, neg=rk.length-pos;
+    document.getElementById('restag').innerHTML=`<b class="pos">${pos}</b> no azul · <b class="neg">${neg}</b> no vermelho`;}
+  document.getElementById('resrows').innerHTML=rk.map(({e,m})=>
+    `<div class="resrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div>
+     <div class="resval ${signCls(m.resultado)}">${brlk(m.resultado)}</div></div>`).join('');
+  // funil leads->reg->ftd
+  if(m){const steps=[
+      {l:"Leads",v:m.leads,c:"linear-gradient(90deg,#ff8a3c,#ff6b00)",rel:null},
+      {l:"Registros",v:m.reg,c:"linear-gradient(90deg,#e8650d,#c85400)",rel:m.leadReg},
+      {l:"FTD",v:m.ftd,c:"linear-gradient(90deg,#4ade80,#22a35a)",rel:m.regFtd}];
+    document.getElementById('funscope').textContent="leads → registros → FTD · "+(current==="todos"?"todos":ATIVOS.find(e=>e.key===current).nome)+" · "+capt(MES);
+    document.getElementById('funnel').innerHTML=steps.map((s,i)=>{const w=Math.max((s.v/m.leads)*100,18);
+      const meta=i===0?'<b>base de leads</b>':`<b>${pct(s.rel)}</b> da etapa anterior`;
+      return `<div class="frow"><div class="flabel">${s.l}</div><div><div class="fbar" style="width:${w}%;background:${s.c}">${nf.format(s.v)}</div><div class="fmeta" style="margin-top:4px">${meta}</div></div></div>`;}).join('');}
+  // campanhas por expert (reais)
+  const totalCamp=ATIVOS.reduce((a,e)=>a+(e.campanhas?e.campanhas.length:0),0);
+  document.getElementById('camphead').innerHTML=
+    `<div class="camp-stat"><div class="n" style="color:var(--orange-400)">${totalCamp}</div><div class="l">campanhas</div></div>
+     <div class="camp-stat"><div class="n">${ATIVOS.length}</div><div class="l">experts c/ dados</div></div>
+     <div class="camp-stat"><div class="n" style="color:var(--green)">${D.meses.length}</div><div class="l">meses 2026</div></div>`;
+  document.getElementById('camplist').innerHTML=ATIVOS.map(e=>(e.campanhas||[]).map(c=>
+    `<div class="campitem"><span class="cn">${e.nome} · ${c.replace(/\s*(ID)?\s*-?\s*(\d{4,6})\s*$/,'').trim()||c}</span><span class="cx tag ${e.marcas[0]}">${(c.match(/(\d{4,6})\s*$/)||[,''])[1]||''}</span></div>`).join('')).join('');
 }
 
 // ---------- DASHBOARD ----------
-let dscope="todos";
 function buildDPills(){
-  const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...EXPERTS];
+  const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...ATIVOS];
   document.getElementById('dpills').innerHTML=items.map(e=>
     `<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}"><span class="dot" style="background:${e.cor}"></span>${e.nome}</button>`).join('');
-  document.querySelectorAll('#dpills .expert-pill').forEach(b=>b.onclick=()=>{
-    dscope=b.dataset.k;document.querySelectorAll('#dpills .expert-pill').forEach(x=>x.classList.toggle('active',x===b));renderDash();});
+  document.querySelectorAll('#dpills .expert-pill').forEach(b=>b.onclick=()=>{dscope=b.dataset.k;
+    document.querySelectorAll('#dpills .expert-pill').forEach(x=>x.classList.toggle('active',x===b));renderDash();});
 }
 function renderDash(){
-  const list=dscope==="todos"?EXPERTS:EXPERTS.filter(e=>e.key===dscope);
-  const a=agg(list),h=a.hoje,o=a.ontem;
-  document.getElementById('dscope').textContent=dscope==="todos"?"todos os experts":EXPERTS.find(e=>e.key===dscope).nome;
-  const d=(x,y)=>varp(x,y);
+  const list=dscope==="todos"?ATIVOS:ATIVOS.filter(e=>e.key===dscope);
+  const prev=mesAnt(MES);
+  const m=met(somaMes(list,MES)), mo=prev?met(somaMes(list,prev)):null;
+  document.getElementById('dscope').textContent=(dscope==="todos"?"todos os experts":ATIVOS.find(e=>e.key===dscope).nome)+" · "+capt(MES);
+  if(!m){document.getElementById('dkpis').innerHTML='<div class="kpi glass" style="grid-column:1/-1;color:var(--fog)">Sem dados neste mês.</div>';return;}
+  const g=k=>mo?mo[k]:null;
   const rows=[
-    {l:"Investimento",v:brlk(h.inv),dl:d(h.inv,o.inv),info:1},
-    {l:"Cliques",v:nf.format(h.cli),dl:d(h.cli,o.cli)},
-    {l:"CPC · custo/clique",v:brl2(div(h.inv,h.cli)),dl:d(div(h.inv,h.cli),div(o.inv,o.cli)),cost:1},
-    {l:"Entradas grupo",v:nf.format(h.ent),dl:d(h.ent,o.ent)},
-    {l:"Clique→Entrada",v:pct(div(h.ent,h.cli)),dl:d(div(h.ent,h.cli),div(o.ent,o.cli))},
-    {l:"Custo/lead",v:brl2(div(h.inv,h.ent)),dl:d(div(h.inv,h.ent),div(o.inv,o.ent)),cost:1},
-    {l:"Registros",v:nf.format(h.reg),dl:d(h.reg,o.reg)},
-    {l:"CPA · custo/registro",v:brl2(div(h.inv,h.reg)),dl:d(div(h.inv,h.reg),div(o.inv,o.reg)),cost:1},
-    {l:"FTD",v:nf.format(h.ftd),dl:d(h.ftd,o.ftd)},
-    {l:"Reg→FTD",v:pct(div(h.ftd,h.reg)),dl:d(div(h.ftd,h.reg),div(o.ftd,o.reg))},
-    {l:"Entrada→FTD",v:pct(div(h.ftd,h.ent)),dl:d(div(h.ftd,h.ent),div(o.ftd,o.ent))},
-    {l:"Depósitos",v:brlk(h.dep),dl:d(h.dep,o.dep)},
-    {l:"Ticket médio",v:brl(div(h.dep,h.ftd)),dl:d(div(h.dep,h.ftd),div(o.dep,o.ftd))},
-    {l:"NGR",v:brlk(h.ngr),dl:d(h.ngr,o.ngr)},
-    {l:"Depósito→NGR",v:pct(div(h.ngr,h.dep)),dl:d(div(h.ngr,h.dep),div(o.ngr,o.dep))},
-    {l:"Wagering",v:brlk(h.wag),dl:d(h.wag,o.wag)},
+    ["Gasto",brlk(m.gasto),varp(m.gasto,g('gasto')),'neutral'],
+    ["Leads",nf.format(m.leads),varp(m.leads,g('leads')),'good'],
+    ["Custo/Lead",brl(m.custoLead),varp(m.custoLead,g('custoLead')),'cost'],
+    ["Registros",nf.format(m.reg),varp(m.reg,g('reg')),'good'],
+    ["CPA · custo/registro",brl(m.cpa),varp(m.cpa,g('cpa')),'cost'],
+    ["Lead→Registro",pct(m.leadReg),varp(m.leadReg,g('leadReg')),'good'],
+    ["FTD",nf.format(m.ftd),varp(m.ftd,g('ftd')),'good'],
+    ["Reg→FTD",pct(m.regFtd),varp(m.regFtd,g('regFtd')),'good'],
+    ["Custo/FTD",brl(m.custoFtd),varp(m.custoFtd,g('custoFtd')),'cost'],
+    ["Depósitos",brlk(m.dep),varp(m.dep,g('dep')),'good'],
+    ["Ticket médio",brl(m.ticket),varp(m.ticket,g('ticket')),'good'],
+    ["NGR",brlk(m.ngr),varp(m.ngr,g('ngr')),'good'],
+    ["Resultado · NGR−Gasto",`<span class="${signCls(m.resultado)}">${brlk(m.resultado)}</span>`,varp(m.resultado,g('resultado')),'good'],
+    ["ROI",m.roi==null?'—':pct(m.roi),varp(m.roi,g('roi')),'good'],
   ];
-  document.getElementById('dkpis').innerHTML=rows.map((k,i)=>{
-    let cls="flat",ar="→",good=k.dl; if(k.cost&&k.dl!=null)good=-k.dl;
-    if(k.dl!=null&&Math.abs(k.dl)>=0.001){ar=k.dl>0?"▲":"▼";cls=k.info?"flat":(good>0?"up":"down");}
-    const dt=k.dl==null?"—":ar+" "+Math.abs(k.dl*100).toFixed(1).replace('.',',')+"%";
-    return `<div class="kpi glass reveal" style="animation-delay:${i*0.03}s"><div class="kpi-label">${k.l}</div><div class="kpi-value">${k.v}</div><div class="kpi-delta ${cls}">${dt}<span style="color:var(--fog)">vs ontem</span></div></div>`;
-  }).join('');
+  document.getElementById('dkpis').innerHTML=rows.map((r,i)=>kpi(r[0],r[1],r[2],r[3],i)).join('');
 }
-const brl2=n=>n==null?'—':'R$'+n.toFixed(2).replace('.',',');
 
-// ---------- HISTÓRICO ----------
+// ---------- HISTÓRICO (diário do mês) ----------
 function buildHist(){
-  const days=trendReg.length;
-  const today=new Date(2026,8,24);
-  const meses=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-  let html='';
-  for(let i=days-1;i>=0;i--){
-    const dt=new Date(today); dt.setDate(today.getDate()-(days-1-i));
-    const reg=trendReg[i],ftd=trendFtd[i];
-    const inv=Math.round(reg*12.9), ngr=Math.round(reg*52.8);
-    const prev=i>0?trendReg[i-1]:reg; const up=reg>=prev;
-    html+=`<tr><td>${dt.getDate()} ${meses[dt.getMonth()]}</td><td class="mono"><b>${nf.format(reg)}</b></td>
-      <td class="mono">${nf.format(ftd)}</td><td class="mono">${pct(ftd/reg)}</td>
-      <td class="mono">${brlk(inv)}</td><td class="mono">${brlk(ngr)}</td>
-      <td><span class="sig ${up?'up':'down'}">${up?'▲ alta':'▼ baixa'}</span></td></tr>`;
-  }
-  document.getElementById('histbody').innerHTML=html;
+  document.getElementById('histscope').textContent=capt(MES);
+  // consolida por dia entre todos os ativos
+  const byday={};
+  ATIVOS.forEach(e=>{const mm=e.meses[MES];if(!mm)return;mm.dias.forEach(d=>{
+    const k=d[0];byday[k]=byday[k]||{g:0,le:0,r:0,f:0,dep:0,n:0};
+    byday[k].g+=d[1];byday[k].le+=d[2];byday[k].r+=d[3];byday[k].f+=d[4];byday[k].dep+=d[5];byday[k].n+=d[6];});});
+  const days=Object.keys(byday).map(Number).sort((a,b)=>b-a);
+  const mnum=String(D.meses.indexOf(MES)+5).padStart(2,'0'); // maio=index0 -> mês5
+  document.getElementById('histbody').innerHTML=days.map(k=>{const t=byday[k];const res=t.n-t.g;
+    return `<tr><td>${String(k).padStart(2,'0')}/${mnum}</td><td class="mono">${brlk(t.g)}</td><td class="mono">${nf.format(t.le)}</td>
+      <td class="mono"><b>${nf.format(t.r)}</b></td><td class="mono">${nf.format(t.f)}</td><td class="mono">${pct(div(t.f,t.r))}</td>
+      <td class="mono">${brlk(t.dep)}</td><td class="mono">${brlk(t.n)}</td><td class="mono ${signCls(res)}">${brlk(res)}</td></tr>`;
+  }).join('')||'<tr><td colspan="9" style="color:var(--fog)">Sem dados diários neste mês.</td></tr>';
+}
+
+// ---------- TENDÊNCIA mensal ----------
+function buildTrend(){
+  const reg=D.meses.map(m=>{const t=somaMes(ATIVOS,m);return t?t.r:0;});
+  const ftd=D.meses.map(m=>{const t=somaMes(ATIVOS,m);return t?t.f:0;});
+  const W=920,H=260,pad={l:48,r:16,t:16,b:30},n=D.meses.length;
+  const max=Math.max(...reg,1)*1.1;
+  const x=i=>pad.l+(n<2?0:(i/(n-1))*(W-pad.l-pad.r));
+  const y=v=>H-pad.b-(v/max)*(H-pad.t-pad.b);
+  const line=(a,c)=>{const d=a.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
+    const dots=a.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.5" fill="${c}"/>`).join('');
+    return `<path d="${d}" fill="none" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}`;};
+  let grid='';for(let gi=0;gi<=4;gi++){const gy=(pad.t+(gi/4)*(H-pad.t-pad.b)).toFixed(0);grid+=`<line x1="${pad.l}" y1="${gy}" x2="${W-pad.r}" y2="${gy}" stroke="rgba(255,255,255,0.06)"/>`;}
+  const labels=D.meses.map((m,i)=>`<text x="${x(i).toFixed(1)}" y="${H-10}" fill="rgba(255,255,255,0.45)" font-size="11" font-family="JetBrains Mono" text-anchor="middle">${capt(m).slice(0,3)}</text>`).join('');
+  document.getElementById('trend').innerHTML=grid+line(reg,'#ff6b00')+line(ftd,'#5b9dff')+labels;
 }
 
 // ---------- UPLOAD ----------
 function buildUpload(){
-  document.getElementById('upexpert').innerHTML=EXPERTS.map(e=>`<option>${e.nome}</option>`).join('');
-  document.getElementById('uprows').innerHTML=EXPERTS.map(e=>
-    `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div>
-     ${e.up.feito?`<div class="status ok"><span class="s-dot"></span>subiu ${e.up.hora}</div>`:`<div class="status wait"><span class="s-dot"></span>pendente</div>`}</div>`).join('');
-  document.querySelectorAll('.up-tab').forEach(t=>t.onclick=()=>{
-    document.querySelectorAll('.up-tab').forEach(x=>x.classList.toggle('active',x===t));
-    document.querySelectorAll('.up-pane').forEach(p=>p.hidden=p.dataset.pane!==t.dataset.tab);
-  });
+  document.getElementById('upexpert').innerHTML=ATIVOS.map(e=>`<option>${e.nome}</option>`).join('')+'<option>IrisAv (pendente)</option>';
+  document.getElementById('uprows').innerHTML=EXPERTS.map(e=>{
+    if(e.pendente)return `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div><div class="status wait"><span class="s-dot"></span>planilha pendente</div></div>`;
+    const m=met(e.meses[MES]);const res=m?m.resultado:0;
+    return `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div><div class="status ok"><span class="s-dot"></span>${capt(MES)}: ${m?brlk(res):'—'}</div></div>`;}).join('');
+  document.querySelectorAll('.up-tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.up-tab').forEach(x=>x.classList.toggle('active',x===t));
+    document.querySelectorAll('.up-pane').forEach(p=>p.hidden=p.dataset.pane!==t.dataset.tab);});
 }
 
-// ---------- CRIATIVOS ----------
+// ---------- CRIATIVOS (preview — não vem da planilha) ----------
 const CRIATIVOS=[
-  {t:"Bingo Turbo · Hook 1",who:"Lucas Striz",fmt:"Reel",st:"ativo",views:"48,2k",ctr:"3,1%",cor:"#ff6b00"},
-  {t:"Reals Prime · Depoimento",who:"Lucas Striz",fmt:"Reel",st:"ativo",views:"31,7k",ctr:"2,7%",cor:"#5b9dff"},
-  {t:"Iris · Oferta boas-vindas",who:"IrisAv",fmt:"Imagem",st:"teste",views:"12,4k",ctr:"1,9%",cor:"#ff8a3c"},
-  {t:"Belodi · Passo a passo",who:"BelodiAv",fmt:"Carrossel",st:"ativo",views:"22,9k",ctr:"4,2%",cor:"#a06bff"},
-  {t:"Suh · Aviator ao vivo",who:"SuhAviator",fmt:"Reel",st:"ativo",views:"27,5k",ctr:"3,4%",cor:"#4ade80"},
-  {t:"Marques · Bônus relâmpago",who:"MarquesAv",fmt:"Imagem",st:"pausado",views:"9,1k",ctr:"1,4%",cor:"#f7b955"},
-  {t:"Caio · Live premiada",who:"Caioleta",fmt:"Reel",st:"teste",views:"15,8k",ctr:"2,2%",cor:"#ff6b00"},
-  {t:"Bingo Noturno · Recap",who:"IrisAv",fmt:"Carrossel",st:"ativo",views:"19,3k",ctr:"3,8%",cor:"#5b9dff"},
+  {t:"Aviator · Hook ganho",who:"Lucas Striz",fmt:"Reel",st:"ativo",views:"48,2k",ctr:"3,1%",cor:"#ff6b00"},
+  {t:"Professor · Estratégia",who:"Lucas Striz",fmt:"Reel",st:"ativo",views:"31,7k",ctr:"2,7%",cor:"#5b9dff"},
+  {t:"Suh · Sessão ao vivo",who:"SuhAviator",fmt:"Reel",st:"ativo",views:"27,5k",ctr:"3,4%",cor:"#a06bff"},
+  {t:"Caio · Roleta premiada",who:"Caioleta",fmt:"Reel",st:"teste",views:"15,8k",ctr:"2,2%",cor:"#f7b955"},
+  {t:"Marques · Bônus",who:"MarquesAv",fmt:"Imagem",st:"pausado",views:"9,1k",ctr:"1,4%",cor:"#4ade80"},
+  {t:"Belodi · Passo a passo",who:"BelodiAv",fmt:"Carrossel",st:"ativo",views:"22,9k",ctr:"4,2%",cor:"#5b9dff"},
 ];
-let cvfilter="todos";
-const fmtIcon={Reel:"▶",Imagem:"▦",Carrossel:"❏"};
+let cvfilter="todos";const fmtIcon={Reel:"▶",Imagem:"▦",Carrossel:"❏"};
 function buildCriativos(){
   const filters=["todos","Reel","Imagem","Carrossel"];
-  document.getElementById('cvfilter').innerHTML=filters.map(f=>
-    `<button class="filter-pill ${f===cvfilter?'active':''}" data-f="${f}">${f==='todos'?'Todos':f+'s'}</button>`).join('');
+  document.getElementById('cvfilter').innerHTML=filters.map(f=>`<button class="filter-pill ${f===cvfilter?'active':''}" data-f="${f}">${f==='todos'?'Todos':f+'s'}</button>`).join('');
   document.querySelectorAll('#cvfilter .filter-pill').forEach(b=>b.onclick=()=>{cvfilter=b.dataset.f;buildCriativos();});
   const list=cvfilter==="todos"?CRIATIVOS:CRIATIVOS.filter(c=>c.fmt===cvfilter);
   document.getElementById('cvcount').textContent=list.length;
   document.getElementById('cvgrid').innerHTML=list.map(c=>
-    `<div class="cv-card glass"><div class="cv-thumb" style="background:linear-gradient(135deg,${c.cor}33,${c.cor}0d)">
-      <span class="fmt">${c.fmt.toUpperCase()}</span><span class="ic" style="color:${c.cor}">${fmtIcon[c.fmt]}</span></div>
-      <div class="cv-body"><div class="t">${c.t}</div><div class="who">${c.who}</div>
-        <div class="cv-metrics"><div><b>${c.views}</b><span>views</span></div><div><b>${c.ctr}</b><span>ctr</span></div></div>
-        <div class="cv-status ${c.st}">${c.st}</div></div></div>`).join('');
+    `<div class="cv-card glass"><div class="cv-thumb" style="background:linear-gradient(135deg,${c.cor}33,${c.cor}0d)"><span class="fmt">${c.fmt.toUpperCase()}</span><span class="ic" style="color:${c.cor}">${fmtIcon[c.fmt]}</span></div>
+      <div class="cv-body"><div class="t">${c.t}</div><div class="who">${c.who}</div><div class="cv-metrics"><div><b>${c.views}</b><span>views</span></div><div><b>${c.ctr}</b><span>ctr</span></div></div><div class="cv-status ${c.st}">${c.st}</div></div></div>`).join('');
 }
 
-// ---------- GESTÃO ----------
+// ---------- GESTÃO (experts + campanhas reais) ----------
 function buildGestao(){
   document.getElementById('gexperts').innerHTML=EXPERTS.map(e=>
-    `<div class="gitem"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}${e.apelido?` <span class="mono" style="font-size:9px;color:var(--fog)">· ${e.apelido}</span>`:''}
-      ${e.marcas.map(x=>`<span class="tag ${x}">${x.toUpperCase()}</span>`).join(' ')}</div>
+    `<div class="gitem"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}${e.apelido?` <span class="mono" style="font-size:9px;color:var(--fog)">· ${e.apelido}</span>`:''} ${e.marcas.map(x=>`<span class="tag ${x}">${x.toUpperCase()}</span>`).join(' ')}${e.pendente?' <span class="tag" style="color:var(--yellow);border-color:rgba(250,204,21,.4)">PLANILHA PENDENTE</span>':''}</div>
       <button class="gedit" onclick="fakeSave(this,'Editar ${e.nome}')">editar</button></div>`).join('');
-  const camps=[["Lucas Striz","Bingo Turbo","bingo","UX-38560"],["Lucas Striz","Reals Prime","reals","UX-41022"],
-    ["IrisAv","Bingo Noturno","bingo","UX-39114"],["BelodiAv","Bingo Premiado","bingo","UX-38921"],
-    ["SuhAviator","Bingo Cash","bingo","UX-40877"],["MarquesAv","Bingo Prime","bingo","UX-40233"],
-    ["Caioleta","Bingo Live","bingo","UX-41560"]];
-  document.getElementById('gcamps').innerHTML=camps.map(c=>
-    `<div class="gitem"><div class="who">${c[0]} · ${c[1]} <span class="tag ${c[2]}">${c[2].toUpperCase()}</span></div>
-      <span class="mono" style="font-size:10px;color:var(--fog)">${c[3]}</span></div>`).join('');
+  let camps='';EXPERTS.forEach(e=>(e.campanhas||[]).forEach(c=>{
+    const id=(c.match(/(\d{4,6})\s*$/)||[,''])[1]||'';
+    camps+=`<div class="gitem"><div class="who">${e.nome} · ${c} <span class="tag ${e.marcas[0]}">${e.marcas[0].toUpperCase()}</span></div><span class="mono" style="font-size:10px;color:var(--fog)">${id}</span></div>`;}));
+  document.getElementById('gcamps').innerHTML=camps||'<div class="mono" style="color:var(--fog)">Sem campanhas.</div>';
 }
 
-// ---------- toast (ações de preview) ----------
-function fakeSave(btn,msg){
-  const t=document.createElement('div'); t.className='toast';
+// ---------- toast ----------
+function fakeSave(btn,msg){const t=document.createElement('div');t.className='toast';
   t.textContent=(msg||'Enviado')+' · preview — grava de verdade quando ligado ao Supabase';
-  document.body.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
-  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},2600);
-}
+  document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},2600);}
 
 // ---------- ROUTER ----------
 const TITLES={central:"CENTRAL",dashboard:"DASHBOARD",historico:"HISTÓRICO",upload:"UPLOAD",criativos:"CRIATIVOS",gestao:"GESTÃO"};
 function go(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
   document.querySelectorAll('.nav-item,.mnav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
-  const mb=document.querySelector('.mobilebar .mono'); if(mb) mb.textContent=TITLES[page]+' · EXPERTS';
-  window.scrollTo(0,0);
-  if(page==='dashboard') renderDash();
+  const mb=document.querySelector('.mobilebar .mono');if(mb)mb.textContent=TITLES[page]+' · EXPERTS';
+  window.scrollTo(0,0);if(page==='dashboard')renderDash();if(page==='historico')buildHist();if(page==='upload')buildUpload();
 }
 document.querySelectorAll('.nav-item[data-page],.mnav-item[data-page]').forEach(n=>n.onclick=()=>go(n.dataset.page));
 
-document.getElementById('refdate').textContent="24 set 2026";
-buildPills(); buildOps(); buildTrend(); render();
-buildDPills(); renderDash(); buildHist(); buildUpload(); buildCriativos(); buildGestao();
+function renderAll(){renderCentral();renderDash();buildHist();buildTrend();buildUpload();}
+
+buildMesSel();buildPills();buildDPills();buildCriativos();buildGestao();renderAll();
 </script>
 </body>
 </html>
