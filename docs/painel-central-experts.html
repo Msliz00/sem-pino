@@ -240,6 +240,7 @@ a{color:inherit;text-decoration:none}
 @keyframes logoGlow{0%,100%{filter:drop-shadow(0 4px 14px rgba(25,227,155,0.18))}50%{filter:drop-shadow(0 6px 22px rgba(25,227,155,0.42))}}
 .login-sub{text-align:center;font-size:10px;letter-spacing:.22em;color:var(--fog);margin-bottom:22px}
 .login-card .label{margin-top:12px}
+.login-hint{font-size:10px;color:var(--reals);margin-top:6px;min-height:13px;letter-spacing:.04em}
 .pwrap{position:relative}
 .pwrap .eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:15px;opacity:.6}
 .pwrap .eye:hover{opacity:1}
@@ -365,8 +366,9 @@ select.input{cursor:pointer}
   <form class="login-card glass-strong" id="loginForm" autocomplete="on">
     <img class="logo" src="logo-reals-bingo.png" alt="REALS Bingo">
     <div class="login-sub mono">PAINEL EXPERTS · ACESSO</div>
-    <label class="label">E-mail</label>
-    <input class="input" type="email" name="username" id="loginEmail" autocomplete="username" placeholder="voce@realsbingo.com" required>
+    <label class="label">Celular, usuário ou e-mail</label>
+    <input class="input" type="text" name="username" id="loginEmail" autocomplete="username" placeholder="(11) 9 0000-0000 · 00BABY · voce@email.com" required>
+    <div class="login-hint mono" id="loginHint"></div>
     <label class="label">Senha</label>
     <div class="pwrap">
       <input class="input" type="password" name="password" id="loginPass" autocomplete="current-password" placeholder="••••••••" required style="padding-right:40px">
@@ -869,6 +871,11 @@ syncBars();buildPills();buildDPills();buildCriativos();buildGestao();renderAll()
   function enter(){scr.classList.add('hidden');}
   // lembrar aparelho
   try{if(localStorage.getItem('reals_login')==='1'){enter();const le=localStorage.getItem('reals_email');if(le)email.value=le;}}catch(e){}
+  // detecta tipo de login: celular / usuário / e-mail
+  const hint=document.getElementById('loginHint');
+  function detectTipo(v){v=v.trim();if(!v)return'';if(v.includes('@'))return'e-mail';
+    const dig=v.replace(/[()\s\-+]/g,'');if(/^\d{10,13}$/.test(dig))return'celular';return'usuário';}
+  email.addEventListener('input',()=>{const t=detectTipo(email.value);hint.textContent=t?('→ reconhecido como '+t):'';});
   // mostrar/ocultar senha
   document.getElementById('eyeBtn').onclick=()=>{pass.type=pass.type==='password'?'text':'password';};
   // esqueci a senha (a estruturar)
