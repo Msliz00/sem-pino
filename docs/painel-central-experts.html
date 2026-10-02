@@ -5,18 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Central de Operações · REALS Bingo! · Painel Experts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --ink:#08070a; --ink-2:#0d0c10;
-  --orange-500:#ff6b00; --orange-400:#ff8a3c;
+  --orange-500:#ff6b00; --orange-400:#ff8a3c; --orange-soft:rgba(255,107,0,.14);
+  --reals:#19e39b; --reals-2:#0fb37a; --reals-soft:rgba(25,227,155,.14);
   --fog:rgba(255,255,255,0.55); --snow:#f5f5f7;
-  --green:#4ade80; --red:#ef4444; --yellow:#facc15; --blue:#5b9dff;
+  --green:#19e39b; --red:#ef4444; --yellow:#facc15; --blue:#5b9dff;
+  --font-display:"Play",system-ui,sans-serif;
+  --font-body:"Inter",system-ui,-apple-system,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
-html,body{background:var(--ink);color:var(--snow);font-family:"Bricolage Grotesque",system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+html,body{background:var(--ink);color:var(--snow);font-family:var(--font-body);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,.page-title,.brand,.hero-val,.kpi-value,.hm-v,.camp-stat .n,.big,.rbar-val{font-family:var(--font-display)}
 .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
-.serif-accent{font-family:"Instrument Serif",Georgia,serif;font-style:italic;color:var(--orange-400)}
+.serif-accent{font-family:var(--font-display);font-style:normal;color:var(--reals);font-weight:700}
 a{color:inherit;text-decoration:none}
 
 /* background */
@@ -44,7 +48,7 @@ a{color:inherit;text-decoration:none}
 .nav{display:flex;flex-direction:column;gap:4px;margin-top:32px;flex:1}
 .nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:11px;color:var(--fog);font-weight:500;font-size:14px;cursor:pointer;transition:all .2s ease}
 .nav-item:hover{color:var(--snow);background:rgba(255,255,255,0.05)}
-.nav-item.active{background:rgba(255,107,0,0.15);color:var(--orange-400);border:1px solid rgba(255,107,0,0.3)}
+.nav-item.active{background:linear-gradient(90deg,rgba(25,227,155,0.10),rgba(255,107,0,0.12));color:var(--orange-400);border:1px solid rgba(255,107,0,0.3);box-shadow:inset 3px 0 0 var(--reals)}
 .nav-item svg{width:18px;height:18px;flex-shrink:0}
 .user-card{border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;margin-top:16px;display:flex;align-items:center;gap:12px}
 .avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#ff8a3c 0%,#ff6b00 100%);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--ink);box-shadow:0 0 20px rgba(255,107,0,0.4);flex-shrink:0}
@@ -72,7 +76,8 @@ a{color:inherit;text-decoration:none}
 .expert-pill.active .dot{background:var(--ink)}
 
 .section-title{font-family:"JetBrains Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--fog);margin:34px 0 14px;display:flex;align-items:center;gap:10px}
-.section-title::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.07)}
+.section-title::before{content:"";width:16px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--orange-500),var(--reals))}
+.section-title::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(25,227,155,0.18),rgba(255,255,255,0.02))}
 
 /* KPI grid */
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -105,7 +110,7 @@ a{color:inherit;text-decoration:none}
 .rank .barf{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:linear-gradient(90deg,#ff8a3c,#ff6b00)}
 .tag{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.08em;padding:2px 7px;border-radius:5px;border:1px solid rgba(255,255,255,0.12);color:var(--fog)}
 .tag.bingo{color:var(--orange-400);border-color:rgba(255,138,60,0.4)}
-.tag.reals{color:var(--blue);border-color:rgba(91,157,255,0.4)}
+.tag.reals{color:var(--reals);border-color:rgba(25,227,155,0.45)}
 
 /* status ops */
 .opsrow{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;border-radius:11px;background:rgba(255,255,255,0.02);margin-bottom:8px;border:1px solid rgba(255,255,255,0.05)}
@@ -225,6 +230,53 @@ a{color:inherit;text-decoration:none}
 @keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
 @media(max-width:1080px){.hero{grid-template-columns:1fr}.hero-side{border-left:none;padding-left:0;border-top:1px solid rgba(255,255,255,0.08);padding-top:14px}}
 @media(max-width:860px){.date-custom{margin-left:0;width:100%}.dinp{flex:1}}
+/* ===== LOGIN ===== */
+#login{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at 20% 10%,rgba(25,227,155,0.10),transparent 45%),radial-gradient(ellipse at 85% 90%,rgba(255,107,0,0.12),transparent 45%),var(--ink);overflow:hidden}
+#login.hidden{display:none}
+#login .orb{z-index:0}
+.login-card{position:relative;z-index:2;width:100%;max-width:410px;border-radius:24px;padding:36px 32px;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:loginIn .7s cubic-bezier(.2,.9,.3,1) both}
+@keyframes loginIn{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
+.login-card .logo{width:200px;margin:0 auto 4px;animation:logoGlow 3.5s ease-in-out infinite}
+@keyframes logoGlow{0%,100%{filter:drop-shadow(0 4px 14px rgba(25,227,155,0.18))}50%{filter:drop-shadow(0 6px 22px rgba(25,227,155,0.42))}}
+.login-sub{text-align:center;font-size:10px;letter-spacing:.22em;color:var(--fog);margin-bottom:22px}
+.login-card .label{margin-top:12px}
+.pwrap{position:relative}
+.pwrap .eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:15px;opacity:.6}
+.pwrap .eye:hover{opacity:1}
+.login-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px;flex-wrap:wrap}
+.chk{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--fog);cursor:pointer}
+.chk input{accent-color:var(--reals);width:15px;height:15px}
+.forgot{font-size:12px;color:var(--orange-400);cursor:pointer}
+.forgot:hover{text-decoration:underline}
+.login-btn{margin-top:18px;width:100%;justify-content:center;font-size:15px;padding:13px}
+.login-or{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--fog);font-size:11px;font-family:"JetBrains Mono",monospace}
+.login-or::before,.login-or::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.1)}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:var(--snow);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-google:hover{background:rgba(255,255,255,0.09);border-color:rgba(25,227,155,0.4)}
+.btn-google svg{width:18px;height:18px}
+/* ===== SOON (telegram placeholder) ===== */
+.soon{display:flex;flex-direction:column;align-items:center;text-align:center;padding:54px 28px;border-radius:20px;margin-top:16px;position:relative;overflow:hidden}
+.soon::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(25,227,155,0.08),transparent 60%)}
+.soon-ic{width:74px;height:74px;border-radius:20px;background:var(--reals-soft);display:flex;align-items:center;justify-content:center;margin-bottom:18px;animation:floaty 3s ease-in-out infinite}
+.soon-ic svg{width:38px;height:38px}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.soon h2{font-size:26px;margin-bottom:8px}
+.soon-p{max-width:480px;color:var(--fog);line-height:1.6;font-size:14px}
+.soon-p b{color:var(--snow)}
+.soon-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px;max-width:560px}
+.soon-tag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:7px 13px;border-radius:9px;background:rgba(255,255,255,0.03);border:1px solid rgba(25,227,155,0.2);color:var(--reals)}
+/* ===== ACESSOS (dashboard operação) ===== */
+.acc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:860px){.acc-grid{grid-template-columns:1fr}}
+.acc-card{border-radius:14px;padding:16px 18px}
+.acc-head{display:flex;align-items:center;gap:10px;margin-bottom:13px;font-weight:700}
+.acc-links{display:flex;flex-wrap:wrap;gap:8px}
+.acc-btn{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:10px;font-size:12.5px;font-weight:600;text-decoration:none;transition:all .2s;border:1px solid rgba(255,255,255,0.1)}
+.acc-btn svg{width:15px;height:15px;flex-shrink:0}
+.acc-btn.on{background:var(--reals-soft);border-color:rgba(25,227,155,0.35);color:var(--reals);cursor:pointer}
+.acc-btn.on:hover{background:rgba(25,227,155,0.2);transform:translateY(-2px)}
+.acc-btn.off{color:var(--fog);opacity:.6;cursor:default;background:rgba(255,255,255,0.02)}
+.acc-btn.off .mini{font-size:8px;opacity:.8;margin-left:2px}
 .resrow{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:7px;border:1px solid rgba(255,255,255,0.05)}
 .resrow .who{display:flex;align-items:center;gap:9px;font-weight:600;font-size:13px}
 .resval{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700}
@@ -307,6 +359,32 @@ select.input{cursor:pointer}
 <body>
 <div class="bg-live"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
 
+<!-- ===== LOGIN ===== -->
+<div id="login">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+  <form class="login-card glass-strong" id="loginForm" autocomplete="on">
+    <img class="logo" src="logo-reals-bingo.png" alt="REALS Bingo">
+    <div class="login-sub mono">PAINEL EXPERTS · ACESSO</div>
+    <label class="label">E-mail</label>
+    <input class="input" type="email" name="username" id="loginEmail" autocomplete="username" placeholder="voce@realsbingo.com" required>
+    <label class="label">Senha</label>
+    <div class="pwrap">
+      <input class="input" type="password" name="password" id="loginPass" autocomplete="current-password" placeholder="••••••••" required style="padding-right:40px">
+      <button type="button" class="eye" id="eyeBtn" aria-label="mostrar senha">👁</button>
+    </div>
+    <div class="login-row">
+      <label class="chk"><input type="checkbox" id="remember" checked> Salvar login neste aparelho</label>
+      <span class="forgot" id="forgot">Esqueci a senha</span>
+    </div>
+    <button class="btn-orange login-btn" type="submit">Entrar</button>
+    <div class="login-or"><span>ou</span></div>
+    <button type="button" class="btn-google" id="googleBtn">
+      <svg viewBox="0 0 24 24"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1-3.3 0-6-2.74-6-6.1s2.7-6.1 6-6.1c1.88 0 3.14.8 3.86 1.49l2.63-2.53C16.9 1.9 14.7 1 12 1 6.9 1 2.8 5.1 2.8 10.2S6.9 19.4 12 19.4c5.9 0 9.8-4.14 9.8-9.98 0-.67-.07-1.18-.16-1.69H12z"/><path fill="#34A853" d="M12 22c2.7 0 4.96-.9 6.61-2.43l-3.15-2.44c-.85.59-1.98 1-3.46 1-2.66 0-4.92-1.8-5.72-4.22l-3.26 2.5C4.9 19.9 8.2 22 12 22z" transform="translate(0 -2.6)"/></svg>
+      Entrar com Google
+    </button>
+  </form>
+</div>
+
 <div class="mobilebar glass-strong">
   <img class="logo" src="logo-reals-bingo.png" alt="REALS Bingo" style="width:120px">
   <div class="mono" style="font-size:10px;color:var(--fog);letter-spacing:.12em">CENTRAL · EXPERTS</div>
@@ -314,7 +392,7 @@ select.input{cursor:pointer}
 <nav class="mobilenav glass-strong">
   <div class="mnav-item active" data-page="central">Central</div>
   <div class="mnav-item" data-page="dashboard">Dashboard</div>
-  <div class="mnav-item" data-page="historico">Histórico</div>
+  <div class="mnav-item" data-page="telegram">Telegram</div>
   <div class="mnav-item" data-page="upload">Upload</div>
   <div class="mnav-item" data-page="criativos">Criativos</div>
   <div class="mnav-item" data-page="gestao">Gestão</div>
@@ -330,7 +408,7 @@ select.input{cursor:pointer}
     <nav class="nav">
       <div class="nav-item active" data-page="central"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Central</div>
       <div class="nav-item" data-page="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M20 20H2"/></svg>Dashboard</div>
-      <div class="nav-item" data-page="historico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg>Histórico</div>
+      <div class="nav-item" data-page="telegram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3L2 10.5l6.5 2.5M22 3l-3 16-7.5-6.5M22 3L8.5 13m0 0v5l3.5-3"/></svg>Telegram</div>
       <div class="nav-item" data-page="upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M7 9l5-5 5 5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20h16"/></svg>Upload</div>
       <div class="nav-item" data-page="criativos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M3 17l5-4 4 3 3-2 6 5"/></svg>Criativos</div>
       <div class="nav-item" data-page="gestao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.1A1.6 1.6 0 006 19.4l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003.3 15H3a2 2 0 110-4h.1A1.6 1.6 0 004.6 9l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010 5.6V3a2 2 0 114 0v.1A1.6 1.6 0 0018.4 6l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-1.1 2.7H21a2 2 0 110 4z"/></svg>Gestão</div>
@@ -424,20 +502,26 @@ select.input{cursor:pointer}
       <div class="date-custom"><span class="dlbl">de</span><input type="date" class="dinp dfrom"><span class="dlbl">até</span><input type="date" class="dinp dto"></div></div>
     <div class="section-title">Métricas do período · vs período anterior</div>
     <div class="kpi-grid dash-grid" id="dkpis"></div>
+    <div class="section-title">Acessos da operação · 100% do fluxo</div>
+    <div class="acc-grid" id="dacessos"></div>
    </section>
 
    <!-- ============ HISTÓRICO ============ -->
-   <section class="page" id="page-historico">
+   <section class="page" id="page-telegram">
     <div class="page-header reveal">
-      <div><div class="page-title">Histórico</div>
-        <div class="page-sub"><span class="livedot"></span>Diário consolidado · <span id="histscope">período</span></div></div>
+      <div><div class="page-title">Telegram</div>
+        <div class="page-sub"><span class="livedot"></span>Central de grupos e disparos · por expert</div></div>
     </div>
-    <div class="datebar glass reveal"><div class="preset-pills"></div>
-      <div class="date-custom"><span class="dlbl">de</span><input type="date" class="dinp dfrom"><span class="dlbl">até</span><input type="date" class="dinp dto"></div></div>
-    <div class="panel glass" style="margin-top:12px">
-      <div class="tblwrap"><table class="rank histtable"><thead>
-        <tr><th>Dia</th><th>Gasto</th><th>Leads</th><th>Registros</th><th>FTD</th><th>Reg→FTD</th><th>Depósitos</th><th>NGR</th><th>Resultado</th></tr>
-      </thead><tbody id="histbody"></tbody></table></div>
+    <div class="soon glass reveal">
+      <div class="soon-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--reals)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3L2 10.5l6.5 2.5M22 3l-3 16-7.5-6.5M22 3L8.5 13m0 0v5l3.5-3"/></svg></div>
+      <h2>Em construção</h2>
+      <p class="soon-p">Esta página vai centralizar as operações de <b>Telegram</b> de cada expert — grupos, membros, disparos e desempenho de cada canal.</p>
+      <div class="soon-tags">
+        <span class="soon-tag">Grupos por expert</span><span class="soon-tag">Membros / crescimento</span>
+        <span class="soon-tag">Disparos agendados</span><span class="soon-tag">Cliques por mensagem</span>
+        <span class="soon-tag">Conversão grupo → registro</span>
+      </div>
+      <div class="mono" style="color:var(--fog);font-size:11px;margin-top:20px">a estruturar — aguardando definição dos dados e integrações</div>
     </div>
    </section>
 
@@ -712,16 +796,25 @@ function renderDash(){const list=dscope==="todos"?ATIVOS:ATIVOS.filter(e=>e.key=
     ["Ticket médio",m.ticket,'money',varp(m.ticket,g('ticket')),'good'],["NGR",m.ngr,'moneyk',varp(m.ngr,g('ngr')),'good'],
     ["ROI",m.roi,'pct',varp(m.roi,g('roi')),'good'],["Resultado",m.resultado,'moneyk',varp(m.resultado,g('resultado')),'good',signCls(m.resultado)]];
   document.getElementById('dkpis').innerHTML=rows.map((r,i)=>kpi(r[0],r[1],r[2],r[3],r[4],i,r[5])).join('');
-  animNums(document.getElementById('dkpis'));document.querySelectorAll('#page-dashboard .reveal').forEach(e=>e.classList.add('in'));}
+  animNums(document.getElementById('dkpis'));buildAcessos();document.querySelectorAll('#page-dashboard .reveal').forEach(e=>e.classList.add('in'));}
 
-// ===== HISTÓRICO =====
-function buildHist(){document.getElementById('histscope').textContent=rangeLbl();
-  const days=dailyR(ATIVOS,RANGE.from,RANGE.to).slice().reverse();
-  document.getElementById('histbody').innerHTML=days.map(t=>{const res=t.n-t.g;
-    return `<tr><td>${t.date.slice(8)}/${t.date.slice(5,7)}</td><td class="mono">${brlk(t.g)}</td><td class="mono">${nf.format(t.le)}</td>
-      <td class="mono"><b>${nf.format(t.r)}</b></td><td class="mono">${nf.format(t.f)}</td><td class="mono">${pct(div(t.f,t.r))}</td>
-      <td class="mono">${brlk(t.d)}</td><td class="mono">${brlk(t.n)}</td><td class="mono ${signCls(res)}">${brlk(res)}</td></tr>`;}).join('')||'<tr><td colspan="9" style="color:var(--fog)">Sem dados no período.</td></tr>';
-  document.querySelectorAll('#page-historico .reveal').forEach(e=>e.classList.add('in'));}
+const ACC_IC={planilha:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>',
+ instagram:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>',
+ telegram:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M22 3L2 10.5l6.5 2.5M22 3l-3 16-7.5-6.5M22 3L8.5 13"/></svg>',
+ grupo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M15 11a3 3 0 100-6M2 21v-2a5 5 0 015-5h4a5 5 0 015 5v2M17 14a5 5 0 014 5v2"/></svg>',
+ live:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M4.9 4.9a10 10 0 000 14.2M19.1 4.9a10 10 0 010 14.2M7.8 7.8a6 6 0 000 8.4M16.2 7.8a6 6 0 010 8.4"/></svg>'};
+const ACC_LABEL={planilha:'Planilha',instagram:'Instagram',telegram:'Telegram',grupo:'Grupo',live:'Live'};
+function buildAcessos(){
+  const list=dscope==="todos"?EXPERTS:EXPERTS.filter(e=>e.key===dscope);
+  const kinds=['planilha','instagram','telegram','grupo','live'];
+  document.getElementById('dacessos').innerHTML=list.map(e=>{
+    const a=e.acessos||{};
+    const btns=kinds.map(k=>{const url=a[k];
+      return url?`<a class="acc-btn on" href="${url}" target="_blank" rel="noopener">${ACC_IC[k]}${ACC_LABEL[k]}</a>`
+                :`<span class="acc-btn off">${ACC_IC[k]}${ACC_LABEL[k]}<span class="mini">a definir</span></span>`;}).join('');
+    return `<div class="acc-card glass lift"><div class="acc-head"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}${e.pendente?' <span class="tag" style="color:var(--yellow);border-color:rgba(250,204,21,.4)">pendente</span>':''}</div><div class="acc-links">${btns}</div></div>`;}).join('');
+}
+
 
 // ===== UPLOAD =====
 function buildUpload(){document.getElementById('upexpert').innerHTML=ATIVOS.map(e=>`<option>${e.nome}</option>`).join('')+'<option>IrisAv (pendente)</option>';
@@ -756,18 +849,42 @@ function fakeSave(btn,msg){const t=document.createElement('div');t.className='to
   document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add('show'));setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},2600);}
 
 // ===== ROUTER =====
-const TITLES={central:"CENTRAL",dashboard:"DASHBOARD",historico:"HISTÓRICO",upload:"UPLOAD",criativos:"CRIATIVOS",gestao:"GESTÃO"};
+const TITLES={central:"CENTRAL",dashboard:"DASHBOARD",telegram:"TELEGRAM",upload:"UPLOAD",criativos:"CRIATIVOS",gestao:"GESTÃO"};
 function go(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
   document.querySelectorAll('.nav-item,.mnav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
   const mb=document.querySelector('.mobilebar .mono');if(mb)mb.textContent=TITLES[page]+' · EXPERTS';window.scrollTo(0,0);
-  if(page==='dashboard')renderDash();if(page==='historico')buildHist();if(page==='upload')buildUpload();
+  if(page==='dashboard')renderDash();if(page==='upload')buildUpload();
   document.querySelectorAll('#page-'+page+' .reveal').forEach(e=>e.classList.add('in'));}
 document.querySelectorAll('.nav-item[data-page],.mnav-item[data-page]').forEach(n=>n.onclick=()=>go(n.dataset.page));
 
-function renderAll(){renderCentral();if(document.getElementById('page-dashboard').classList.contains('active'))renderDash();
-  if(document.getElementById('page-historico').classList.contains('active'))buildHist();buildUpload();obsReveals();}
+function renderAll(){renderCentral();if(document.getElementById('page-dashboard').classList.contains('active'))renderDash();buildUpload();obsReveals();}
 
 syncBars();buildPills();buildDPills();buildCriativos();buildGestao();renderAll();obsReveals();
+
+// ===== LOGIN =====
+(function(){
+  const scr=document.getElementById('login'),form=document.getElementById('loginForm');
+  const email=document.getElementById('loginEmail'),pass=document.getElementById('loginPass');
+  function show(){scr.classList.remove('hidden');}
+  function enter(){scr.classList.add('hidden');}
+  // lembrar aparelho
+  try{if(localStorage.getItem('reals_login')==='1'){enter();const le=localStorage.getItem('reals_email');if(le)email.value=le;}}catch(e){}
+  // mostrar/ocultar senha
+  document.getElementById('eyeBtn').onclick=()=>{pass.type=pass.type==='password'?'text':'password';};
+  // esqueci a senha (a estruturar)
+  document.getElementById('forgot').onclick=()=>fakeSave(null,'Recuperação de senha — a estruturar');
+  // google (a estruturar)
+  document.getElementById('googleBtn').onclick=()=>fakeSave(null,'Entrar com Google — a estruturar');
+  // submit → salva credencial no gerenciador do aparelho/Google + entra
+  form.addEventListener('submit',async ev=>{
+    ev.preventDefault();
+    if(!email.value||!pass.value)return;
+    const remember=document.getElementById('remember').checked;
+    try{if(window.PasswordCredential){const c=new PasswordCredential(form);await navigator.credentials.store(c);}}catch(e){}
+    try{if(remember){localStorage.setItem('reals_login','1');localStorage.setItem('reals_email',email.value);}else{localStorage.removeItem('reals_login');}}catch(e){}
+    enter();
+  });
+})();
 document.querySelectorAll('#page-central .reveal').forEach(e=>io.observe(e));
 </script>
 </body>
