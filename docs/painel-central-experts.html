@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Central de Operações · BingoBet · Painel Experts</title>
+<title>Central de Operações · REALS Bingo! · Painel Experts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -39,7 +39,8 @@ a{color:inherit;text-decoration:none}
 /* layout */
 .app{display:flex;width:100%;position:relative;z-index:1}
 .sidebar{width:240px;min-height:100vh;padding:22px 18px;position:relative;z-index:10;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,0.08)}
-.sub-brand{margin-top:6px;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--fog)}
+.sub-brand{margin-top:8px;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--fog)}
+.logo{width:184px;max-width:100%;display:block;filter:drop-shadow(0 4px 14px rgba(46,230,197,0.18))}
 .nav{display:flex;flex-direction:column;gap:4px;margin-top:32px;flex:1}
 .nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:11px;color:var(--fog);font-weight:500;font-size:14px;cursor:pointer;transition:all .2s ease}
 .nav-item:hover{color:var(--snow);background:rgba(255,255,255,0.05)}
@@ -169,6 +170,61 @@ a{color:inherit;text-decoration:none}
 .page.active{display:block}
 .messel{width:auto!important;padding:9px 13px;font-size:13px;cursor:pointer;background:rgba(20,18,24,0.6);border:1px solid rgba(255,255,255,0.1);color:var(--snow);border-radius:11px;font-family:inherit}
 .messel:focus{outline:none;border-color:rgba(255,107,0,0.5)}
+/* ===== DATE FILTER ===== */
+.datebar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 12px;border-radius:14px;margin-bottom:18px}
+.preset-pills{display:flex;gap:5px;flex-wrap:wrap}
+.ppill{padding:8px 13px;border-radius:9px;background:transparent;border:1px solid rgba(255,255,255,0.08);cursor:pointer;color:var(--fog);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.04em;transition:all .22s;white-space:nowrap}
+.ppill:hover{color:var(--snow);border-color:rgba(255,107,0,0.4)}
+.ppill.active{background:linear-gradient(135deg,#ff8a3c,#ff6b00);color:var(--ink);font-weight:700;border-color:transparent;box-shadow:0 4px 16px rgba(255,107,0,.3)}
+.date-custom{display:flex;align-items:center;gap:7px;margin-left:auto}
+.dlbl{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--fog)}
+.dinp{background:rgba(20,18,24,0.6);border:1px solid rgba(255,255,255,0.1);color:var(--snow);border-radius:9px;padding:8px 10px;font-family:"JetBrains Mono",monospace;font-size:12px;color-scheme:dark}
+.dinp:focus{outline:none;border-color:rgba(255,107,0,0.5)}
+/* ===== HERO ===== */
+.hero{display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:22px;align-items:center;border-radius:20px;padding:24px 26px;margin-bottom:16px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 50%,rgba(46,230,197,0.08),transparent 55%);pointer-events:none}
+.hero-val{font-size:clamp(34px,5vw,54px);font-weight:700;line-height:1;letter-spacing:-0.02em;margin:6px 0}
+.hero-sub{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--fog)}
+.hero-side{display:flex;flex-direction:column;gap:12px;border-left:1px solid rgba(255,255,255,0.08);padding-left:22px}
+.hero-mini{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.hero-mini .hm-l{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--fog)}
+.hero-mini .hm-v{font-size:19px;font-weight:700}
+.hero-spark svg{width:100%;height:92px;display:block}
+/* ===== CHART PANELS ===== */
+.chart-svg{width:100%;height:230px;display:block;overflow:visible}
+.chart-svg text{font-family:"JetBrains Mono",monospace}
+.cline{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.cbar{transition:height .9s cubic-bezier(.2,.8,.2,1),y .9s cubic-bezier(.2,.8,.2,1)}
+.clegend{display:flex;gap:16px;margin-bottom:6px}
+.clegend span{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);display:flex;align-items:center;gap:6px}
+.clegend .lk{width:14px;height:3px;border-radius:2px}
+/* ranking bars */
+.rbar-row{display:grid;grid-template-columns:150px 1fr auto;align-items:center;gap:12px;margin-bottom:11px}
+.rbar-name{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rbar-track{height:26px;border-radius:7px;background:rgba(255,255,255,0.04);position:relative;overflow:hidden}
+.rbar-fill{position:absolute;top:0;bottom:0;border-radius:7px;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.rbar-val{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;white-space:nowrap}
+/* insights */
+.insight{display:flex;gap:12px;align-items:flex-start;padding:13px 14px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);margin-bottom:9px}
+.insight .ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.insight .it{font-size:10px;font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--fog)}
+.insight .iv{font-size:14px;font-weight:600;margin-top:2px;line-height:1.35}
+.insight .iv b{color:var(--orange-400)}
+/* donut */
+.donut-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.donut-wrap svg{width:150px;height:150px;flex-shrink:0}
+.dleg{display:flex;flex-direction:column;gap:7px;flex:1;min-width:140px}
+.dleg-row{display:flex;align-items:center;gap:9px;font-size:13px}
+.dleg-row .dk{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.dleg-row .dv{margin-left:auto;font-family:"JetBrains Mono",monospace;font-weight:700;font-size:12px}
+/* ===== MOTION ===== */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.lift{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.lift:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+@keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@media(max-width:1080px){.hero{grid-template-columns:1fr}.hero-side{border-left:none;padding-left:0;border-top:1px solid rgba(255,255,255,0.08);padding-top:14px}}
+@media(max-width:860px){.date-custom{margin-left:0;width:100%}.dinp{flex:1}}
 .resrow{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:7px;border:1px solid rgba(255,255,255,0.05)}
 .resrow .who{display:flex;align-items:center;gap:9px;font-weight:600;font-size:13px}
 .resval{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700}
@@ -252,7 +308,7 @@ select.input{cursor:pointer}
 <div class="bg-live"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
 
 <div class="mobilebar glass-strong">
-  <div class="brand">Bingo<span class="bet">Bet</span></div>
+  <img class="logo" src="logo-reals-bingo.png" alt="REALS Bingo" style="width:120px">
   <div class="mono" style="font-size:10px;color:var(--fog);letter-spacing:.12em">CENTRAL · EXPERTS</div>
 </div>
 <nav class="mobilenav glass-strong">
@@ -268,7 +324,7 @@ select.input{cursor:pointer}
   <!-- SIDEBAR -->
   <aside class="sidebar glass-strong">
     <div>
-      <div class="brand">Bingo<span class="bet">Bet</span></div>
+      <img class="logo" src="logo-reals-bingo.png" alt="REALS Bingo">
       <div class="sub-brand mono">Painel Experts</div>
     </div>
     <nav class="nav">
@@ -291,58 +347,69 @@ select.input{cursor:pointer}
     <div class="page-header reveal">
       <div>
         <div class="page-title">Central de <span class="serif-accent">operações</span></div>
-        <div class="page-sub"><span class="livedot"></span>Visão consolidada · <span id="scope">todos os experts</span></div>
+        <div class="page-sub"><span class="livedot"></span><span id="scope">todos os experts</span></div>
       </div>
-      <div class="hdr-right">
-        <select class="input messel" aria-label="mês"></select>
-        <div class="experts-pills glass" id="pills"></div>
-      </div>
+      <div class="hdr-right"><div class="experts-pills glass" id="pills"></div></div>
     </div>
 
-    <!-- KPIs -->
-    <div class="section-title" id="kpititle">Indicadores do mês · vs mês anterior</div>
+    <!-- FILTRO DE DATA -->
+    <div class="datebar glass reveal"><div class="preset-pills"></div>
+      <div class="date-custom"><span class="dlbl">de</span><input type="date" class="dinp dfrom"><span class="dlbl">até</span><input type="date" class="dinp dto"></div></div>
+
+    <!-- HERO RESULTADO -->
+    <div class="hero glass reveal lift">
+      <div class="hero-main">
+        <div class="kpi-label">Resultado do período · NGR − Gasto</div>
+        <div class="hero-val" id="heroRes">—</div>
+        <div class="hero-sub" id="heroDelta"></div>
+      </div>
+      <div class="hero-side">
+        <div class="hero-mini"><span class="hm-l">ROI</span><span class="hm-v" id="heroRoi">—</span></div>
+        <div class="hero-mini"><span class="hm-l">Margem NGR</span><span class="hm-v" id="heroMargin">—</span></div>
+        <div class="hero-mini"><span class="hm-l">Experts no azul</span><span class="hm-v" id="heroWin">—</span></div>
+      </div>
+      <div class="hero-spark"><svg id="sparkRes" preserveAspectRatio="none" role="img" aria-label="Resultado diário no período"></svg></div>
+    </div>
+
+    <!-- KPIs essenciais -->
+    <div class="section-title" id="kpititle">Indicadores do período</div>
     <div class="kpi-grid" id="kpis"></div>
 
-    <!-- RANKING + RESULTADO -->
+    <!-- GRÁFICOS -->
     <div class="grid-2" style="margin-top:8px">
-      <div class="panel glass reveal">
-        <h3>Ranking de experts</h3>
-        <div class="psub" id="rankpsub">ordenado por resultado</div>
-        <div class="tblwrap"><table class="rank"><thead>
-          <tr><th>Expert</th><th>Gasto</th><th>Reg.</th><th>FTD</th><th>NGR</th><th>Resultado</th></tr>
-        </thead><tbody id="rankbody"></tbody></table></div>
+      <div class="panel glass reveal lift">
+        <h3>Resultado diário</h3><div class="psub">NGR − Gasto por dia · verde lucro, vermelho prejuízo</div>
+        <svg class="chart-svg" id="chartRes" role="img" aria-label="Resultado por dia"></svg>
       </div>
-      <div class="panel glass reveal">
-        <h3>Resultado do mês</h3>
-        <div class="psub" id="resscope">NGR − Gasto</div>
-        <div class="ops-summary"><span class="big" id="resbig">—</span><span class="mono" id="restag" style="color:var(--fog)"></span></div>
-        <div id="resrows"></div>
+      <div class="panel glass reveal lift">
+        <h3>Gasto × NGR</h3><div class="psub">investimento vs receita líquida · por dia</div>
+        <div class="clegend"><span><span class="lk" style="background:#ff6b00"></span>Gasto</span><span><span class="lk" style="background:#2ee6c5"></span>NGR</span></div>
+        <svg class="chart-svg" id="chartGN" role="img" aria-label="Gasto e NGR por dia"></svg>
       </div>
     </div>
 
-    <!-- FUNIL + CAMPANHAS -->
+    <!-- RANKING (barras) + DESTAQUES -->
     <div class="grid-2" style="margin-top:24px">
-      <div class="panel glass reveal">
-        <h3>Funil operacional</h3>
-        <div class="psub" id="funscope">leads → registros → FTD</div>
-        <div class="funnel" id="funnel"></div>
+      <div class="panel glass reveal lift">
+        <h3>Ranking por resultado</h3><div class="psub" id="rankpsub">todos os experts · período</div>
+        <div id="rankbars" style="margin-top:14px"></div>
       </div>
-      <div class="panel glass reveal">
-        <h3>Campanhas por expert</h3>
-        <div class="psub">IDs reais das planilhas</div>
-        <div class="camp-head" id="camphead"></div>
-        <div class="camplist" id="camplist"></div>
+      <div class="panel glass reveal lift">
+        <h3>Destaques</h3><div class="psub">o que exige atenção</div>
+        <div id="insights" style="margin-top:14px"></div>
       </div>
     </div>
 
-    <!-- TREND -->
-    <div class="section-title">Tendência mensal · 2026 (consolidado)</div>
-    <div class="panel glass reveal">
-      <div class="legend">
-        <span><span class="lk" style="background:#ff6b00"></span>Registros</span>
-        <span><span class="lk" style="background:#5b9dff"></span>FTD</span>
+    <!-- FUNIL + DONUT -->
+    <div class="grid-2" style="margin-top:24px">
+      <div class="panel glass reveal lift">
+        <h3>Funil operacional</h3><div class="psub" id="funscope">leads → registros → FTD</div>
+        <div class="funnel" id="funnel" style="margin-top:12px"></div>
       </div>
-      <div class="chart-wrap"><svg id="trend" viewBox="0 0 920 260" width="100%" role="img" aria-label="Linha de registros e FTD nos últimos 14 dias, ambos em tendência de alta."></svg></div>
+      <div class="panel glass reveal lift">
+        <h3>Composição de NGR</h3><div class="psub">participação de cada expert na receita</div>
+        <div class="donut-wrap" style="margin-top:14px"><svg id="donut" viewBox="0 0 120 120" role="img" aria-label="Participação de NGR por expert"></svg><div class="dleg" id="donutleg"></div></div>
+      </div>
     </div>
    </section>
 
@@ -351,12 +418,11 @@ select.input{cursor:pointer}
     <div class="page-header reveal">
       <div><div class="page-title">Dashboard</div>
         <div class="page-sub"><span class="livedot"></span>Métricas completas · <span id="dscope">todos os experts</span></div></div>
-      <div class="hdr-right">
-        <select class="input messel" aria-label="mês"></select>
-        <div class="experts-pills glass" id="dpills"></div>
-      </div>
+      <div class="hdr-right"><div class="experts-pills glass" id="dpills"></div></div>
     </div>
-    <div class="section-title">Métricas do mês · vs mês anterior</div>
+    <div class="datebar glass reveal"><div class="preset-pills"></div>
+      <div class="date-custom"><span class="dlbl">de</span><input type="date" class="dinp dfrom"><span class="dlbl">até</span><input type="date" class="dinp dto"></div></div>
+    <div class="section-title">Métricas do período · vs período anterior</div>
     <div class="kpi-grid dash-grid" id="dkpis"></div>
    </section>
 
@@ -364,9 +430,10 @@ select.input{cursor:pointer}
    <section class="page" id="page-historico">
     <div class="page-header reveal">
       <div><div class="page-title">Histórico</div>
-        <div class="page-sub"><span class="livedot"></span>Diário consolidado do mês · <span id="histscope">setembro</span></div></div>
-      <div class="hdr-right"><select class="input messel" aria-label="mês"></select></div>
+        <div class="page-sub"><span class="livedot"></span>Diário consolidado · <span id="histscope">período</span></div></div>
     </div>
+    <div class="datebar glass reveal"><div class="preset-pills"></div>
+      <div class="date-custom"><span class="dlbl">de</span><input type="date" class="dinp dfrom"><span class="dlbl">até</span><input type="date" class="dinp dto"></div></div>
     <div class="panel glass" style="margin-top:12px">
       <div class="tblwrap"><table class="rank histtable"><thead>
         <tr><th>Dia</th><th>Gasto</th><th>Leads</th><th>Registros</th><th>FTD</th><th>Reg→FTD</th><th>Depósitos</th><th>NGR</th><th>Resultado</th></tr>
@@ -451,7 +518,7 @@ select.input{cursor:pointer}
    </section>
 
     <div class="foot">
-      <div class="mono">BingoBet · Painel Experts — Central de Operações · preview</div>
+      <div class="mono">REALS Bingo! · Painel Experts — Central de Operações · preview</div>
       <div class="preview-flag">PREVIEW · dados mock — pendente ligação ao Supabase</div>
     </div>
   </main>
@@ -459,243 +526,249 @@ select.input{cursor:pointer}
 
 <script src="painel-dados.js"></script>
 <script>
-const D = window.DADOS;
-const capt = s => s[0]+s.slice(1).toLowerCase();
-let MES = D.mesAtual, current="todos", dscope="todos";
-
+const D=window.DADOS, capt=s=>s[0]+s.slice(1).toLowerCase();
+const MN={MAIO:5,JUNHO:6,JULHO:7,AGOSTO:8,SETEMBRO:9,OUTUBRO:10,NOVEMBRO:11,DEZEMBRO:12};
 const nf=new Intl.NumberFormat('pt-BR');
 const brl=n=>'R$ '+nf.format(Math.round(n||0));
-function brlk(n){n=n||0;const a=Math.abs(n);const s=n<0?'-':'';
+function brlk(n){n=n||0;const a=Math.abs(n),s=n<0?'-':'';
   if(a>=1e6)return s+'R$ '+(a/1e6).toFixed(2).replace('.',',')+'M';
   if(a>=1e3)return s+'R$ '+(a/1e3).toFixed(1).replace('.',',')+'k';
   return s+'R$ '+nf.format(Math.round(a));}
 const pct=n=>n==null?'—':(n*100).toFixed(1).replace('.',',')+'%';
-const div=(a,b)=>b?a/b:null;
-const varp=(a,b)=>(b&&isFinite(b))?((a-b)/b):null;
+const div=(a,b)=>b?a/b:null, varp=(a,b)=>(b&&isFinite(b))?((a-b)/b):null;
+const signCls=n=>n>=0?'pos':'neg';
 const EXPERTS=D.experts, ATIVOS=EXPERTS.filter(e=>!e.pendente);
-const mesAnt=m=>{const i=D.meses.indexOf(m);return i>0?D.meses[i-1]:null;};
+let current="todos", dscope="todos";
 
-function somaMes(list,mes){const t={g:0,le:0,r:0,f:0,d:0,n:0};let any=false;
-  list.forEach(e=>{const m=e.meses[mes];if(m){any=true;t.g+=m.g;t.le+=m.le;t.r+=m.r;t.f+=m.f;t.d+=m.d;t.n+=m.n;}});
-  return any?t:null;}
-function met(t){if(!t)return null;return{gasto:t.g,leads:t.le,reg:t.r,ftd:t.f,dep:t.d,ngr:t.n,
-  resultado:t.n-t.g,custoLead:div(t.g,t.le),cpa:div(t.g,t.r),custoFtd:div(t.g,t.f),
-  regFtd:div(t.f,t.r),ticket:div(t.d,t.f),roi:t.g?((t.n-t.g)/t.g):null,leadReg:div(t.r,t.le)};}
+function flat(e){if(e._f)return e._f;const o=[];D.meses.forEach(m=>{const mm=e.meses[m];if(!mm)return;const mn=MN[m];
+  mm.dias.forEach(d=>o.push({date:`${D.ano}-${String(mn).padStart(2,'0')}-${String(d[0]).padStart(2,'0')}`,g:d[1],le:d[2],r:d[3],f:d[4],d:d[5],n:d[6]}));});
+  o.sort((a,b)=>a.date<b.date?-1:1);e._f=o;return o;}
+const ALLD=[...new Set(ATIVOS.flatMap(e=>flat(e).map(x=>x.date)))].sort();
+const MAXD=ALLD[ALLD.length-1], MIND=ALLD[0];
+const addD=(iso,n)=>{const d=new Date(iso+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);};
+const nDays=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
+let RANGE={from:addD(MAXD,-29),to:MAXD}, PRESET='30d';
 
-function kpi(label,valHTML,delta,mode,i){
-  let cls="flat",ar="→";let good=delta;if(mode==='cost'&&delta!=null)good=-delta;
+function aggR(list,f,t){const s={g:0,le:0,r:0,f:0,d:0,n:0};let any=false;
+  list.forEach(e=>flat(e).forEach(x=>{if(x.date>=f&&x.date<=t){any=true;s.g+=x.g;s.le+=x.le;s.r+=x.r;s.f+=x.f;s.d+=x.d;s.n+=x.n;}}));return any?s:null;}
+function dailyR(list,f,t){const m={};list.forEach(e=>flat(e).forEach(x=>{if(x.date>=f&&x.date<=t){const k=x.date;(m[k]=m[k]||{g:0,le:0,r:0,f:0,d:0,n:0});
+  m[k].g+=x.g;m[k].le+=x.le;m[k].r+=x.r;m[k].f+=x.f;m[k].d+=x.d;m[k].n+=x.n;}}));return Object.keys(m).sort().map(k=>({date:k,...m[k]}));}
+const prevR=()=>{const L=nDays(RANGE.from,RANGE.to);return{f:addD(RANGE.from,-(L+1)),t:addD(RANGE.from,-1)};};
+function met(t){if(!t)return null;return{gasto:t.g,leads:t.le,reg:t.r,ftd:t.f,dep:t.d,ngr:t.n,resultado:t.n-t.g,
+  custoLead:div(t.g,t.le),cpa:div(t.g,t.r),custoFtd:div(t.g,t.f),regFtd:div(t.f,t.r),ticket:div(t.d,t.f),
+  roi:t.g?((t.n-t.g)/t.g):null,leadReg:div(t.r,t.le),margem:div(t.n-t.g,t.n)};}
+
+// ===== MOTION =====
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.06});
+function obsReveals(){document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));}
+function easeOut(k){return 1-Math.pow(1-k,3);}
+function countNum(el){const to=parseFloat(el.dataset.to),kind=el.dataset.kind;if(isNaN(to))return;
+  const fmt=kind==='int'?v=>nf.format(Math.round(v)):kind==='money'?brl:kind==='moneyk'?brlk:kind==='pct'?v=>pct(v):String;
+  const t0=performance.now(),dur=720;
+  function s(t){let k=Math.min(1,(t-t0)/dur);el.textContent=fmt(to*easeOut(k));if(k<1)requestAnimationFrame(s);}requestAnimationFrame(s);}
+function animNums(root){(root||document).querySelectorAll('[data-to]').forEach(el=>{if(el._an)return;el._an=1;countNum(el);});}
+function drawLines(svg){svg.querySelectorAll('path.cline').forEach(p=>{const L=p.getTotalLength();p.style.transition='none';p.style.strokeDasharray=L;p.style.strokeDashoffset=L;
+  requestAnimationFrame(()=>{p.style.transition='stroke-dashoffset 1.1s cubic-bezier(.3,.9,.3,1)';p.style.strokeDashoffset=0;});});}
+function growBars(svg){svg.querySelectorAll('rect.cbar').forEach(r=>{const h=+r.dataset.h,y=+r.dataset.y;r.setAttribute('height',0);r.setAttribute('y',+r.dataset.base);
+  requestAnimationFrame(()=>{r.setAttribute('height',h);r.setAttribute('y',y);});});}
+
+// ===== FILTRO DE DATA =====
+const PRESETS=[{k:'7d',l:'7 dias',d:7},{k:'15d',l:'15 dias',d:15},{k:'30d',l:'30 dias',d:30},{k:'90d',l:'90 dias',d:90},{k:'all',l:'Tudo'}];
+function setPreset(k){PRESET=k;if(k==='all'){RANGE={from:MIND,to:MAXD};}else{const d=PRESETS.find(p=>p.k===k).d;RANGE={from:addD(MAXD,-(d-1)),to:MAXD};}
+  if(RANGE.from<MIND)RANGE.from=MIND;syncBars();renderAll();}
+function syncBars(){document.querySelectorAll('.datebar').forEach(bar=>{
+  bar.querySelector('.preset-pills').innerHTML=PRESETS.map(p=>`<button class="ppill ${p.k===PRESET?'active':''}" data-k="${p.k}">${p.l}</button>`).join('');
+  bar.querySelectorAll('.ppill').forEach(b=>b.onclick=()=>setPreset(b.dataset.k));
+  const f=bar.querySelector('.dfrom'),t=bar.querySelector('.dto');
+  f.min=MIND;f.max=MAXD;t.min=MIND;t.max=MAXD;f.value=RANGE.from;t.value=RANGE.to;
+  f.onchange=()=>{if(f.value){RANGE.from=f.value;PRESET='';syncBars();renderAll();}};
+  t.onchange=()=>{if(t.value){RANGE.to=t.value;PRESET='';syncBars();renderAll();}};});}
+const rangeLbl=()=>{const d=nDays(RANGE.from,RANGE.to)+1;const f=RANGE.from.slice(8)+'/'+RANGE.from.slice(5,7),t=RANGE.to.slice(8)+'/'+RANGE.to.slice(5,7);return `${f} a ${t} · ${d} dias`;};
+
+// ===== CENTRAL =====
+function buildPills(){const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...ATIVOS];
+  document.getElementById('pills').innerHTML=items.map(e=>`<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}"><span class="dot" style="background:${e.cor}"></span>${e.nome}</button>`).join('');
+  document.querySelectorAll('#pills .expert-pill').forEach(b=>b.onclick=()=>{current=b.dataset.k;document.querySelectorAll('#pills .expert-pill').forEach(x=>x.classList.toggle('active',x===b));renderCentral();});}
+
+function kpi(label,raw,kind,delta,mode,i,valCls){
+  let cls="flat",ar="→",good=delta;if(mode==='cost'&&delta!=null)good=-delta;
   if(delta!=null&&Math.abs(delta)>=0.001){ar=delta>0?"▲":"▼";cls=(mode==='neutral'||mode==='none')?"flat":(good>0?"up":"down");}
   const dt=mode==='none'?'':(delta==null?'—':ar+' '+Math.abs(delta*100).toFixed(1).replace('.',',')+'%');
-  const sub=mode==='none'?'':'<span style="color:var(--fog)">vs '+capt(mesAnt(MES)||'')+'</span>';
-  return `<div class="kpi glass reveal" style="animation-delay:${i*0.03}s"><div class="kpi-label">${label}</div>
-    <div class="kpi-value">${valHTML}</div><div class="kpi-delta ${cls}">${dt} ${sub}</div></div>`;
-}
-const signCls=n=>n>=0?'pos':'neg';
-
-// ---------- SELETOR DE MÊS ----------
-function buildMesSel(){
-  document.querySelectorAll('.messel').forEach(sel=>{
-    sel.innerHTML=D.meses.slice().reverse().map(m=>`<option value="${m}" ${m===MES?'selected':''}>${capt(m)} ${D.ano}</option>`).join('');
-    sel.onchange=()=>{MES=sel.value;document.querySelectorAll('.messel').forEach(s=>s.value=MES);renderAll();};
-  });
-}
-
-// ---------- CENTRAL ----------
-function buildPills(){
-  const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...ATIVOS];
-  document.getElementById('pills').innerHTML=items.map(e=>
-    `<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}"><span class="dot" style="background:${e.cor}"></span>${e.nome}</button>`).join('');
-  document.querySelectorAll('#pills .expert-pill').forEach(b=>b.onclick=()=>{current=b.dataset.k;
-    document.querySelectorAll('#pills .expert-pill').forEach(x=>x.classList.toggle('active',x===b));renderCentral();});
+  const init=kind==='int'?nf.format(Math.round(raw)):kind==='money'?brl(raw):kind==='moneyk'?brlk(raw):kind==='pct'?pct(raw):raw;
+  return `<div class="kpi glass reveal lift" style="animation-delay:${i*0.03}s"><div class="kpi-label">${label}</div>
+    <div class="kpi-value ${valCls||''}" data-to="${raw}" data-kind="${kind}">${init}</div>
+    <div class="kpi-delta ${cls}">${dt}${mode==='none'?'':' <span style="color:var(--fog)">vs ant.</span>'}</div></div>`;
 }
 function renderCentral(){
   const list=current==="todos"?ATIVOS:ATIVOS.filter(e=>e.key===current);
-  const prev=mesAnt(MES);
-  const m=met(somaMes(list,MES)), mo=prev?met(somaMes(list,prev)):null;
-  document.getElementById('scope').textContent=(current==="todos"?"todos os experts":ATIVOS.find(e=>e.key===current).nome)+" · "+capt(MES);
-  document.getElementById('kpititle').textContent="Indicadores de "+capt(MES)+(prev?" · vs "+capt(prev):"");
-  if(!m){document.getElementById('kpis').innerHTML='<div class="kpi glass" style="grid-column:1/-1;color:var(--fog)">Sem dados neste mês.</div>';}
-  else{
-    const g=k=>mo?mo[k]:null;
-    const cards=[
-      kpi("Gasto",brlk(m.gasto),varp(m.gasto,g('gasto')),'neutral',0),
-      kpi("Leads",nf.format(m.leads),varp(m.leads,g('leads')),'good',1),
-      kpi("Registros",nf.format(m.reg),varp(m.reg,g('reg')),'good',2),
-      kpi("FTD",nf.format(m.ftd),varp(m.ftd,g('ftd')),'good',3),
-      kpi("Conversão Reg→FTD",pct(m.regFtd),varp(m.regFtd,g('regFtd')),'good',4),
-      kpi("Depósitos",brlk(m.dep),varp(m.dep,g('dep')),'good',5),
-      kpi("NGR",brlk(m.ngr),varp(m.ngr,g('ngr')),'good',6),
-      kpi("Resultado · NGR−Gasto",`<span class="${signCls(m.resultado)}">${brlk(m.resultado)}</span>`,varp(m.resultado,g('resultado')),'good',7),
-    ];
-    document.getElementById('kpis').innerHTML=cards.join('');
-  }
-  // ranking por resultado (todos os ativos, no mês)
-  document.getElementById('rankpsub').textContent="ordenado por resultado · "+capt(MES);
-  const rk=ATIVOS.map(e=>({e,m:met(e.meses[MES])})).filter(x=>x.m).sort((a,b)=>b.m.resultado-a.m.resultado);
-  document.getElementById('rankbody').innerHTML=rk.map(({e,m})=>{
-    const on=current!=="todos"&&current===e.key;
-    return `<tr class="${on?'on':''}"><td><div class="who"><span class="adot" style="background:${e.cor}"></span><span style="white-space:nowrap">${e.nome}</span> ${e.marcas.map(x=>`<span class="tag ${x}">${x.toUpperCase()}</span>`).join(' ')}</div></td>
-      <td class="mono">${brlk(m.gasto)}</td><td class="mono"><b>${nf.format(m.reg)}</b></td><td class="mono">${nf.format(m.ftd)}</td>
-      <td class="mono">${brlk(m.ngr)}</td>
-      <td class="mono ${signCls(m.resultado)}"><b>${brlk(m.resultado)}</b></td></tr>`;
-  }).join('');
-  // resultado do mês (consolidado todos ativos)
-  const all=met(somaMes(ATIVOS,MES));
-  document.getElementById('resscope').textContent="NGR − Gasto · "+capt(MES);
-  if(all){document.getElementById('resbig').innerHTML=`<span class="${signCls(all.resultado)}">${brlk(all.resultado)}</span>`;
-    const pos=rk.filter(x=>x.m.resultado>=0).length, neg=rk.length-pos;
-    document.getElementById('restag').innerHTML=`<b class="pos">${pos}</b> no azul · <b class="neg">${neg}</b> no vermelho`;}
-  document.getElementById('resrows').innerHTML=rk.map(({e,m})=>
-    `<div class="resrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div>
-     <div class="resval ${signCls(m.resultado)}">${brlk(m.resultado)}</div></div>`).join('');
-  // funil leads->reg->ftd
-  if(m){const steps=[
-      {l:"Leads",v:m.leads,c:"linear-gradient(90deg,#ff8a3c,#ff6b00)",rel:null},
-      {l:"Registros",v:m.reg,c:"linear-gradient(90deg,#e8650d,#c85400)",rel:m.leadReg},
-      {l:"FTD",v:m.ftd,c:"linear-gradient(90deg,#4ade80,#22a35a)",rel:m.regFtd}];
-    document.getElementById('funscope').textContent="leads → registros → FTD · "+(current==="todos"?"todos":ATIVOS.find(e=>e.key===current).nome)+" · "+capt(MES);
+  const p=prevR();
+  const m=met(aggR(list,RANGE.from,RANGE.to)), mo=met(aggR(list,p.f,p.t));
+  const days=dailyR(list,RANGE.from,RANGE.to);
+  document.getElementById('scope').textContent=(current==="todos"?"todos os experts":ATIVOS.find(e=>e.key===current).nome)+" · "+rangeLbl();
+  // HERO
+  const H=document.getElementById('heroRes'),g=k=>mo?mo[k]:null;
+  if(m){H.className='hero-val '+signCls(m.resultado);H.dataset.to=m.resultado;H.dataset.kind='moneyk';H._an=0;H.textContent=brlk(m.resultado);
+    const dv=varp(m.resultado,g('resultado'));
+    document.getElementById('heroDelta').innerHTML=(dv==null?'—':(dv>0?'▲':'▼')+' '+Math.abs(dv*100).toFixed(1).replace('.',',')+'%')+' vs período anterior';
+    const hr=document.getElementById('heroRoi');hr.className='hm-v '+signCls(m.roi||0);hr.textContent=m.roi==null?'—':pct(m.roi);
+    const hm=document.getElementById('heroMargin');hm.textContent=m.margem==null?'—':pct(m.margem);
+    const winners=ATIVOS.filter(e=>{const mm=met(aggR([e],RANGE.from,RANGE.to));return mm&&mm.resultado>=0;}).length;
+    document.getElementById('heroWin').innerHTML=`<span class="pos">${winners}</span><span style="color:var(--fog);font-size:13px">/${ATIVOS.length}</span>`;
+    sparkRes(days);
+  } else {H.textContent='sem dados';}
+  // KPIs essenciais
+  document.getElementById('kpititle').textContent="Indicadores · "+rangeLbl();
+  if(m){document.getElementById('kpis').innerHTML=[
+    kpi("Gasto",m.gasto,'moneyk',varp(m.gasto,g('gasto')),'neutral',0),
+    kpi("Registros",m.reg,'int',varp(m.reg,g('reg')),'good',1),
+    kpi("FTD",m.ftd,'int',varp(m.ftd,g('ftd')),'good',2),
+    kpi("NGR",m.ngr,'moneyk',varp(m.ngr,g('ngr')),'good',3),
+    kpi("CPA",m.cpa,'money',varp(m.cpa,g('cpa')),'cost',4),
+    kpi("Resultado",m.resultado,'moneyk',varp(m.resultado,g('resultado')),'good',5,signCls(m.resultado)),
+  ].join('');animNums(document.getElementById('kpis'));}
+  else document.getElementById('kpis').innerHTML='<div class="kpi glass" style="grid-column:1/-1;color:var(--fog)">Sem dados no período.</div>';
+  // CHARTS
+  chartResultado(days); chartGastoNGR(days);
+  // RANKING bars
+  const rk=ATIVOS.map(e=>({e,m:met(aggR([e],RANGE.from,RANGE.to))})).filter(x=>x.m).sort((a,b)=>b.m.resultado-a.m.resultado);
+  document.getElementById('rankpsub').textContent="todos os experts · "+rangeLbl();
+  const maxAbs=Math.max(...rk.map(x=>Math.abs(x.m.resultado)),1);
+  document.getElementById('rankbars').innerHTML=rk.map(({e,m})=>{
+    const w=Math.max(Math.abs(m.resultado)/maxAbs*100,2);const col=m.resultado>=0?'linear-gradient(90deg,#1f9d6b,#2ee6c5)':'linear-gradient(90deg,#b8392c,#e74c3c)';
+    return `<div class="rbar-row"><div class="rbar-name"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div>
+      <div class="rbar-track"><div class="rbar-fill" data-w="${w}" style="background:${col}"></div></div>
+      <div class="rbar-val ${signCls(m.resultado)}">${brlk(m.resultado)}</div></div>`;}).join('');
+  requestAnimationFrame(()=>document.querySelectorAll('#rankbars .rbar-fill').forEach(f=>f.style.width=f.dataset.w+'%'));
+  // INSIGHTS
+  buildInsights(rk,days);
+  // FUNIL
+  if(m){const steps=[{l:"Leads",v:m.leads,c:"linear-gradient(90deg,#ff8a3c,#ff6b00)"},{l:"Registros",v:m.reg,c:"linear-gradient(90deg,#e8650d,#c85400)",rel:m.leadReg},{l:"FTD",v:m.ftd,c:"linear-gradient(90deg,#2ee6c5,#1f9d6b)",rel:m.regFtd}];
+    document.getElementById('funscope').textContent="leads → registros → FTD · "+(current==="todos"?"todos":ATIVOS.find(e=>e.key===current).nome);
     document.getElementById('funnel').innerHTML=steps.map((s,i)=>{const w=Math.max((s.v/m.leads)*100,18);
-      const meta=i===0?'<b>base de leads</b>':`<b>${pct(s.rel)}</b> da etapa anterior`;
-      return `<div class="frow"><div class="flabel">${s.l}</div><div><div class="fbar" style="width:${w}%;background:${s.c}">${nf.format(s.v)}</div><div class="fmeta" style="margin-top:4px">${meta}</div></div></div>`;}).join('');}
-  // campanhas por expert (reais)
-  const totalCamp=ATIVOS.reduce((a,e)=>a+(e.campanhas?e.campanhas.length:0),0);
-  document.getElementById('camphead').innerHTML=
-    `<div class="camp-stat"><div class="n" style="color:var(--orange-400)">${totalCamp}</div><div class="l">campanhas</div></div>
-     <div class="camp-stat"><div class="n">${ATIVOS.length}</div><div class="l">experts c/ dados</div></div>
-     <div class="camp-stat"><div class="n" style="color:var(--green)">${D.meses.length}</div><div class="l">meses 2026</div></div>`;
-  document.getElementById('camplist').innerHTML=ATIVOS.map(e=>(e.campanhas||[]).map(c=>
-    `<div class="campitem"><span class="cn">${e.nome} · ${c.replace(/\s*(ID)?\s*-?\s*(\d{4,6})\s*$/,'').trim()||c}</span><span class="cx tag ${e.marcas[0]}">${(c.match(/(\d{4,6})\s*$/)||[,''])[1]||''}</span></div>`).join('')).join('');
+      return `<div class="frow"><div class="flabel">${s.l}</div><div><div class="fbar" style="width:0;background:${s.c}" data-w="${w}">${nf.format(s.v)}</div><div class="fmeta" style="margin-top:4px">${i===0?'<b>base de leads</b>':'<b>'+pct(s.rel)+'</b> da etapa anterior'}</div></div></div>`;}).join('');
+    requestAnimationFrame(()=>document.querySelectorAll('#funnel .fbar').forEach(f=>f.style.width=f.dataset.w+'%'));}
+  // DONUT NGR
+  donutNGR(rk);
+  document.querySelectorAll('#page-central .reveal').forEach(e=>e.classList.add('in'));
 }
 
-// ---------- DASHBOARD ----------
-function buildDPills(){
-  const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...ATIVOS];
-  document.getElementById('dpills').innerHTML=items.map(e=>
-    `<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}"><span class="dot" style="background:${e.cor}"></span>${e.nome}</button>`).join('');
-  document.querySelectorAll('#dpills .expert-pill').forEach(b=>b.onclick=()=>{dscope=b.dataset.k;
-    document.querySelectorAll('#dpills .expert-pill').forEach(x=>x.classList.toggle('active',x===b));renderDash();});
+// ---- charts ----
+function sparkRes(days){const svg=document.getElementById('sparkRes');const n=days.length||1;const W=n*8,H=92;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);const vals=days.map(d=>d.n-d.g);const max=Math.max(...vals.map(Math.abs),1);const mid=H/2;
+  svg.innerHTML=`<line x1="0" y1="${mid}" x2="${W}" y2="${mid}" stroke="rgba(255,255,255,.12)"/>`+days.map((d,i)=>{const v=d.n-d.g;const h=Math.abs(v)/max*(mid-4);const y=v>=0?mid-h:mid;
+    return `<rect class="cbar" x="${i*8+1}" width="6" rx="1.5" data-base="${mid}" data-h="${h}" data-y="${v>=0?mid-h:mid}" y="${mid}" height="0" fill="${v>=0?'#2ee6c5':'#e74c3c'}"/>`;}).join('');
+  growBars(svg);}
+function chartResultado(days){const svg=document.getElementById('chartRes');const W=900,H=230,pad={l:54,r:10,t:12,b:22};
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);const vals=days.map(d=>d.n-d.g);const max=Math.max(...vals.map(Math.abs),1);
+  const zx=W-pad.r,bw=Math.max((zx-pad.l)/Math.max(days.length,1)-2,2);const midY=pad.t+(H-pad.t-pad.b)/2;
+  const sc=v=>(v/max)*((H-pad.t-pad.b)/2);
+  let g=`<line x1="${pad.l}" y1="${midY}" x2="${zx}" y2="${midY}" stroke="rgba(255,255,255,.14)"/>`;
+  g+=`<text x="${pad.l-8}" y="${pad.t+8}" fill="rgba(255,255,255,.4)" font-size="9" text-anchor="end">+${brlk(max).replace('R$ ','')}</text>`;
+  g+=`<text x="${pad.l-8}" y="${H-pad.b}" fill="rgba(255,255,255,.4)" font-size="9" text-anchor="end">-${brlk(max).replace('R$ ','')}</text>`;
+  const bars=days.map((d,i)=>{const v=d.n-d.g;const x=pad.l+i*((zx-pad.l)/Math.max(days.length,1));const h=Math.abs(sc(v));const y=v>=0?midY-h:midY;
+    return `<rect class="cbar" x="${x.toFixed(1)}" width="${bw.toFixed(1)}" rx="1.5" data-base="${midY}" data-h="${h.toFixed(1)}" data-y="${y.toFixed(1)}" y="${midY}" height="0" fill="${v>=0?'#2ee6c5':'#e74c3c'}"><title>${d.date.slice(8)}/${d.date.slice(5,7)}: ${brlk(v)}</title></rect>`;}).join('');
+  svg.innerHTML=g+bars;growBars(svg);}
+function chartGastoNGR(days){const svg=document.getElementById('chartGN');const W=900,H=230,pad={l:54,r:10,t:12,b:22};
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);const max=Math.max(...days.map(d=>Math.max(d.g,d.n)),1)*1.1;
+  const x=i=>pad.l+(days.length<2?0:i/(days.length-1)*(W-pad.l-pad.r));const y=v=>H-pad.b-(v/max)*(H-pad.t-pad.b);
+  let grid='';for(let i=0;i<=3;i++){const gy=(pad.t+i/3*(H-pad.t-pad.b)).toFixed(0);grid+=`<line x1="${pad.l}" y1="${gy}" x2="${W-pad.r}" y2="${gy}" stroke="rgba(255,255,255,.06)"/><text x="${pad.l-8}" y="${+gy+3}" fill="rgba(255,255,255,.4)" font-size="9" text-anchor="end">${brlk(max*(1-i/3)).replace('R$ ','')}</text>`;}
+  const path=(k,c)=>{const d=days.map((pt,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(pt[k]).toFixed(1)).join(' ');return `<path class="cline" d="${d}" stroke="${c}"/>`;};
+  svg.innerHTML=grid+path('g','#ff6b00')+path('n','#2ee6c5');drawLines(svg);}
+function donutNGR(rk){const svg=document.getElementById('donut');const pos=rk.filter(x=>x.m.ngr>0);const tot=pos.reduce((a,x)=>a+x.m.ngr,0)||1;
+  const r=42,circ=2*Math.PI*r;let off=0;
+  svg.innerHTML=`<circle cx="60" cy="60" r="${r}" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="15"/>`+pos.map(x=>{const frac=x.m.ngr/tot;const seg=frac*circ;
+    const c=`<circle cx="60" cy="60" r="${r}" fill="none" stroke="${x.e.cor}" stroke-width="15" stroke-dasharray="${seg.toFixed(1)} ${(circ-seg).toFixed(1)}" stroke-dashoffset="${(-off).toFixed(1)}" transform="rotate(-90 60 60)" style="transition:stroke-dasharray .8s ease"/>`;off+=seg;return c;}).join('')
+    +`<text x="60" y="56" text-anchor="middle" fill="var(--snow)" font-size="10" font-family="JetBrains Mono">NGR total</text><text x="60" y="70" text-anchor="middle" fill="var(--snow)" font-size="12" font-weight="700" font-family="JetBrains Mono">${brlk(tot)}</text>`;
+  document.getElementById('donutleg').innerHTML=pos.map(x=>`<div class="dleg-row"><span class="dk" style="background:${x.e.cor}"></span>${x.e.nome}<span class="dv">${pct(x.m.ngr/tot)}</span></div>`).join('');}
+function buildInsights(rk,days){
+  const best=rk[0], worst=rk[rk.length-1];
+  const reds=rk.filter(x=>x.m.resultado<0);
+  const dres=days.map(d=>({date:d.date,v:d.n-d.g}));
+  const bestDay=dres.slice().sort((a,b)=>b.v-a.v)[0], worstDay=dres.slice().sort((a,b)=>a.v-b.v)[0];
+  const fd=iso=>iso?iso.slice(8)+'/'+iso.slice(5,7):'—';
+  const items=[];
+  if(best)items.push(['🏆','rgba(46,230,197,.14)','Expert destaque',`<b>${best.e.nome}</b> lidera com ${brlk(best.m.resultado)} de resultado`]);
+  if(reds.length)items.push(['🔴','rgba(239,68,68,.14)','Atenção',`<b>${reds.length}</b> expert(s) no vermelho: ${reds.map(x=>x.e.nome).join(', ')}`]);
+  else items.push(['🟢','rgba(46,230,197,.14)','Tudo no azul','Todos os experts com resultado positivo no período']);
+  if(bestDay)items.push(['📈','rgba(255,138,60,.14)','Melhor dia',`${fd(bestDay.date)} rendeu <b>${brlk(bestDay.v)}</b>`]);
+  if(worstDay&&worstDay.v<0)items.push(['📉','rgba(239,68,68,.12)','Pior dia',`${fd(worstDay.date)} com <b>${brlk(worstDay.v)}</b>`]);
+  document.getElementById('insights').innerHTML=items.map(it=>`<div class="insight"><div class="ic" style="background:${it[1]}">${it[0]}</div><div><div class="it">${it[2]}</div><div class="iv">${it[3]}</div></div></div>`).join('');
 }
-function renderDash(){
-  const list=dscope==="todos"?ATIVOS:ATIVOS.filter(e=>e.key===dscope);
-  const prev=mesAnt(MES);
-  const m=met(somaMes(list,MES)), mo=prev?met(somaMes(list,prev)):null;
-  document.getElementById('dscope').textContent=(dscope==="todos"?"todos os experts":ATIVOS.find(e=>e.key===dscope).nome)+" · "+capt(MES);
-  if(!m){document.getElementById('dkpis').innerHTML='<div class="kpi glass" style="grid-column:1/-1;color:var(--fog)">Sem dados neste mês.</div>';return;}
+
+// ===== DASHBOARD =====
+function buildDPills(){const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...ATIVOS];
+  document.getElementById('dpills').innerHTML=items.map(e=>`<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}"><span class="dot" style="background:${e.cor}"></span>${e.nome}</button>`).join('');
+  document.querySelectorAll('#dpills .expert-pill').forEach(b=>b.onclick=()=>{dscope=b.dataset.k;document.querySelectorAll('#dpills .expert-pill').forEach(x=>x.classList.toggle('active',x===b));renderDash();});}
+function renderDash(){const list=dscope==="todos"?ATIVOS:ATIVOS.filter(e=>e.key===dscope);const p=prevR();
+  const m=met(aggR(list,RANGE.from,RANGE.to)),mo=met(aggR(list,p.f,p.t));
+  document.getElementById('dscope').textContent=(dscope==="todos"?"todos os experts":ATIVOS.find(e=>e.key===dscope).nome)+" · "+rangeLbl();
+  if(!m){document.getElementById('dkpis').innerHTML='<div class="kpi glass" style="grid-column:1/-1;color:var(--fog)">Sem dados no período.</div>';return;}
   const g=k=>mo?mo[k]:null;
-  const rows=[
-    ["Gasto",brlk(m.gasto),varp(m.gasto,g('gasto')),'neutral'],
-    ["Leads",nf.format(m.leads),varp(m.leads,g('leads')),'good'],
-    ["Custo/Lead",brl(m.custoLead),varp(m.custoLead,g('custoLead')),'cost'],
-    ["Registros",nf.format(m.reg),varp(m.reg,g('reg')),'good'],
-    ["CPA · custo/registro",brl(m.cpa),varp(m.cpa,g('cpa')),'cost'],
-    ["Lead→Registro",pct(m.leadReg),varp(m.leadReg,g('leadReg')),'good'],
-    ["FTD",nf.format(m.ftd),varp(m.ftd,g('ftd')),'good'],
-    ["Reg→FTD",pct(m.regFtd),varp(m.regFtd,g('regFtd')),'good'],
-    ["Custo/FTD",brl(m.custoFtd),varp(m.custoFtd,g('custoFtd')),'cost'],
-    ["Depósitos",brlk(m.dep),varp(m.dep,g('dep')),'good'],
-    ["Ticket médio",brl(m.ticket),varp(m.ticket,g('ticket')),'good'],
-    ["NGR",brlk(m.ngr),varp(m.ngr,g('ngr')),'good'],
-    ["Resultado · NGR−Gasto",`<span class="${signCls(m.resultado)}">${brlk(m.resultado)}</span>`,varp(m.resultado,g('resultado')),'good'],
-    ["ROI",m.roi==null?'—':pct(m.roi),varp(m.roi,g('roi')),'good'],
-  ];
-  document.getElementById('dkpis').innerHTML=rows.map((r,i)=>kpi(r[0],r[1],r[2],r[3],i)).join('');
-}
+  const rows=[["Gasto",m.gasto,'moneyk',varp(m.gasto,g('gasto')),'neutral'],["Leads",m.leads,'int',varp(m.leads,g('leads')),'good'],
+    ["Custo/Lead",m.custoLead,'money',varp(m.custoLead,g('custoLead')),'cost'],["Registros",m.reg,'int',varp(m.reg,g('reg')),'good'],
+    ["CPA",m.cpa,'money',varp(m.cpa,g('cpa')),'cost'],["Lead→Registro",m.leadReg,'pct',varp(m.leadReg,g('leadReg')),'good'],
+    ["FTD",m.ftd,'int',varp(m.ftd,g('ftd')),'good'],["Reg→FTD",m.regFtd,'pct',varp(m.regFtd,g('regFtd')),'good'],
+    ["Custo/FTD",m.custoFtd,'money',varp(m.custoFtd,g('custoFtd')),'cost'],["Depósitos",m.dep,'moneyk',varp(m.dep,g('dep')),'good'],
+    ["Ticket médio",m.ticket,'money',varp(m.ticket,g('ticket')),'good'],["NGR",m.ngr,'moneyk',varp(m.ngr,g('ngr')),'good'],
+    ["ROI",m.roi,'pct',varp(m.roi,g('roi')),'good'],["Resultado",m.resultado,'moneyk',varp(m.resultado,g('resultado')),'good',signCls(m.resultado)]];
+  document.getElementById('dkpis').innerHTML=rows.map((r,i)=>kpi(r[0],r[1],r[2],r[3],r[4],i,r[5])).join('');
+  animNums(document.getElementById('dkpis'));document.querySelectorAll('#page-dashboard .reveal').forEach(e=>e.classList.add('in'));}
 
-// ---------- HISTÓRICO (diário do mês) ----------
-function buildHist(){
-  document.getElementById('histscope').textContent=capt(MES);
-  // consolida por dia entre todos os ativos
-  const byday={};
-  ATIVOS.forEach(e=>{const mm=e.meses[MES];if(!mm)return;mm.dias.forEach(d=>{
-    const k=d[0];byday[k]=byday[k]||{g:0,le:0,r:0,f:0,dep:0,n:0};
-    byday[k].g+=d[1];byday[k].le+=d[2];byday[k].r+=d[3];byday[k].f+=d[4];byday[k].dep+=d[5];byday[k].n+=d[6];});});
-  const days=Object.keys(byday).map(Number).sort((a,b)=>b-a);
-  const mnum=String(D.meses.indexOf(MES)+5).padStart(2,'0'); // maio=index0 -> mês5
-  document.getElementById('histbody').innerHTML=days.map(k=>{const t=byday[k];const res=t.n-t.g;
-    return `<tr><td>${String(k).padStart(2,'0')}/${mnum}</td><td class="mono">${brlk(t.g)}</td><td class="mono">${nf.format(t.le)}</td>
+// ===== HISTÓRICO =====
+function buildHist(){document.getElementById('histscope').textContent=rangeLbl();
+  const days=dailyR(ATIVOS,RANGE.from,RANGE.to).slice().reverse();
+  document.getElementById('histbody').innerHTML=days.map(t=>{const res=t.n-t.g;
+    return `<tr><td>${t.date.slice(8)}/${t.date.slice(5,7)}</td><td class="mono">${brlk(t.g)}</td><td class="mono">${nf.format(t.le)}</td>
       <td class="mono"><b>${nf.format(t.r)}</b></td><td class="mono">${nf.format(t.f)}</td><td class="mono">${pct(div(t.f,t.r))}</td>
-      <td class="mono">${brlk(t.dep)}</td><td class="mono">${brlk(t.n)}</td><td class="mono ${signCls(res)}">${brlk(res)}</td></tr>`;
-  }).join('')||'<tr><td colspan="9" style="color:var(--fog)">Sem dados diários neste mês.</td></tr>';
-}
+      <td class="mono">${brlk(t.d)}</td><td class="mono">${brlk(t.n)}</td><td class="mono ${signCls(res)}">${brlk(res)}</td></tr>`;}).join('')||'<tr><td colspan="9" style="color:var(--fog)">Sem dados no período.</td></tr>';
+  document.querySelectorAll('#page-historico .reveal').forEach(e=>e.classList.add('in'));}
 
-// ---------- TENDÊNCIA mensal ----------
-function buildTrend(){
-  const reg=D.meses.map(m=>{const t=somaMes(ATIVOS,m);return t?t.r:0;});
-  const ftd=D.meses.map(m=>{const t=somaMes(ATIVOS,m);return t?t.f:0;});
-  const W=920,H=260,pad={l:48,r:16,t:16,b:30},n=D.meses.length;
-  const max=Math.max(...reg,1)*1.1;
-  const x=i=>pad.l+(n<2?0:(i/(n-1))*(W-pad.l-pad.r));
-  const y=v=>H-pad.b-(v/max)*(H-pad.t-pad.b);
-  const line=(a,c)=>{const d=a.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
-    const dots=a.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.5" fill="${c}"/>`).join('');
-    return `<path d="${d}" fill="none" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}`;};
-  let grid='';for(let gi=0;gi<=4;gi++){const gy=(pad.t+(gi/4)*(H-pad.t-pad.b)).toFixed(0);grid+=`<line x1="${pad.l}" y1="${gy}" x2="${W-pad.r}" y2="${gy}" stroke="rgba(255,255,255,0.06)"/>`;}
-  const labels=D.meses.map((m,i)=>`<text x="${x(i).toFixed(1)}" y="${H-10}" fill="rgba(255,255,255,0.45)" font-size="11" font-family="JetBrains Mono" text-anchor="middle">${capt(m).slice(0,3)}</text>`).join('');
-  document.getElementById('trend').innerHTML=grid+line(reg,'#ff6b00')+line(ftd,'#5b9dff')+labels;
-}
+// ===== UPLOAD =====
+function buildUpload(){document.getElementById('upexpert').innerHTML=ATIVOS.map(e=>`<option>${e.nome}</option>`).join('')+'<option>IrisAv (pendente)</option>';
+  document.getElementById('uprows').innerHTML=EXPERTS.map(e=>{if(e.pendente)return `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div><div class="status wait"><span class="s-dot"></span>planilha pendente</div></div>`;
+    const m=met(aggR([e],RANGE.from,RANGE.to));return `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div><div class="status ok"><span class="s-dot"></span>${m?brlk(m.resultado):'—'} no período</div></div>`;}).join('');
+  document.querySelectorAll('.up-tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.up-tab').forEach(x=>x.classList.toggle('active',x===t));document.querySelectorAll('.up-pane').forEach(p=>p.hidden=p.dataset.pane!==t.dataset.tab);});
+  document.querySelectorAll('#page-upload .reveal').forEach(e=>e.classList.add('in'));}
 
-// ---------- UPLOAD ----------
-function buildUpload(){
-  document.getElementById('upexpert').innerHTML=ATIVOS.map(e=>`<option>${e.nome}</option>`).join('')+'<option>IrisAv (pendente)</option>';
-  document.getElementById('uprows').innerHTML=EXPERTS.map(e=>{
-    if(e.pendente)return `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div><div class="status wait"><span class="s-dot"></span>planilha pendente</div></div>`;
-    const m=met(e.meses[MES]);const res=m?m.resultado:0;
-    return `<div class="opsrow"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}</div><div class="status ok"><span class="s-dot"></span>${capt(MES)}: ${m?brlk(res):'—'}</div></div>`;}).join('');
-  document.querySelectorAll('.up-tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.up-tab').forEach(x=>x.classList.toggle('active',x===t));
-    document.querySelectorAll('.up-pane').forEach(p=>p.hidden=p.dataset.pane!==t.dataset.tab);});
-}
-
-// ---------- CRIATIVOS (preview — não vem da planilha) ----------
-const CRIATIVOS=[
-  {t:"Aviator · Hook ganho",who:"Lucas Striz",fmt:"Reel",st:"ativo",views:"48,2k",ctr:"3,1%",cor:"#ff6b00"},
-  {t:"Professor · Estratégia",who:"Lucas Striz",fmt:"Reel",st:"ativo",views:"31,7k",ctr:"2,7%",cor:"#5b9dff"},
+// ===== CRIATIVOS (preview) =====
+const CRIATIVOS=[{t:"Aviator · Hook ganho",who:"Lucas Striz",fmt:"Reel",st:"ativo",views:"48,2k",ctr:"3,1%",cor:"#ff6b00"},
+  {t:"Professor · Estratégia",who:"Lucas Striz",fmt:"Reel",st:"ativo",views:"31,7k",ctr:"2,7%",cor:"#2ee6c5"},
   {t:"Suh · Sessão ao vivo",who:"SuhAviator",fmt:"Reel",st:"ativo",views:"27,5k",ctr:"3,4%",cor:"#a06bff"},
   {t:"Caio · Roleta premiada",who:"Caioleta",fmt:"Reel",st:"teste",views:"15,8k",ctr:"2,2%",cor:"#f7b955"},
   {t:"Marques · Bônus",who:"MarquesAv",fmt:"Imagem",st:"pausado",views:"9,1k",ctr:"1,4%",cor:"#4ade80"},
-  {t:"Belodi · Passo a passo",who:"BelodiAv",fmt:"Carrossel",st:"ativo",views:"22,9k",ctr:"4,2%",cor:"#5b9dff"},
-];
+  {t:"Belodi · Passo a passo",who:"BelodiAv",fmt:"Carrossel",st:"ativo",views:"22,9k",ctr:"4,2%",cor:"#5b9dff"}];
 let cvfilter="todos";const fmtIcon={Reel:"▶",Imagem:"▦",Carrossel:"❏"};
-function buildCriativos(){
-  const filters=["todos","Reel","Imagem","Carrossel"];
+function buildCriativos(){const filters=["todos","Reel","Imagem","Carrossel"];
   document.getElementById('cvfilter').innerHTML=filters.map(f=>`<button class="filter-pill ${f===cvfilter?'active':''}" data-f="${f}">${f==='todos'?'Todos':f+'s'}</button>`).join('');
   document.querySelectorAll('#cvfilter .filter-pill').forEach(b=>b.onclick=()=>{cvfilter=b.dataset.f;buildCriativos();});
-  const list=cvfilter==="todos"?CRIATIVOS:CRIATIVOS.filter(c=>c.fmt===cvfilter);
-  document.getElementById('cvcount').textContent=list.length;
-  document.getElementById('cvgrid').innerHTML=list.map(c=>
-    `<div class="cv-card glass"><div class="cv-thumb" style="background:linear-gradient(135deg,${c.cor}33,${c.cor}0d)"><span class="fmt">${c.fmt.toUpperCase()}</span><span class="ic" style="color:${c.cor}">${fmtIcon[c.fmt]}</span></div>
-      <div class="cv-body"><div class="t">${c.t}</div><div class="who">${c.who}</div><div class="cv-metrics"><div><b>${c.views}</b><span>views</span></div><div><b>${c.ctr}</b><span>ctr</span></div></div><div class="cv-status ${c.st}">${c.st}</div></div></div>`).join('');
-}
+  const list=cvfilter==="todos"?CRIATIVOS:CRIATIVOS.filter(c=>c.fmt===cvfilter);document.getElementById('cvcount').textContent=list.length;
+  document.getElementById('cvgrid').innerHTML=list.map(c=>`<div class="cv-card glass lift"><div class="cv-thumb" style="background:linear-gradient(135deg,${c.cor}33,${c.cor}0d)"><span class="fmt">${c.fmt.toUpperCase()}</span><span class="ic" style="color:${c.cor}">${fmtIcon[c.fmt]}</span></div><div class="cv-body"><div class="t">${c.t}</div><div class="who">${c.who}</div><div class="cv-metrics"><div><b>${c.views}</b><span>views</span></div><div><b>${c.ctr}</b><span>ctr</span></div></div><div class="cv-status ${c.st}">${c.st}</div></div></div>`).join('');
+  document.querySelectorAll('#page-criativos .reveal').forEach(e=>e.classList.add('in'));}
 
-// ---------- GESTÃO (experts + campanhas reais) ----------
-function buildGestao(){
-  document.getElementById('gexperts').innerHTML=EXPERTS.map(e=>
-    `<div class="gitem"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}${e.apelido?` <span class="mono" style="font-size:9px;color:var(--fog)">· ${e.apelido}</span>`:''} ${e.marcas.map(x=>`<span class="tag ${x}">${x.toUpperCase()}</span>`).join(' ')}${e.pendente?' <span class="tag" style="color:var(--yellow);border-color:rgba(250,204,21,.4)">PLANILHA PENDENTE</span>':''}</div>
-      <button class="gedit" onclick="fakeSave(this,'Editar ${e.nome}')">editar</button></div>`).join('');
-  let camps='';EXPERTS.forEach(e=>(e.campanhas||[]).forEach(c=>{
-    const id=(c.match(/(\d{4,6})\s*$/)||[,''])[1]||'';
+// ===== GESTÃO =====
+function buildGestao(){document.getElementById('gexperts').innerHTML=EXPERTS.map(e=>`<div class="gitem"><div class="who"><span class="adot" style="width:9px;height:9px;border-radius:50%;background:${e.cor}"></span>${e.nome}${e.apelido?` <span class="mono" style="font-size:9px;color:var(--fog)">· ${e.apelido}</span>`:''} ${e.marcas.map(x=>`<span class="tag ${x}">${x.toUpperCase()}</span>`).join(' ')}${e.pendente?' <span class="tag" style="color:var(--yellow);border-color:rgba(250,204,21,.4)">PLANILHA PENDENTE</span>':''}</div><button class="gedit" onclick="fakeSave(this,'Editar ${e.nome}')">editar</button></div>`).join('');
+  let camps='';EXPERTS.forEach(e=>(e.campanhas||[]).forEach(c=>{const id=(c.match(/(\d{4,6})\s*$/)||[,''])[1]||'';
     camps+=`<div class="gitem"><div class="who">${e.nome} · ${c} <span class="tag ${e.marcas[0]}">${e.marcas[0].toUpperCase()}</span></div><span class="mono" style="font-size:10px;color:var(--fog)">${id}</span></div>`;}));
   document.getElementById('gcamps').innerHTML=camps||'<div class="mono" style="color:var(--fog)">Sem campanhas.</div>';
-}
+  document.querySelectorAll('#page-gestao .reveal').forEach(e=>e.classList.add('in'));}
 
-// ---------- toast ----------
-function fakeSave(btn,msg){const t=document.createElement('div');t.className='toast';
-  t.textContent=(msg||'Enviado')+' · preview — grava de verdade quando ligado ao Supabase';
-  document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add('show'));
-  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},2600);}
+function fakeSave(btn,msg){const t=document.createElement('div');t.className='toast';t.textContent=(msg||'Enviado')+' · preview — grava de verdade quando ligado ao Supabase';
+  document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add('show'));setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},2600);}
 
-// ---------- ROUTER ----------
+// ===== ROUTER =====
 const TITLES={central:"CENTRAL",dashboard:"DASHBOARD",historico:"HISTÓRICO",upload:"UPLOAD",criativos:"CRIATIVOS",gestao:"GESTÃO"};
-function go(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
+function go(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
   document.querySelectorAll('.nav-item,.mnav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
-  const mb=document.querySelector('.mobilebar .mono');if(mb)mb.textContent=TITLES[page]+' · EXPERTS';
-  window.scrollTo(0,0);if(page==='dashboard')renderDash();if(page==='historico')buildHist();if(page==='upload')buildUpload();
-}
+  const mb=document.querySelector('.mobilebar .mono');if(mb)mb.textContent=TITLES[page]+' · EXPERTS';window.scrollTo(0,0);
+  if(page==='dashboard')renderDash();if(page==='historico')buildHist();if(page==='upload')buildUpload();
+  document.querySelectorAll('#page-'+page+' .reveal').forEach(e=>e.classList.add('in'));}
 document.querySelectorAll('.nav-item[data-page],.mnav-item[data-page]').forEach(n=>n.onclick=()=>go(n.dataset.page));
 
-function renderAll(){renderCentral();renderDash();buildHist();buildTrend();buildUpload();}
+function renderAll(){renderCentral();if(document.getElementById('page-dashboard').classList.contains('active'))renderDash();
+  if(document.getElementById('page-historico').classList.contains('active'))buildHist();buildUpload();obsReveals();}
 
-buildMesSel();buildPills();buildDPills();buildCriativos();buildGestao();renderAll();
+syncBars();buildPills();buildDPills();buildCriativos();buildGestao();renderAll();obsReveals();
+document.querySelectorAll('#page-central .reveal').forEach(e=>io.observe(e));
 </script>
 </body>
 </html>
