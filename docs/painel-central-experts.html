@@ -61,7 +61,7 @@ a{color:inherit;text-decoration:none}
 /* header */
 .page-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:8px}
 .page-title{font-size:44px;font-weight:600;letter-spacing:-0.02em;line-height:1.05}
-.page-sub{font-family:"JetBrains Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:var(--fog);margin-top:12px}
+.page-sub{font-family:var(--font-body);font-size:13px;font-weight:600;text-transform:none;letter-spacing:0.01em;color:var(--reals);margin-top:12px}
 .livedot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);margin-right:7px;vertical-align:middle;animation:fadeInUp .6s}
 .hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
 .datechip{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--snow);padding:10px 16px;border-radius:12px}
@@ -95,7 +95,7 @@ a{color:inherit;text-decoration:none}
 .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .panel{border-radius:18px;padding:22px}
 .panel h3{font-size:17px;font-weight:600;margin-bottom:4px}
-.panel .psub{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--fog);margin-bottom:16px}
+.panel .psub{font-family:var(--font-body);font-size:12px;font-weight:500;text-transform:none;letter-spacing:0.01em;color:rgba(25,227,155,0.72);margin-bottom:16px}
 
 /* ranking table */
 .rank{width:100%;border-collapse:collapse;font-size:14px}
@@ -181,10 +181,39 @@ a{color:inherit;text-decoration:none}
 .ppill{padding:8px 13px;border-radius:9px;background:transparent;border:1px solid rgba(255,255,255,0.08);cursor:pointer;color:var(--fog);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.04em;transition:all .22s;white-space:nowrap}
 .ppill:hover{color:var(--snow);border-color:rgba(255,107,0,0.4)}
 .ppill.active{background:linear-gradient(135deg,#ff8a3c,#ff6b00);color:var(--ink);font-weight:700;border-color:transparent;box-shadow:0 4px 16px rgba(255,107,0,.3)}
-.date-custom{display:flex;align-items:center;gap:7px;margin-left:auto}
 .dlbl{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--fog)}
 .dinp{background:rgba(20,18,24,0.6);border:1px solid rgba(255,255,255,0.1);color:var(--snow);border-radius:9px;padding:8px 10px;font-family:"JetBrains Mono",monospace;font-size:12px;color-scheme:dark}
 .dinp:focus{outline:none;border-color:rgba(255,107,0,0.5)}
+/* personalizado (popover de datas) */
+.pz{position:relative;margin-left:auto}
+.pz-btn{display:flex;align-items:center;gap:7px;padding:8px 13px;border-radius:9px;background:transparent;border:1px solid rgba(255,255,255,0.08);cursor:pointer;color:var(--fog);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.04em;transition:all .22s;white-space:nowrap}
+.pz-btn:hover{color:var(--snow);border-color:rgba(255,107,0,0.4)}
+.pz-btn.active{background:linear-gradient(135deg,#ff8a3c,#ff6b00);color:var(--ink);font-weight:700;border-color:transparent;box-shadow:0 4px 16px rgba(255,107,0,.3)}
+.pz-btn .cv{transition:transform .25s}
+.pz.open .pz-btn .cv{transform:rotate(180deg)}
+.pz-pop{position:absolute;top:calc(100% + 8px);right:0;z-index:40;min-width:250px;padding:14px;border-radius:14px;background:rgba(18,16,22,0.97);border:1px solid rgba(255,255,255,0.1);box-shadow:0 20px 50px rgba(0,0,0,.55);backdrop-filter:blur(14px);display:none;flex-direction:column;gap:10px}
+.pz.open .pz-pop{display:flex;animation:popIn .22s ease}
+@keyframes popIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.pz-pop .pzrow{display:flex;align-items:center;gap:8px}
+.pz-pop .pzrow .dlbl{width:28px}
+.pz-pop .dinp{flex:1}
+.pz-ttl{font-family:"JetBrains Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--reals);margin-bottom:2px}
+/* dropdown de experts (botão único) */
+.exp-dd{position:relative}
+.exp-dd-btn{display:flex;align-items:center;gap:9px;padding:9px 15px;border-radius:11px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);cursor:pointer;color:var(--snow);font-family:var(--font-body);font-size:13px;font-weight:600;transition:all .25s;white-space:nowrap}
+.exp-dd-btn:hover{border-color:rgba(255,107,0,0.45)}
+.exp-dd.open .exp-dd-btn{border-color:rgba(255,107,0,0.6);box-shadow:0 0 20px rgba(255,107,0,0.18)}
+.exp-dd-btn .dot{width:9px;height:9px;border-radius:50%;background:var(--fog);flex-shrink:0}
+.exp-dd-btn .cv{margin-left:4px;transition:transform .25s;color:var(--fog)}
+.exp-dd.open .exp-dd-btn .cv{transform:rotate(180deg)}
+.exp-dd-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:40;min-width:210px;padding:7px;border-radius:14px;background:rgba(18,16,22,0.97);border:1px solid rgba(255,255,255,0.1);box-shadow:0 20px 50px rgba(0,0,0,.55);backdrop-filter:blur(14px);display:none;flex-direction:column;gap:3px;max-height:320px;overflow:auto}
+.exp-dd.open .exp-dd-menu{display:flex;animation:popIn .22s ease}
+.exp-opt{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:9px;background:transparent;border:none;cursor:pointer;color:var(--fog);font-family:var(--font-body);font-size:13px;font-weight:500;text-align:left;transition:all .18s;white-space:nowrap}
+.exp-opt:hover{background:rgba(255,255,255,0.05);color:var(--snow)}
+.exp-opt .dot{width:8px;height:8px;border-radius:50%;background:var(--fog);flex-shrink:0}
+.exp-opt.sel{background:var(--reals-soft);color:var(--reals);font-weight:700}
+.exp-opt .ck{margin-left:auto;opacity:0;color:var(--reals)}
+.exp-opt.sel .ck{opacity:1}
 /* ===== HERO ===== */
 .hero{display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:22px;align-items:center;border-radius:20px;padding:24px 26px;margin-bottom:16px;position:relative;overflow:hidden}
 .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 50%,rgba(46,230,197,0.08),transparent 55%);pointer-events:none}
@@ -429,12 +458,19 @@ select.input{cursor:pointer}
         <div class="page-title">Central de <span class="serif-accent">operações</span></div>
         <div class="page-sub"><span class="livedot"></span><span id="scope">todos os experts</span></div>
       </div>
-      <div class="hdr-right"><div class="experts-pills glass" id="pills"></div></div>
+      <div class="hdr-right"><div id="pills"></div></div>
     </div>
 
     <!-- FILTRO DE DATA -->
     <div class="datebar glass reveal"><div class="preset-pills"></div>
-      <div class="date-custom"><span class="dlbl">de</span><input type="date" class="dinp dfrom"><span class="dlbl">até</span><input type="date" class="dinp dto"></div></div>
+      <div class="pz">
+        <button class="pz-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>Personalizado<svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="pz-pop">
+          <div class="pz-ttl">Período personalizado</div>
+          <div class="pzrow"><span class="dlbl">de</span><input type="date" class="dinp dfrom"></div>
+          <div class="pzrow"><span class="dlbl">até</span><input type="date" class="dinp dto"></div>
+        </div>
+      </div></div>
 
     <!-- HERO RESULTADO -->
     <div class="hero glass reveal lift">
@@ -498,10 +534,17 @@ select.input{cursor:pointer}
     <div class="page-header reveal">
       <div><div class="page-title">Dashboard</div>
         <div class="page-sub"><span class="livedot"></span>Métricas completas · <span id="dscope">todos os experts</span></div></div>
-      <div class="hdr-right"><div class="experts-pills glass" id="dpills"></div></div>
+      <div class="hdr-right"><div id="dpills"></div></div>
     </div>
     <div class="datebar glass reveal"><div class="preset-pills"></div>
-      <div class="date-custom"><span class="dlbl">de</span><input type="date" class="dinp dfrom"><span class="dlbl">até</span><input type="date" class="dinp dto"></div></div>
+      <div class="pz">
+        <button class="pz-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>Personalizado<svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="pz-pop">
+          <div class="pz-ttl">Período personalizado</div>
+          <div class="pzrow"><span class="dlbl">de</span><input type="date" class="dinp dfrom"></div>
+          <div class="pzrow"><span class="dlbl">até</span><input type="date" class="dinp dto"></div>
+        </div>
+      </div></div>
     <div class="section-title">Métricas do período · vs período anterior</div>
     <div class="kpi-grid dash-grid" id="dkpis"></div>
     <div class="section-title">Acessos da operação · 100% do fluxo</div>
@@ -686,19 +729,35 @@ function growBars(svg){svg.querySelectorAll('rect.cbar').forEach(r=>{const h=+r.
 const PRESETS=[{k:'7d',l:'7 dias',d:7},{k:'15d',l:'15 dias',d:15},{k:'30d',l:'30 dias',d:30},{k:'90d',l:'90 dias',d:90},{k:'all',l:'Tudo'}];
 function setPreset(k){PRESET=k;if(k==='all'){RANGE={from:MIND,to:MAXD};}else{const d=PRESETS.find(p=>p.k===k).d;RANGE={from:addD(MAXD,-(d-1)),to:MAXD};}
   if(RANGE.from<MIND)RANGE.from=MIND;syncBars();renderAll();}
+function closeAllDD(){document.querySelectorAll('.exp-dd.open,.pz.open').forEach(d=>d.classList.remove('open'));}
+document.addEventListener('click',closeAllDD);
 function syncBars(){document.querySelectorAll('.datebar').forEach(bar=>{
   bar.querySelector('.preset-pills').innerHTML=PRESETS.map(p=>`<button class="ppill ${p.k===PRESET?'active':''}" data-k="${p.k}">${p.l}</button>`).join('');
   bar.querySelectorAll('.ppill').forEach(b=>b.onclick=()=>setPreset(b.dataset.k));
+  const pz=bar.querySelector('.pz'),pzb=bar.querySelector('.pz-btn');
+  pzb.classList.toggle('active',PRESET==='');
+  pzb.onclick=e=>{e.stopPropagation();const was=pz.classList.contains('open');closeAllDD();if(!was)pz.classList.add('open');};
+  bar.querySelector('.pz-pop').onclick=e=>e.stopPropagation();
   const f=bar.querySelector('.dfrom'),t=bar.querySelector('.dto');
   f.min=MIND;f.max=MAXD;t.min=MIND;t.max=MAXD;f.value=RANGE.from;t.value=RANGE.to;
   f.onchange=()=>{if(f.value){RANGE.from=f.value;PRESET='';syncBars();renderAll();}};
   t.onchange=()=>{if(t.value){RANGE.to=t.value;PRESET='';syncBars();renderAll();}};});}
 const rangeLbl=()=>{const d=nDays(RANGE.from,RANGE.to)+1;const f=RANGE.from.slice(8)+'/'+RANGE.from.slice(5,7),t=RANGE.to.slice(8)+'/'+RANGE.to.slice(5,7);return `${f} a ${t} · ${d} dias`;};
 
+// ===== seletor de expert (botão único + dropdown) =====
+function buildExpertDD(container,curKey,onPick){
+  const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...ATIVOS];
+  const cur=items.find(e=>e.key===curKey)||items[0];
+  container.className='exp-dd';
+  container.innerHTML=`<button class="exp-dd-btn" type="button"><span class="dot" style="background:${cur.cor}"></span>${cur.nome}<svg class="cv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div class="exp-dd-menu">${items.map(e=>`<button class="exp-opt ${e.key===curKey?'sel':''}" data-k="${e.key}"><span class="dot" style="background:${e.cor}"></span>${e.nome}<svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:13px;height:13px"><path d="M5 12l5 5L20 6"/></svg></button>`).join('')}</div>`;
+  container.querySelector('.exp-dd-btn').onclick=e=>{e.stopPropagation();const was=container.classList.contains('open');closeAllDD();if(!was)container.classList.add('open');};
+  container.querySelector('.exp-dd-menu').onclick=e=>e.stopPropagation();
+  container.querySelectorAll('.exp-opt').forEach(b=>b.onclick=()=>{container.classList.remove('open');onPick(b.dataset.k);});
+}
+
 // ===== CENTRAL =====
-function buildPills(){const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...ATIVOS];
-  document.getElementById('pills').innerHTML=items.map(e=>`<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}"><span class="dot" style="background:${e.cor}"></span>${e.nome}</button>`).join('');
-  document.querySelectorAll('#pills .expert-pill').forEach(b=>b.onclick=()=>{current=b.dataset.k;document.querySelectorAll('#pills .expert-pill').forEach(x=>x.classList.toggle('active',x===b));renderCentral();});}
+function buildPills(){buildExpertDD(document.getElementById('pills'),current,k=>{current=k;buildPills();renderCentral();});}
 
 function kpi(label,raw,kind,delta,mode,i,valCls){
   let cls="flat",ar="→",good=delta;if(mode==='cost'&&delta!=null)good=-delta;
@@ -806,9 +865,7 @@ function buildInsights(rk,days){
 }
 
 // ===== DASHBOARD =====
-function buildDPills(){const items=[{key:"todos",nome:"Todos",cor:"var(--snow)"},...ATIVOS];
-  document.getElementById('dpills').innerHTML=items.map(e=>`<button class="expert-pill ${e.key==='todos'?'active':''}" data-k="${e.key}"><span class="dot" style="background:${e.cor}"></span>${e.nome}</button>`).join('');
-  document.querySelectorAll('#dpills .expert-pill').forEach(b=>b.onclick=()=>{dscope=b.dataset.k;document.querySelectorAll('#dpills .expert-pill').forEach(x=>x.classList.toggle('active',x===b));renderDash();});}
+function buildDPills(){buildExpertDD(document.getElementById('dpills'),dscope,k=>{dscope=k;buildDPills();renderDash();});}
 function renderDash(){const list=dscope==="todos"?ATIVOS:ATIVOS.filter(e=>e.key===dscope);const p=prevR();
   const m=met(aggR(list,RANGE.from,RANGE.to)),mo=met(aggR(list,p.f,p.t));
   document.getElementById('dscope').textContent=(dscope==="todos"?"todos os experts":ATIVOS.find(e=>e.key===dscope).nome)+" · "+rangeLbl();
