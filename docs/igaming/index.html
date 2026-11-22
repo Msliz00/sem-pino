@@ -143,33 +143,23 @@ button{cursor:pointer}
 .rv.noan{opacity:1;transform:none;animation:none!important}
 .noan .mfill,.noan .fbar{animation:none}
 
-/* hero */
-.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr) minmax(0,1.3fr);gap:24px;align-items:center;padding:24px 26px;margin-bottom:14px;overflow:hidden}
-.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 120% at 0% 50%,rgba(212,169,58,.08),transparent 60%);pointer-events:none;border-radius:inherit}
-.lbl{font-size:12.5px;font-weight:500;color:var(--ink-2)}
-.lbl .hint{color:var(--ink-3);font-weight:400}
-.hero-v{font-size:52px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:8px 0 8px;white-space:nowrap}
-.hero-v.pos{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero-v.neg{color:var(--bad)}
-.hero-m{display:flex;flex-direction:column;gap:12px;padding-left:22px;border-left:1px solid var(--hair)}
-.hm{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.hm span{font-size:12.5px;color:var(--ink-2)}
-.hm b{font-size:19px;font-weight:600}
-.hero-spark{min-width:0}
-.hero-spark .cap{font-size:11.5px;color:var(--ink-3);margin-bottom:4px}
-.hero-spark .plot{height:96px}
-
 /* variação */
-.dl{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600}
+.dl{display:flex;flex-wrap:wrap;align-items:center;column-gap:5px;font-size:12.5px;font-weight:600}
+.dl .dn{white-space:nowrap}
 .dl .vs{font-weight:400;color:var(--ink-3)}
 .dl.up{color:var(--good)}.dl.down{color:var(--bad)}.dl.neu{color:var(--ink-2)}.dl.na{color:var(--ink-3);font-weight:400}
 
 /* KPI tiles */
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
-.kpi{padding:16px 16px 12px;transition:border-color .25s,transform .25s}
+.kpi{display:flex;flex-direction:column;padding:16px 16px 12px;transition:border-color .25s,transform .25s}
 .kpi:hover{border-color:rgba(226,192,106,.3);transform:translateY(-2px)}
 .kpi .kv{font-size:25px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kpi .ks{height:34px;margin-top:8px}
+.kpis.k5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.kpi .kc{height:64px;margin-top:auto;padding-top:14px;box-sizing:content-box}
+.kv.gold{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.kv.neg{color:var(--bad)}
+.mini .bar{opacity:.42}
+.mini .bar.last,.mini .bar.hot{opacity:1}
 .kpi .kx{font-size:12px;color:var(--ink-3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* grades */
@@ -292,11 +282,8 @@ table.tb{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
 .foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--hair);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-3)}
 
 /* ============ RESPONSIVO ============ */
-@media (max-width:1180px){
-  .hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .hero-spark{grid-column:1/-1}
-}
-@media (max-width:1080px){.g2,.g2.wide{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1180px){.kpis.k5{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:1080px){.g2,.g2.wide{grid-template-columns:minmax(0,1fr)}.kpis.k5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:900px){
   .side{display:none}
   .main{padding:0 16px 32px}
@@ -311,9 +298,6 @@ table.tb{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
   .dw-k{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:560px){
-  .hero{grid-template-columns:minmax(0,1fr);padding:20px}
-  .hero-m{padding-left:0;border-left:0;padding-top:14px;border-top:1px solid var(--hair)}
-  .hero-v{font-size:42px}
   .kpi .kv{font-size:21px}
   .kpi .dl .vs{display:none}
   .kpi .dl{white-space:nowrap}
@@ -425,56 +409,11 @@ table.tb{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
       </div>
       <span class="fsep"></span>
       <label class="sel"><span>Canal</span><select id="fCanal"></select></label>
-      <label class="sel"><span>Status</span><select id="fStatus">
-        <option value="todos">Todos</option><option value="ativa">Ativa</option><option value="em teste">Em teste</option><option value="pausada">Pausada</option>
-      </select></label>
     </div>
 
     <!-- ============ PÁGINA 1 · MÉTRICAS ============ -->
     <section class="page" id="pg-metricas" aria-labelledby="ttl">
-      <div class="card hero rv" style="--i:0">
-        <div>
-          <div class="lbl">Resultado do período <span class="hint">· NGR − investimento</span></div>
-          <div class="hero-v" id="hRes">—</div>
-          <div id="hDelta"></div>
-        </div>
-        <div class="hero-m">
-          <div class="hm"><span>ROI</span><b id="hRoi">—</b></div>
-          <div class="hm"><span>NGR</span><b id="hNgr">—</b></div>
-          <div class="hm"><span>Investimento</span><b id="hInv">—</b></div>
-          <div class="hm"><span>Depósitos</span><b id="hDep">—</b></div>
-        </div>
-        <div class="hero-spark">
-          <div class="cap">Resultado acumulado no período</div>
-          <div class="plot" id="hArea"></div>
-        </div>
-      </div>
-
-      <div class="kpis" id="kpis"></div>
-
-      <div class="g2 wide">
-        <div class="card rv" style="--i:9" data-card="res">
-          <div class="ch"><div><h3>Resultado diário</h3><p>NGR − investimento por dia, em R$</p></div><button type="button" class="tbtn" aria-pressed="false" data-tbl><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>Tabela</button></div>
-          <div class="legend"><span><i class="rc" style="background:var(--pos)"></i>Lucro</span><span><i class="rc" style="background:var(--neg)"></i>Prejuízo</span></div>
-          <div class="plot" id="cRes"></div><div class="tview" hidden></div>
-        </div>
-        <div class="card rv" style="--i:10" data-card="inv">
-          <div class="ch"><div><h3>Investimento × NGR</h3><p>por dia, em R$ — mesma escala</p></div><button type="button" class="tbtn" aria-pressed="false" data-tbl><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>Tabela</button></div>
-          <div class="legend"><span><i class="ln" style="background:var(--s-ngr)"></i>NGR</span><span><i class="ln" style="background:var(--s-inv)"></i>Investimento</span></div>
-          <div class="plot" id="cInv"></div><div class="tview" hidden></div>
-        </div>
-      </div>
-
-      <div class="g2">
-        <div class="card rv" style="--i:11" data-card="fun">
-          <div class="ch"><div><h3>Funil de conversão</h3><p>cliques → registros → FTD</p></div><button type="button" class="tbtn" aria-pressed="false" data-tbl><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>Tabela</button></div>
-          <div class="plot" id="cFun"></div><div class="tview" hidden></div>
-        </div>
-        <div class="card rv" style="--i:12" data-card="can">
-          <div class="ch"><div><h3>Resultado por canal</h3><p>ordenado do maior para o menor</p></div><button type="button" class="tbtn" aria-pressed="false" data-tbl><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>Tabela</button></div>
-          <div class="plot" id="cCan"></div><div class="tview" hidden></div>
-        </div>
-      </div>
+      <div class="kpis k5" id="kpis"></div>
     </section>
 
     <!-- ============ PÁGINA 2 · CAMPANHAS ============ -->
@@ -586,20 +525,21 @@ const WD = ["dom","seg","ter","qua","qui","sex","sáb"];
 const idxOf = iso => Math.round((new Date(iso + "T12:00:00") - D0) / 864e5);
 
 /* ---------- estado ---------- */
-const S0 = { page:"metricas", preset:"30", i0:N-30, i1:N-1, canal:"todos", status:"todos", sort:{k:"res", dir:-1} };
+const S0 = { page:"metricas", preset:"30", i0:N-30, i1:N-1, canal:"todos", sort:{k:"res", dir:-1} };
 let ST = Object.assign({}, S0);
 try { const sv = JSON.parse(localStorage.getItem("ig_view") || "null"); if (sv) Object.assign(ST, sv, {sort: Object.assign({}, S0.sort, sv.sort||{})}); } catch(e){}
-function saveView(){ try { localStorage.setItem("ig_view", JSON.stringify({page:ST.page, preset:ST.preset, i0:ST.i0, i1:ST.i1, canal:ST.canal, status:ST.status, sort:ST.sort})); } catch(e){} }
+function saveView(){ try { localStorage.setItem("ig_view", JSON.stringify({page:ST.page, preset:ST.preset, i0:ST.i0, i1:ST.i1, canal:ST.canal, sort:ST.sort})); } catch(e){} }
 function applyPreset(p){
   ST.preset = p;
   if (p === "all") { ST.i0 = 0; ST.i1 = N-1; }
   else if (p !== "custom") { const n = +p; ST.i1 = N-1; ST.i0 = Math.max(0, N-n); }
 }
+if (ST.canal !== "todos" && !IG.canais.includes(ST.canal)) ST.canal = "todos";
 if (ST.preset !== "custom") applyPreset(ST.preset);
 ST.i0 = Math.max(0, Math.min(ST.i0, N-1)); ST.i1 = Math.max(ST.i0, Math.min(ST.i1, N-1));
 
 /* ---------- agregação ---------- */
-const sel = () => IG.campanhas.filter(c => (ST.canal === "todos" || c.canal === ST.canal) && (ST.status === "todos" || c.status === ST.status));
+const sel = () => IG.campanhas.filter(c => ST.canal === "todos" || c.canal === ST.canal);
 function tot(list, i0, i1){ const t = [0,0,0,0,0,0,0]; for (const c of list) for (let i = Math.max(0,i0); i <= i1; i++){ const r = c.d[i]; if (r) for (let k = 0; k < 7; k++) t[k] += r[k]; } return t; }
 function met(t){
   const [inv, impr, cli, reg, ftd, dep, ngr] = t, dv = (a,b) => b ? a/b : null;
@@ -613,11 +553,18 @@ const vary = (a, b) => (b == null || !isFinite(b) || b === 0 || a == null) ? nul
 /* ---------- componentes ---------- */
 function deltaEl(cur, prev, mode){ // mode: good | cost | neutral
   const d = el("span", "dl");
+  if (mode === "pp") {
+    if (prev == null || !isFinite(prev) || cur == null) { d.classList.add("na"); d.textContent = "sem período anterior para comparar"; return d; }
+    const df = (cur - prev) * 100, fl = Math.abs(df) < 0.05;
+    d.classList.add(fl ? "neu" : df > 0 ? "up" : "down");
+    d.append(el("span", "dn", (fl ? "→ " : df > 0 ? "▲ " : "▼ ") + nf1.format(Math.abs(df)) + " p.p."), el("span", "vs", " vs período anterior"));
+    return d;
+  }
   const v = vary(cur, prev);
   if (v == null) { d.classList.add("na"); d.textContent = "sem período anterior para comparar"; return d; }
   const up = v > 0, flat = Math.abs(v) < 0.0005;
   d.classList.add(flat || mode === "neutral" ? "neu" : ((mode === "cost" ? !up : up) ? "up" : "down"));
-  d.append((flat ? "→ " : up ? "▲ " : "▼ ") + nf1.format(Math.abs(v)*100) + "%", el("span", "vs", " vs período anterior"));
+  d.append(el("span", "dn", (flat ? "→ " : up ? "▲ " : "▼ ") + nf1.format(Math.abs(v)*100) + "%"), el("span", "vs", " vs período anterior"));
   return d;
 }
 function countTo(node, to, fmt, anim){
@@ -673,59 +620,6 @@ function xLabels(svg, n, X, y, pw, i0){
 }
 function emptyIn(node, msg){ node.replaceChildren(el("div", "empty", msg || "Sem dados para este filtro e período.")); }
 
-/* ---------- gráfico: colunas divergentes (resultado diário) ---------- */
-function colChart(node, rows, anim){
-  node.replaceChildren(); if (!rows.length) return emptyIn(node);
-  const W = Math.max(280, node.clientWidth), H = 262, m = {l:50, r:10, t:24, b:28};
-  const pw = W - m.l - m.r, ph = H - m.t - m.b, n = rows.length;
-  const vals = rows.map(r => r.res), lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
-  const ticks = nice(lo, hi, 4), y0 = ticks[0], y1 = ticks[ticks.length-1];
-  const Y = v => m.t + (y1 - v) / (y1 - y0) * ph, band = pw / n, bw = Math.max(2, Math.min(24, band - 2));
-  const best = vals.indexOf(Math.max(...vals)), worst = vals.indexOf(Math.min(...vals));
-  const svg = S("svg", {width:W, height:H, viewBox:`0 0 ${W} ${H}`, class:"cv", role:"img", tabindex:"0",
-    "aria-label":`Resultado diário de ${dm(rows[0].i)} a ${dm(rows[n-1].i)}. Melhor dia ${dm(rows[best].i)}: ${money(vals[best])}. Pior dia ${dm(rows[worst].i)}: ${money(vals[worst])}. Use as setas para navegar.`});
-  ticks.forEach(t => { const y = Y(t); S("line", {x1:m.l, x2:W-m.r, y1:y, y2:y, class: t === 0 ? "ax" : "gl"}, svg); T(svg, m.l-8, y+4, axisF(t), {class:"tk", "text-anchor":"end"}); });
-  xLabels(svg, n, j => m.l + j*band + band/2, H - 8, pw, rows[0].i);
-  const z = Y(0), bars = [];
-  rows.forEach((r, j) => {
-    const v = r.res, x = m.l + j*band + (band - bw)/2, h = Math.abs(Y(v) - z), up = v >= 0;
-    if (h < 0.5) { bars.push(null); return; }
-    const rr = Math.min(4, bw/2, h), yT = z - h, yB = z + h;
-    const d = up ? `M${x},${z}V${yT+rr}Q${x},${yT} ${x+rr},${yT}H${x+bw-rr}Q${x+bw},${yT} ${x+bw},${yT+rr}V${z}Z`
-                 : `M${x},${z}V${yB-rr}Q${x},${yB} ${x+rr},${yB}H${x+bw-rr}Q${x+bw},${yB} ${x+bw},${yB-rr}V${z}Z`;
-    const p = S("path", {d, fill: up ? "var(--pos)" : "var(--neg)", class: "bar" + (anim ? " grow" + (up ? "" : " dn") : "")}, svg);
-    if (anim) p.style.animationDelay = Math.min(j*8, 360) + "ms";
-    bars.push(p);
-  });
-  // rótulos diretos seletivos: melhor e pior dia
-  const lab = (j, above) => { const v = vals[j], cx = m.l + j*band + band/2; let a = "middle"; if (cx < m.l + 40) a = "start"; if (cx > W - m.r - 40) a = "end";
-    T(svg, cx, above ? Y(v) - 7 : Y(v) + 15, money(v), {class:"dlab", "text-anchor":a}); };
-  if (vals[best] > 0) lab(best, true);
-  if (vals[worst] < 0) lab(worst, false);
-  // interação (a coluna inteira é o alvo)
-  const ov = S("rect", {x:m.l, y:m.t, width:pw, height:ph, fill:"transparent"}, svg);
-  let cur = -1;
-  const at = (j, cx, cy) => {
-    if (cur >= 0 && bars[cur]) bars[cur].classList.remove("hot");
-    cur = j; if (bars[j]) bars[j].classList.add("hot");
-    const r = rows[j];
-    showTip(cx, cy, `${WD[dOf(r.i).getDay()]}, ${dmy(r.i)}`, [
-      {c: r.res >= 0 ? "var(--pos)" : "var(--neg)", rect:true, v: money(r.res), l: r.res >= 0 ? "lucro" : "prejuízo"},
-      {c: "var(--s-ngr)", v: money(r.ngr), l: "NGR"},
-      {c: "var(--s-inv)", v: money(r.inv), l: "investimento"} ]);
-  };
-  const clear = () => { if (cur >= 0 && bars[cur]) bars[cur].classList.remove("hot"); cur = -1; hideTip(); };
-  ov.addEventListener("pointermove", e => { const b = svg.getBoundingClientRect(); const j = Math.max(0, Math.min(n-1, Math.floor((e.clientX - b.left - m.l) / band))); at(j, e.clientX, e.clientY); });
-  ov.addEventListener("pointerleave", clear);
-  svg.addEventListener("keydown", e => {
-    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return; e.preventDefault();
-    const j = cur < 0 ? n-1 : Math.max(0, Math.min(n-1, cur + (e.key === "ArrowRight" ? 1 : -1)));
-    const b = svg.getBoundingClientRect(); at(j, b.left + m.l + j*band + band/2, b.top + m.t + 20);
-  });
-  svg.addEventListener("blur", clear);
-  node.append(svg);
-}
-
 /* ---------- gráfico: linhas (investimento × NGR) ---------- */
 function lineChart(node, rows, series, anim, H){
   node.replaceChildren(); if (rows.length < 2) return emptyIn(node, rows.length ? "Selecione um período com pelo menos 2 dias." : null);
@@ -767,28 +661,45 @@ function lineChart(node, rows, series, anim, H){
   node.append(svg);
 }
 
-/* ---------- mini gráficos ---------- */
-function spark(node, vals){
-  node.replaceChildren(); if (vals.length < 2) return;
-  const W = Math.max(80, node.clientWidth), H = 34, lo = Math.min(...vals), hi = Math.max(...vals), sp = hi - lo || 1;
-  const X = j => 3 + j * (W - 8) / (vals.length - 1), Y = v => 4 + (hi - v) / sp * (H - 8);
-  const svg = S("svg", {width:W, height:H, viewBox:`0 0 ${W} ${H}`, "aria-hidden":"true"});
-  S("path", {d: vals.map((v,j) => (j ? "L" : "M") + X(j).toFixed(1) + "," + Y(v).toFixed(1)).join(""), fill:"none", stroke:"var(--ink-3)", "stroke-width":1.5, "stroke-linejoin":"round", "stroke-linecap":"round", opacity:.9}, svg);
-  S("circle", {cx:X(vals.length-1), cy:Y(vals[vals.length-1]), r:3.5, fill:"var(--gold-mid)", class:"dot"}, svg);
-  node.append(svg);
-}
-function heroArea(node, vals, anim){
-  node.replaceChildren(); if (vals.length < 2) return;
-  const W = Math.max(160, node.clientWidth), H = 96; let acc = 0; const c = vals.map(v => acc += v);
-  const lo = Math.min(0, ...c), hi = Math.max(0, ...c), sp = hi - lo || 1;
-  const X = j => 2 + j * (W - 10) / (c.length - 1), Y = v => 6 + (hi - v) / sp * (H - 12), z = Y(0);
-  const svg = S("svg", {width:W, height:H, viewBox:`0 0 ${W} ${H}`, "aria-hidden":"true"});
+/* ---------- gráfico de colunas do bloco (uma coluna por dia) ---------- */
+function miniCols(node, days, key, fmt, label, diverge){
+  node.replaceChildren();
+  const pts = days.map(d => ({i:d.i, v:d[key]})), ok = v => v != null && isFinite(v);
+  const vals = pts.map(p => p.v).filter(ok); if (!vals.length) return;
+  const W = Math.max(120, node.clientWidth), H = 64, n = pts.length;
+  const lo = diverge ? Math.min(0, ...vals) : 0, hi = Math.max(0, ...vals), span = (hi - lo) || 1;
+  const Y = v => 2 + (hi - v) / span * (H - 4), z = Y(0), band = W / n, bw = Math.max(1.5, Math.min(14, band - 2));
+  const best = pts.reduce((a, p) => ok(p.v) && (a == null || p.v > a.v) ? p : a, null);
+  const svg = S("svg", {width:W, height:H, viewBox:`0 0 ${W} ${H}`, class:"cv mini", role:"img", tabindex:"0",
+    "aria-label": `${label} por dia, de ${dm(pts[0].i)} a ${dm(pts[n-1].i)}. Maior: ${dm(best.i)}, ${fmt(best.v)}. Último dia: ${ok(pts[n-1].v) ? fmt(pts[n-1].v) : "sem dado"}. Use as setas para navegar.`});
   S("line", {x1:0, x2:W, y1:z, y2:z, class:"ax"}, svg);
-  const line = c.map((v,j) => (j ? "L" : "M") + X(j).toFixed(1) + "," + Y(v).toFixed(1)).join("");
-  S("path", {d: line + `L${X(c.length-1).toFixed(1)},${z}L${X(0)},${z}Z`, fill:"var(--s-ngr)", opacity:.12}, svg);
-  const p = S("path", {d: line, class:"ln", stroke:"var(--s-ngr)"}, svg);
-  S("circle", {cx:X(c.length-1), cy:Y(c[c.length-1]), r:4, fill:"var(--s-ngr)", class:"dot"}, svg);
-  if (anim && !REDUCE) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; p.getBoundingClientRect(); p.style.transition = "stroke-dashoffset 1.2s ease"; requestAnimationFrame(() => p.style.strokeDashoffset = 0); }
+  const bars = pts.map((p, j) => {
+    if (!ok(p.v)) return null;
+    const x = j*band + (band - bw)/2, h = Math.abs(Y(p.v) - z); if (h < 0.5) return null;
+    const up = p.v >= 0, rr = Math.min(3, bw/2, h), yT = z - h, yB = z + h;
+    const d = up ? `M${x},${z}V${yT+rr}Q${x},${yT} ${x+rr},${yT}H${x+bw-rr}Q${x+bw},${yT} ${x+bw},${yT+rr}V${z}Z`
+                 : `M${x},${z}V${yB-rr}Q${x},${yB} ${x+rr},${yB}H${x+bw-rr}Q${x+bw},${yB} ${x+bw},${yB-rr}V${z}Z`;
+    const fill = diverge ? (up ? "var(--pos)" : "var(--neg)") : "var(--s-ngr)";
+    const b = S("path", {d, fill, class:"bar" + (j === n-1 ? " last" : "") + (ANIM ? " grow" + (up ? "" : " dn") : "")}, svg);
+    if (ANIM) b.style.animationDelay = Math.min(j*10, 420) + "ms";
+    return b;
+  });
+  const ov = S("rect", {x:0, y:0, width:W, height:H, fill:"transparent"}, svg);
+  let cur = -1;
+  const at = (j, cx, cy) => {
+    if (cur >= 0 && bars[cur]) bars[cur].classList.remove("hot"); cur = j; if (bars[j]) bars[j].classList.add("hot");
+    const p = pts[j];
+    showTip(cx, cy, `${WD[dOf(p.i).getDay()]}, ${dmy(p.i)}`, [{c: diverge ? (p.v >= 0 ? "var(--pos)" : "var(--neg)") : "var(--s-ngr)", rect:true, v: ok(p.v) ? fmt(p.v) : "sem dado", l: label}]);
+  };
+  const clear = () => { if (cur >= 0 && bars[cur]) bars[cur].classList.remove("hot"); cur = -1; hideTip(); };
+  ov.addEventListener("pointermove", e => { const b = svg.getBoundingClientRect(); at(Math.max(0, Math.min(n-1, Math.floor((e.clientX - b.left) / band))), e.clientX, e.clientY); });
+  ov.addEventListener("pointerleave", clear);
+  svg.addEventListener("keydown", e => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return; e.preventDefault();
+    const j = cur < 0 ? n-1 : Math.max(0, Math.min(n-1, cur + (e.key === "ArrowRight" ? 1 : -1)));
+    const b = svg.getBoundingClientRect(); at(j, b.left + j*band + band/2, b.top + 8);
+  });
+  svg.addEventListener("blur", clear);
   node.append(svg);
 }
 
@@ -850,52 +761,37 @@ $$("[data-tbl]").forEach(btn => btn.addEventListener("click", () => {
   render(false);
 }));
 
-/* ---------- KPI tile ---------- */
-function kpiTile(label, v, pv, fmt, mode, series, i, extra){
+/* ---------- bloco de métrica ---------- */
+function kpiTile(label, v, pv, fmt, mode, i, opt){
+  opt = opt || {};
   const c = el("div", "card kpi rv" + (ANIM ? "" : " noan")); c.style.setProperty("--i", i);
   c.append(el("div", "lbl", label));
-  const kv = el("div", "kv"); c.append(kv); countTo(kv, v, fmt, ANIM);
+  const kv = el("div", "kv" + (opt.cls ? " " + opt.cls : "")); c.append(kv); countTo(kv, v, fmt, ANIM);
   c.append(deltaEl(v, pv, mode));
-  if (extra) c.append(el("div", "kx", extra));
-  const sp = el("div", "ks"); c.append(sp); c._spark = () => spark(sp, series);
+  if (opt.extra) c.append(el("div", "kx", opt.extra));
+  c._chart = () => {};
+  if (opt.days) { const ch = el("div", "kc"); c.append(ch); c._chart = () => miniCols(ch, opt.days, opt.key, fmt, label, !!opt.diverge); }
   return c;
 }
 
-/* ---------- render: MÉTRICAS ---------- */
+/* ---------- render: MÉTRICAS (só os blocos) ---------- */
 function renderMetricas(anim){
   const list = sel(), m = met(tot(list, ST.i0, ST.i1)), p = prevR(), pm = p ? met(tot(list, p.i0, p.i1)) : null, days = daily(list, ST.i0, ST.i1);
   const g = k => pm ? pm[k] : null;
-  // hero
-  const hv = $("#hRes"); hv.className = "hero-v " + (m.res < 0 ? "neg" : "pos"); countTo(hv, m.res, money, anim);
-  $("#hDelta").replaceChildren(deltaEl(m.res, g("res"), "good"));
-  $("#hRoi").textContent = pct(m.roi); $("#hRoi").style.color = m.roi < 0 ? "var(--bad)" : "var(--gold)";
-  $("#hNgr").textContent = money(m.ngr); $("#hInv").textContent = money(m.inv); $("#hDep").textContent = money(m.dep);
-  heroArea($("#hArea"), days.map(d => d.res), anim);
-  // KPIs
-  const K = $("#kpis"); K.replaceChildren();
-  const tiles = [
-    kpiTile("Investimento", m.inv, g("inv"), money, "neutral", days.map(d => d.inv), 1),
-    kpiTile("Cliques", m.cli, g("cli"), int, "good", days.map(d => d.cli), 2, "CTR " + pct(m.ctr)),
-    kpiTile("Registros", m.reg, g("reg"), int, "good", days.map(d => d.reg), 3, "clique → registro " + pct(m.c2r)),
-    kpiTile("FTD", m.ftd, g("ftd"), int, "good", days.map(d => d.ftd), 4, "registro → FTD " + pct(m.r2f)),
-    kpiTile("CPA (custo por registro)", m.cpa, g("cpa"), money2, "cost", days.map(d => d.cpa || 0), 5),
-    kpiTile("Custo por FTD", m.cpf, g("cpf"), money2, "cost", days.map(d => d.cpf || 0), 6),
-    kpiTile("Depósitos", m.dep, g("dep"), money, "good", days.map(d => d.dep), 7, "ticket médio FTD " + money(m.tkt)),
-    kpiTile("NGR", m.ngr, g("ngr"), money, "good", days.map(d => d.ngr), 8),
+  const B = [
+    ["Resultado", "res", money, "good", true, m.res < 0 ? "neg" : "gold"],
+    ["ROI", "roi", pct, "pp", true],
+    ["Investimento", "inv", money, "neutral"],
+    ["NGR", "ngr", money, "good"],
+    ["Depósitos", "dep", money, "good"],
+    ["Cliques", "cli", int, "good"],
+    ["Registros", "reg", int, "good"],
+    ["FTD", "ftd", int, "good"],
+    ["CPA (custo por registro)", "cpa", money2, "cost"],
+    ["Custo por FTD", "cpf", money2, "cost"],
   ];
-  K.append(...tiles); tiles.forEach(t => t._spark());
-  // gráficos / tabelas
-  const cardOn = id => $(`[data-card="${id}"] [data-tbl]`).getAttribute("aria-pressed") === "true";
-  const dayRows = () => days.map(d => [dmy(d.i), moneyF(d.inv), moneyF(d.ngr), sgnCell(d.res, moneyF)]);
-  if (cardOn("res")) tableView($('[data-card="res"] .tview'), ["Data","Investimento","NGR","Resultado"], dayRows()); else colChart($("#cRes"), days, anim);
-  const SER = [{k:"ngr", l:"NGR", c:"var(--s-ngr)"}, {k:"inv", l:"Investimento", c:"var(--s-inv)"}];
-  if (cardOn("inv")) tableView($('[data-card="inv"] .tview'), ["Data","Investimento","NGR","Resultado"], dayRows()); else lineChart($("#cInv"), days, SER, anim);
-  if (cardOn("fun")) tableView($('[data-card="fun"] .tview'), ["Etapa","Volume","Conversão da etapa anterior"], [["Cliques", int(m.cli), "CTR " + pct(m.ctr)], ["Registros", int(m.reg), pct(m.c2r)], ["FTD", int(m.ftd), pct(m.r2f)]]); else funnel($("#cFun"), m);
-  // por canal
-  const canais = [...new Set(list.map(c => c.canal))].map(cn => { const mm = met(tot(list.filter(c => c.canal === cn), ST.i0, ST.i1)); return {name:cn, sub:"ROI " + pct(mm.roi), v:mm.res, m:mm}; })
-                 .filter(x => x.m.inv > 0 || x.m.ngr > 0).sort((a,b) => b.v - a.v);
-  if (cardOn("can")) tableView($('[data-card="can"] .tview'), ["Canal","Investimento","NGR","Resultado","ROI"], canais.map(x => [x.name, moneyF(x.m.inv), moneyF(x.m.ngr), sgnCell(x.v, moneyF), sgnCell(x.m.roi, pct)]));
-  else meterList($("#cCan"), canais, x => [ {c: x.v >= 0 ? "var(--pos)" : "var(--neg)", rect:true, v: money(x.v), l:"resultado"}, {c:"var(--s-ngr)", v:money(x.m.ngr), l:"NGR"}, {c:"var(--s-inv)", v:money(x.m.inv), l:"investimento"}, {v:pct(x.m.roi), l:"ROI"} ]);
+  const tiles = B.map((b, i) => kpiTile(b[0], m[b[1]], g(b[1]), b[2], b[3], i, {days, key:b[1], diverge:b[4], cls:b[5]}));
+  $("#kpis").replaceChildren(...tiles); tiles.forEach(t => t._chart());
 }
 
 /* ---------- render: CAMPANHAS ---------- */
@@ -913,11 +809,10 @@ function renderCampanhas(anim){
   const withInv = rows.filter(r => r.inv > 0), best = withInv.slice().sort((a,b) => (b.roi||-9) - (a.roi||-9))[0];
   const t1 = el("div", "card kpi rv" + (ANIM ? "" : " noan")); t1.style.setProperty("--i", 0); t1.append(el("div", "lbl", "Campanhas ativas"));
   const v1 = el("div", "kv"); v1.textContent = ativas + " de " + rows.length; t1.append(v1, el("div", "kx", rows.filter(r => r.status === "em teste").length + " em teste · " + rows.filter(r => r.status === "pausada").length + " pausada(s)"));
-  const t2 = kpiTile("Investimento", all.inv, pm && pm.inv, money, "neutral", [], 1);
-  const t3 = kpiTile("Resultado", all.res, pm && pm.res, money, "good", [], 2, "ROI " + pct(all.roi));
+  const t2 = kpiTile("Investimento", all.inv, pm && pm.inv, money, "neutral", 1);
+  const t3 = kpiTile("Resultado", all.res, pm && pm.res, money, "good", 2, {extra: "ROI " + pct(all.roi)});
   const t4 = el("div", "card kpi rv" + (ANIM ? "" : " noan")); t4.style.setProperty("--i", 3); t4.append(el("div", "lbl", "Melhor ROI no período"));
   const v4 = el("div", "kv"); v4.textContent = best ? pct(best.roi) : "—"; t4.append(v4, el("div", "kx", best ? best.nome + " · " + best.canal : "—"));
-  [t2, t3].forEach(t => t.querySelector(".ks").remove());
   K.append(t1, t2, t3, t4);
   // gráfico por campanha
   const items = rows.filter(r => r.inv > 0 || r.ngr > 0).map(r => ({name:r.nome, sub:r.canal, v:r.res, r, onClick:() => openDrawer(r.c)})).sort((a,b) => b.v - a.v);
@@ -994,11 +889,11 @@ document.addEventListener("keydown", e => {
 const rangeTxt = () => `${dm(ST.i0)} a ${dm(ST.i1)} · ${ST.i1 - ST.i0 + 1} dias`;
 function syncFilters(){
   $$("#presets [data-p]").forEach(b => b.setAttribute("aria-pressed", b.dataset.p === ST.preset));
-  $("#fCanal").value = ST.canal; $("#fStatus").value = ST.status;
+  $("#fCanal").value = ST.canal;
   const p = prevR();
   const per = $("#periodo"); per.replaceChildren(el("b", null, rangeTxt()), document.createTextNode(p ? `  ·  comparado com ${dm(p.i0)} a ${dm(p.i1)}` : "  ·  sem período anterior"));
 }
-$("#fCanal").append(...[["todos","Todos"]].concat(IG.canais.map(c => [c, c])).map(([v,l]) => { const o = el("option", null, l); o.value = v; return o; }));
+$("#fCanal").append(...[["todos","Geral"]].concat(IG.canais.map(c => [c, c])).map(([v,l]) => { const o = el("option", null, l); o.value = v; return o; }));
 $$("#presets [data-p]").forEach(b => { if (b.dataset.p !== "custom") b.addEventListener("click", () => { applyPreset(b.dataset.p); closePop(); update(); }); });
 const pop = $("#pzPop"), pzBtn = $("#pzBtn");
 function openPop(){ const f = $("#dFrom"), t = $("#dTo"); f.min = t.min = isoOf(0); f.max = t.max = isoOf(N-1); f.value = isoOf(ST.i0); t.value = isoOf(ST.i1); pop.hidden = false; pzBtn.setAttribute("aria-expanded", "true"); f.focus(); }
@@ -1012,7 +907,6 @@ $("#dApply").addEventListener("click", () => {
   ST.preset = "custom"; ST.i0 = a; ST.i1 = b; closePop(); update();
 });
 $("#fCanal").addEventListener("change", e => { ST.canal = e.target.value; update(); });
-$("#fStatus").addEventListener("change", e => { ST.status = e.target.value; update(); });
 
 /* ---------- páginas ---------- */
 function go(page, anim){
