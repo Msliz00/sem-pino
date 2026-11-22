@@ -300,10 +300,10 @@ table.tb{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
 @media (max-width:900px){
   .side{display:none}
   .main{padding:0 16px 32px}
-  .mbar{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:20;margin:0 -16px;padding:12px 16px;background:rgba(10,9,8,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--hair-gold)}
+  .mbar{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;margin:0 -16px;padding:12px 16px;background:rgba(10,9,8,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--hair-gold)}
   .mbar .brand .mark{width:30px;height:30px}
   .mbar .brand .wordmark{font-size:15px}
-  .mtabs{display:flex;gap:6px;position:sticky;top:55px;z-index:19;margin:0 -16px 16px;padding:8px 16px;background:rgba(10,9,8,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--hair)}
+  .mtabs{display:flex;gap:6px;position:sticky;top:calc(55px + env(safe-area-inset-top,0px));z-index:19;margin:0 -16px 16px;padding:8px 16px;background:rgba(10,9,8,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--hair)}
   .mtabs button{flex:1;height:36px;border-radius:9px;border:1px solid var(--hair);background:none;color:var(--ink-2);font-weight:600}
   .mtabs button[aria-current="page"]{background:var(--grad);color:#1a1409;border-color:transparent}
   .top h1{font-size:24px}
