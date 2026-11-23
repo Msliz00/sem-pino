@@ -52,9 +52,21 @@ button{cursor:pointer}
 .orb.b{width:260px;height:260px;background:rgba(168,128,31,.18);bottom:-90px;right:-60px;animation-delay:-8s}
 @keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(34px,26px)}}
 .lg-card{position:relative;z-index:2;width:100%;max-width:392px;padding:34px 30px 28px;border-radius:22px;background:linear-gradient(180deg,rgba(27,25,21,.92),rgba(16,15,12,.94));border:1px solid var(--hair-gold);box-shadow:0 30px 80px rgba(0,0,0,.65),0 0 70px rgba(79,140,255,.14),inset 0 1px 0 rgba(246,220,148,.08);animation:cardIn .7s cubic-bezier(.2,.9,.3,1) both}
-@keyframes cardIn{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes cardIn{from{opacity:0;translate:0 22px;scale:.98}}
 .lg-head{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:22px}
-.lg-head .mark{width:54px;height:54px;margin-bottom:12px;filter:drop-shadow(0 6px 18px rgba(212,169,58,.35))}
+.lg-head{perspective:700px}
+.lg-head .mark{width:54px;height:54px;margin-bottom:12px;filter:drop-shadow(0 6px 18px rgba(212,169,58,.35));animation:chipFlip 1.6s cubic-bezier(.2,.8,.2,1) .25s both,chipIdle 5s ease-in-out 2s infinite}
+@keyframes chipFlip{from{opacity:0;rotate:y -540deg;scale:.55}}
+@keyframes chipIdle{50%{translate:0 -5px}}
+.topbar .brand{perspective:500px}
+.topbar .brand:hover .mark{animation:chipSpin .9s cubic-bezier(.2,.8,.2,1)}
+@keyframes chipSpin{to{rotate:y 360deg}}
+.login.saindo{animation:loginOut .42s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes loginOut{to{opacity:0;scale:1.05;filter:blur(6px)}}
+.app.entrando .topbar{animation:tbIn .65s cubic-bezier(.2,.8,.2,1) both}
+@keyframes tbIn{from{opacity:0;translate:0 -100%}}
+.app.entrando .top,.app.entrando .filters{animation:upIn .6s cubic-bezier(.2,.8,.2,1) .15s both}
+@keyframes upIn{from{opacity:0;translate:0 16px}}
 .wordmark{font-family:var(--brand);font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:linear-gradient(110deg,#a8801f 0%,#f6dc94 30%,#d4a93a 50%,#f6dc94 70%,#a8801f 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
 @keyframes shine{from{background-position:120% 0}to{background-position:-120% 0}}
 .lg-head .wordmark{font-size:26px}
@@ -94,7 +106,9 @@ button.avatar:hover,button.avatar[aria-expanded="true"]{transform:scale(1.06);bo
 .tabs button{position:relative;border:0;background:none;padding:6px 2px;font-size:20px;font-weight:500;letter-spacing:-.01em;color:rgba(243,238,227,.48);transition:color .25s}
 .tabs button:hover{color:var(--ink)}
 .tabs button[aria-current="page"]{color:var(--ink);font-weight:700}
-.tabs button[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:3px;border-radius:3px;background:var(--grad);box-shadow:0 0 14px rgba(212,169,58,.6)}
+.tabs{position:relative}
+.tabs .ink{position:absolute;left:0;bottom:-3px;width:0;height:3px;border-radius:3px;background:var(--grad);box-shadow:0 0 14px rgba(212,169,58,.6);pointer-events:none;transition:translate .45s cubic-bezier(.2,.8,.2,1),width .45s cubic-bezier(.2,.8,.2,1)}
+.topbar.rolou{box-shadow:0 12px 34px rgba(0,0,0,.5)}
 .tb-r{margin-left:auto;display:flex;align-items:center;gap:20px}
 .clock{font-size:17px;font-weight:500;color:var(--ink-2);font-variant-numeric:tabular-nums;letter-spacing:.02em}
 .me{position:relative}
@@ -143,6 +157,10 @@ button.avatar:hover,button.avatar[aria-expanded="true"]{transform:scale(1.06);bo
 .card::before{content:"";position:absolute;left:18px;right:18px;top:-1px;height:1px;background:linear-gradient(90deg,transparent,rgba(226,192,106,.45),transparent);opacity:.7}
 .rv{opacity:0;translate:0 12px}
 .page.show .rv{animation:rise .6s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i,0) * 60ms)}
+.page.show{animation:pgIn .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes pgIn{from{opacity:0;translate:var(--dx,0px) 0}}
+.tb tbody tr.rin{animation:rowIn .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rowIn{from{opacity:0;translate:0 10px}}
 @keyframes rise{to{opacity:1;translate:0 0}}
 .rv.noan{opacity:1;translate:none;animation:none!important}
 .noan .mfill,.noan .fbar{animation:none}
@@ -175,7 +193,17 @@ button.avatar:hover,button.avatar[aria-expanded="true"]{transform:scale(1.06);bo
 .tile:hover{--lift:-5px;border-color:rgba(255,255,255,.18)}
 .tile[aria-selected="true"]{--lift:-12px;--sc:1.08;z-index:2;border-color:rgba(226,192,106,.8);box-shadow:0 0 0 1px rgba(226,192,106,.35),0 0 28px rgba(212,169,58,.3),0 28px 60px rgba(0,0,0,.62),0 12px 54px rgba(79,140,255,.26)}
 .tile:focus-visible{outline:none;box-shadow:0 0 0 3px var(--blue-hi),0 28px 60px rgba(0,0,0,.62)}
-@keyframes tileIn{from{opacity:0;translate:0 26px}}
+@keyframes tileIn{from{opacity:0;translate:70px 22px;rotate:y -32deg}}
+.shelf{perspective:1600px}
+.tile::before{content:"";position:absolute;top:-25%;bottom:-25%;left:0;width:45%;background:linear-gradient(105deg,transparent,rgba(255,236,190,.17),transparent);translate:-160% 0;rotate:14deg;pointer-events:none;opacity:0}
+.tile[aria-selected="true"]::before{opacity:1;animation:sweep 4.4s ease-in-out 1.4s infinite}
+@keyframes sweep{0%{translate:-160% 0}38%,100%{translate:330% 0}}
+.tile[aria-selected="true"]{animation:halo 3.2s ease-in-out infinite}
+@keyframes halo{50%{box-shadow:0 0 0 1px rgba(226,192,106,.55),0 0 44px rgba(212,169,58,.45),0 28px 60px rgba(0,0,0,.62),0 12px 70px rgba(79,140,255,.38)}}
+.t-lbl,.t-v,.t-art{transition:translate .3s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.t-lbl{translate:calc(var(--px,0) * 3px) calc(var(--py,0) * 2px)}
+.t-v{translate:calc(var(--px,0) * 7px) calc(var(--py,0) * 5px)}
+.t-art{translate:calc(var(--px,0) * -6px) calc(var(--py,0) * -3px)}
 .t-lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
 .t-v{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-top:8px;white-space:nowrap}
 .t-v.gold,.fx-v.gold{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -190,10 +218,10 @@ button.avatar:hover,button.avatar[aria-expanded="true"]{transform:scale(1.06);bo
 .shelf-btn:hover{border-color:var(--gold);color:var(--gold)}
 @media (hover:none){.shelf-btn{display:none!important}}
 .focus{padding:26px 28px 20px;border-color:rgba(110,160,255,.16);background:linear-gradient(168deg,rgba(25,23,19,.95),rgba(13,13,16,.96) 55%,rgba(15,21,36,.95));overflow:hidden}
-.focus::after{content:"";position:absolute;right:-12%;top:-45%;width:62%;height:130%;background:radial-gradient(closest-side,rgba(79,140,255,.11),transparent);pointer-events:none}
+.focus::after{content:"";position:absolute;inset:0;background:radial-gradient(560px circle at var(--mx,84%) var(--my,0%),rgba(79,140,255,.13),transparent 62%);pointer-events:none}
 .focus>*{position:relative;z-index:1}
 .fx-in{animation:fxIn .45s cubic-bezier(.2,.8,.2,1)}
-@keyframes fxIn{from{opacity:0;translate:0 10px}}
+@keyframes fxIn{from{opacity:0;translate:var(--dx,0px) 10px}}
 .fx-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 .fx-eye{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
 .fx-v{font-size:56px;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:8px 0 8px;white-space:nowrap}
@@ -434,6 +462,7 @@ select.inp option{background:#141310}
   <header class="topbar">
     <div class="brand"><span data-mark></span><span class="wordmark" data-brand></span></div>
     <nav class="tabs" aria-label="Páginas">
+      <span class="ink" aria-hidden="true"></span>
       <button type="button" data-page="metricas" aria-current="page">Métricas</button>
       <button type="button" data-page="campanhas">Campanhas</button>
     </nav>
@@ -845,14 +874,17 @@ function tilt(node, max){
     const r = node.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
     node.style.setProperty("--ry", ((px - .5) * 2 * max).toFixed(2) + "deg"); node.style.setProperty("--rx", ((.5 - py) * 2 * max).toFixed(2) + "deg");
     node.style.setProperty("--gx", (px * 100).toFixed(1) + "%"); node.style.setProperty("--gy", (py * 100).toFixed(1) + "%");
+    node.style.setProperty("--px", ((px - .5) * 2).toFixed(3)); node.style.setProperty("--py", ((py - .5) * 2).toFixed(3));
   });
-  node.addEventListener("pointerleave", () => { node.style.setProperty("--rx", "0deg"); node.style.setProperty("--ry", "0deg"); });
+  node.addEventListener("pointerleave", () => { ["--rx", "--ry"].forEach(k => node.style.setProperty(k, "0deg")); ["--px", "--py"].forEach(k => node.style.setProperty(k, "0")); });
 }
 
 /* ---------- fundo 3D: superfície de ondas em perspectiva + partículas de luz ---------- */
 const BG = (() => {
   const cv = document.getElementById("bg3d"), cx = cv && cv.getContext ? cv.getContext("2d") : null;
   if (!cx) return { start(){} };
+  let mx = 0, my = 0, tx = 0, ty = 0;
+  addEventListener("pointermove", e => { tx = e.clientX / innerWidth * 2 - 1; ty = e.clientY / innerHeight * 2 - 1; }, {passive:true});
   let W = 0, H = 0, cols = 60, rows = 24, slow = false, running = false, raf = 0, last = 0, frames = 0, cost = 0, sky = null, glow = null, parts = [];
   const t0 = performance.now(), GOLD = [212,169,58], BLUE = [79,140,255], Z0 = 1.15, Z1 = 9;
   function setup(){
@@ -867,7 +899,8 @@ const BG = (() => {
     parts = Array.from({length:n}, (_, i) => ({x:Math.random(), y:Math.random(), z:.25 + Math.random()*.75, ph:Math.random()*6.28, blue:i % 3 === 0}));
   }
   function draw(now){
-    const t = (now - t0) / 1000, f = H * .56, hz = H * .44, cam = 1.25;
+    mx += (tx - mx) * .045; my += (ty - my) * .045;
+    const t = (now - t0) / 1000, f = H * .56, hz = H * .44 - Math.min(scrollY, 700) * .12 + my * H * .02, cam = 1.25;
     cx.globalCompositeOperation = "source-over"; cx.fillStyle = "#060608"; cx.fillRect(0, 0, W, H);
     cx.fillStyle = sky; cx.fillRect(0, 0, W, H); cx.fillStyle = glow; cx.fillRect(0, 0, W, H);
     cx.globalCompositeOperation = "lighter";
@@ -879,7 +912,7 @@ const BG = (() => {
       for (let c = 0; c < cols; c++) {
         const xw = (c / (cols - 1) * 2 - 1) * span;
         const y = .30 * Math.sin(xw * .55 + t * .45 + z * .35) + .20 * Math.sin(z * .9 - t * .6 + xw * .18) + .10 * Math.sin((xw + z) * 1.3 + t * .8);
-        const sx = W / 2 + xw * f / z, sy = hz + (cam - y) * f / z;
+        const sx = W / 2 + xw * f / z - mx * 70 * (Z0 / z), sy = hz + (cam - y) * f / z - my * 26 * (Z0 / z);
         if (c) cx.lineTo(sx, sy); else cx.moveTo(sx, sy);
       }
       cx.stroke();
@@ -887,7 +920,7 @@ const BG = (() => {
     for (const p of parts) {                             // partículas sobem devagar, as próximas mais rápido
       const yy = ((p.y - t * .012 * p.z) % 1 + 1) % 1, xx = p.x + Math.sin(t * .3 + p.ph) * .012 * p.z;
       const a = (.12 + .5 * p.z) * (.6 + .4 * Math.sin(t * 1.3 + p.ph)), s = .6 + 1.8 * p.z, c = p.blue ? BLUE : GOLD;
-      cx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${a.toFixed(3)})`; cx.beginPath(); cx.arc(xx * W, yy * H, s, 0, 6.283); cx.fill();
+      cx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${a.toFixed(3)})`; cx.beginPath(); cx.arc(xx * W - mx * 26 * p.z, yy * H - my * 14 * p.z, s, 0, 6.283); cx.fill();
     }
   }
   function loop(now){
@@ -1004,7 +1037,7 @@ function renderMetricas(anim){
     const on = b.key === ST.metric, v = MC.m[b.key], t = el("button", "tile");
     t.type = "button"; t.id = "tile-" + b.key; t.dataset.k = b.key; t.setAttribute("role", "tab");
     t.setAttribute("aria-selected", on); t.setAttribute("aria-controls", "focus"); t.tabIndex = on ? 0 : -1;
-    if (ANIM) t.style.animation = `tileIn .55s cubic-bezier(.2,.8,.2,1) ${i*45}ms both`;
+    if (ANIM) { t.style.animation = `tileIn .7s cubic-bezier(.2,.8,.2,1) ${i*55}ms both`; t.addEventListener("animationend", ev => { if (ev.animationName === "tileIn") t.style.animation = ""; }); }
     const tv = el("span", "t-v " + valCls(b, v)); countTo(tv, v, b.fmt, ANIM);
     const dc = deltaCurto(v, MC.pm ? MC.pm[b.key] : null, b.mode);
     const art = el("span", "t-art"); art.setAttribute("aria-hidden", "true");
@@ -1017,10 +1050,10 @@ function renderMetricas(anim){
   shelf.replaceChildren(...tiles); tiles.forEach(t => t._art()); shelf.scrollLeft = keep; setasShelf();
   renderFocus(anim);
 }
-function renderFocus(anim){
+function renderFocus(anim, dir){
   const b = BM.find(x => x.key === ST.metric), f = $("#focus"), v = MC.m[b.key];
   f.setAttribute("aria-labelledby", "tile-" + b.key);
-  const w = el("div", anim ? "fx-in" : "");
+  const w = el("div", anim ? "fx-in" : ""); w.style.setProperty("--dx", ((dir || 0) * 46) + "px");
   const h = el("div", "fx-h"), hl = el("div");
   const fv = el("div", "fx-v " + valCls(b, v)); countTo(fv, v, b.fmt, anim);
   hl.append(el("div", "fx-eye", b.label), fv, deltaEl(v, MC.pm ? MC.pm[b.key] : null, b.mode));
@@ -1037,12 +1070,13 @@ function renderFocus(anim){
   else { tv.hidden = true; bigCols(plot, pts, {fmt:b.fmt, label:b.label, div:b.div, kind:b.kind, color:b.color, anim}); }
 }
 function escolhe(k, foco){
+  const dir = Math.sign(BM.findIndex(b => b.key === k) - BM.findIndex(b => b.key === ST.metric));
   if (k !== ST.metric) { ST.metric = k; saveView(); }
   $$("#shelf .tile").forEach(t => { const on = t.dataset.k === k; t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1; });
   const t = $("#tile-" + k); if (foco) t.focus({preventScroll:true});
   const sh = $("#shelf"), tl = t.offsetLeft, tr = tl + t.offsetWidth;
   if (tl < sh.scrollLeft + 24 || tr > sh.scrollLeft + sh.clientWidth - 24) sh.scrollTo({left: tl - (sh.clientWidth - t.offsetWidth) / 2, behavior: REDUCE ? "auto" : "smooth"});
-  renderFocus(true);
+  renderFocus(true, dir);
 }
 $("#shelf").addEventListener("keydown", e => {
   const i = BM.findIndex(b => b.key === ST.metric); let j = i;
@@ -1095,8 +1129,8 @@ function renderCampanhas(anim){
   thead.replaceChildren(hr);
   const k = ST.sort.k, dir = ST.sort.dir;
   rows.sort((a,b) => { const x = a[k], y = b[k]; if (typeof x === "string") return x.localeCompare(y, "pt-BR") * dir; return ((x == null ? -Infinity : x) - (y == null ? -Infinity : y)) * dir; });
-  tbody.replaceChildren(...rows.map(r => {
-    const tr = el("tr", "clk"); tr.tabIndex = 0; tr.setAttribute("aria-label", "Abrir detalhe de " + r.nome);
+  tbody.replaceChildren(...rows.map((r, ri) => {
+    const tr = el("tr", "clk"); tr.tabIndex = 0; if (ANIM) { tr.classList.add("rin"); tr.style.animationDelay = (ri * 35) + "ms"; } tr.setAttribute("aria-label", "Abrir detalhe de " + r.nome);
     COLS.forEach(col => {
       const td = el("td");
       if (col.k === "nome") { td.className = "cn"; td.append(el("b", null, r.nome), el("span", null, r.canal)); }
@@ -1178,7 +1212,9 @@ function go(page, anim){
   ST.page = page; saveView();
   $$("[data-page]").forEach(b => { if (b.dataset.page === page) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
   $("#ttl").textContent = page === "metricas" ? "Métricas" : "Campanhas";
-  ["metricas","campanhas"].forEach(p => { const s = $("#pg-" + p); s.hidden = p !== page; s.classList.remove("show"); });
+  const ant = go._ant; go._ant = page;
+  ["metricas","campanhas"].forEach(p => { const s = $("#pg-" + p); s.hidden = p !== page; s.classList.remove("show"); s.style.setProperty("--dx", ant && ant !== page ? (page === "campanhas" ? "48px" : "-48px") : "0px"); });
+  moveInk();
   hideTip(); render(anim !== false);
   if (page === "campanhas" && REG === null && !regBusy) loadReg();
   const s = $("#pg-" + page); void s.offsetWidth; s.classList.add("show");
@@ -1210,13 +1246,17 @@ async function ehMembro(uid){
   if (error) throw error; return !!(data && data.length);
 }
 function enter(name, anim){
-  $("#login").hidden = true; $("#app").hidden = false;
-  const mn = $("#main"), cs = getComputedStyle(mn); lastW = Math.round(mn.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
   const nm = name || "Usuário"; $$("[data-user]").forEach(e => e.textContent = nm); $$("[data-avatar]").forEach(e => e.textContent = nm.trim().charAt(0).toUpperCase() || "·");
-  go(ST.page, anim);
+  const mostra = () => {
+    const lg = $("#login"), app = $("#app"); lg.hidden = true; lg.classList.remove("saindo"); app.hidden = false;
+    if (anim && !REDUCE) { app.classList.add("entrando"); setTimeout(() => app.classList.remove("entrando"), 1500); }
+    const mn = $("#main"), cs = getComputedStyle(mn); lastW = Math.round(mn.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
+    go(ST.page, anim);
+  };
+  if (anim && !REDUCE && !$("#login").hidden) { $("#login").classList.add("saindo"); setTimeout(mostra, 380); } else mostra();
 }
 function showLogin(){
-  fechaMe();
+  fechaMe(); $("#login").classList.remove("saindo"); go._ant = null;
   if (dwCamp) closeDrawer(); if ($("#addDlg").open) $("#addDlg").close(); hideTip(); REG = null;
   $("#app").hidden = true; $("#login").hidden = false; $("#lgPass").value = ""; $("#lgUser").focus();
 }
@@ -1370,6 +1410,14 @@ fForm.addEventListener("submit", async e => {
 /* ---------- relógio e menu da conta ---------- */
 function relogio(){ const d = new Date(); $("#clock").textContent = String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); }
 relogio(); setInterval(relogio, 15000);
+function moveInk(){
+  const ink = $(".tabs .ink"), at = $('.tabs [aria-current="page"]'); if (!ink || !at || $("#app").hidden) return;
+  ink.style.width = at.offsetWidth + "px"; ink.style.translate = at.offsetLeft + "px 0";
+}
+addEventListener("resize", moveInk); if (document.fonts && document.fonts.ready) document.fonts.ready.then(moveInk);
+addEventListener("scroll", () => { const tb = $(".topbar"); if (tb) tb.classList.toggle("rolou", scrollY > 8); }, {passive:true});
+$("#focus").addEventListener("pointermove", e => { const r = e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty("--mx", (e.clientX - r.left) + "px"); e.currentTarget.style.setProperty("--my", (e.clientY - r.top) + "px"); });
+if (TILT) { $("#lgForm").classList.add("tilt3d"); tilt($("#lgForm"), 3); }
 function fechaMe(){ const p = $("#mePop"); if (p.hidden) return; p.hidden = true; $("#meBtn").setAttribute("aria-expanded", "false"); }
 $("#meBtn").addEventListener("click", e => {
   e.stopPropagation(); const p = $("#mePop"), abrir = p.hidden; p.hidden = !abrir; $("#meBtn").setAttribute("aria-expanded", String(abrir));
