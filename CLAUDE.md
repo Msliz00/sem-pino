@@ -13,7 +13,10 @@ Dono: 00BABY (Bekas). Idioma: sempre português do Brasil, tom direto.
 - Visual preto e dourado. Cores de dado validadas para daltonismo sobre `#141310`: ouro `#b38a26` (NGR/lucro), azul `#5b8fd9` (investimento), carmim `#c93d5c` (prejuízo). Texto de variação: `#2fb85a` / `#e5636f`.
 - Marca no topo do script: `const MARCA = { nome: "Glassy", sub: "Action Forte" }`.
 - **Dados são de EXEMPLO.** Regerar: `python3 scripts/gerar_dados_glassy.py docs/igaming/dados.js` (seed fixo, reproduzível). Formato por campanha/dia: `[investimento, impressões, cliques, registros, FTD, depósitos, NGR]`.
-- Login: só hash PBKDF2 no arquivo (objeto `ACESSO`). **Nunca gravar senha, telefone ou e-mail em texto no repositório** (é público). O login só protege a tela; antes de dados reais, validar no servidor (ex.: Supabase Auth).
+- Login: **Supabase Auth** no projeto `experts-painel` (`SB_URL`/`SB_KEY` publicável no topo do script). Usuário vira e-mail interno: `bekas` → `bekas@glassy.app.invalid`. Só entra quem está em `public.glassy_membros`. **Nunca gravar senha, telefone ou e-mail em texto no repositório** (é público).
+- Página Campanhas: cartão "Campanhas cadastradas" + botão **Adicionar campanha** (nome, canal + público, início/fim, status, arquivo da base). Grava em `public.glassy_campanhas`; o arquivo vai para o bucket **privado** `glassy-bases` (lista de contatos = dado pessoal, LGPD: o painel mostra só nome do arquivo e quantidade de contatos).
+- Banco: `supabase/migrations/007_glassy_campanhas.sql` (tabelas `glassy_*`, RLS por membro, bucket). Isolado do app dos experts — não alterar tabelas dele.
+- A página do claude.ai (artifact) não alcança o Supabase (CSP); o Glassy com login/cadastro roda no GitHub Pages e na Vercel.
 
 ## Fluxo de entrega
 - Branch de trabalho: `claude/bingobet-instagram-report-june-sh9zlp` (o GitHub Pages publica desta branch, pasta `/docs`).

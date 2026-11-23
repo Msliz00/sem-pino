@@ -279,6 +279,46 @@ table.tb{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
 .dw-k b.pos{color:var(--good)}.dw-k b.neg{color:var(--bad)}
 .drawer .card{margin-bottom:12px}
 
+.btn-add{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border:0;border-radius:10px;background:var(--grad);color:#1a1409;font-weight:700;font-size:13px;box-shadow:0 6px 18px rgba(212,169,58,.2);flex-shrink:0;transition:box-shadow .2s}
+.btn-add svg{width:15px;height:15px}
+.btn-add:hover{box-shadow:0 8px 24px rgba(212,169,58,.34)}
+.reg{margin-bottom:14px}
+.reg .empty{height:auto;padding:26px 10px}
+.reg .loading{opacity:.55;transition:opacity .2s}
+.st.agend svg{color:var(--s-inv)}.st.encer svg{color:var(--ink-3)}
+.dlg{margin:auto;width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--hair-gold);border-radius:18px;background:#0f0e0c;color:var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.7)}
+.dlg::backdrop{background:rgba(0,0,0,.62);backdrop-filter:blur(2px)}
+.dlg[open]{animation:cardIn .3s cubic-bezier(.2,.9,.3,1)}
+.dlg form{padding:22px;display:flex;flex-direction:column}
+.dlg-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:2px}
+.dlg-h .cn{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.dlg-h h2{font-size:21px;font-weight:700;margin-top:4px}
+.fs{border:0;margin:18px 0 0;padding:0;min-width:0}
+.fs legend{font-size:12.5px;font-weight:600;color:var(--ink);padding:0}
+.fs .fld{margin-top:8px}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+select.inp{padding:0 10px;cursor:pointer}
+select.inp option{background:#141310}
+.inp[type=date]{color-scheme:dark}
+.fld em{font-style:normal;color:var(--ink-3);font-weight:400}
+.drop{display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 14px;border:1.5px dashed rgba(226,192,106,.32);border-radius:12px;background:rgba(212,169,58,.03);text-align:center;cursor:pointer;color:var(--ink-2);font-size:13px;transition:border-color .2s,background .2s}
+.drop:hover,.drop.over{border-color:rgba(226,192,106,.7);background:rgba(212,169,58,.07)}
+.drop:focus-within{outline:2px solid var(--gold);outline-offset:2px}
+.drop svg{width:22px;height:22px;color:var(--gold)}
+.drop b{color:var(--gold)}
+.drop small{color:var(--ink-3);font-size:11.5px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.finfo{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--hair);font-size:12.5px}
+.finfo div{min-width:0}
+.finfo b{display:block;font-weight:600;overflow-wrap:anywhere}
+.finfo span{color:var(--ink-3)}
+.finfo button{border:0;background:none;color:var(--ink-2);font-size:12px;text-decoration:underline;flex-shrink:0}
+.note{font-size:11.5px;color:var(--ink-3);margin-top:8px;line-height:1.5}
+.dlg-f{display:flex;justify-content:flex-end;gap:10px;margin-top:4px}
+.btn-gold.sm{width:auto;height:40px;padding:0 18px;margin-top:0;font-size:14px}
+.dlg .out{height:40px;padding:0 16px;font-size:13px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:95;max-width:calc(100vw - 32px);padding:11px 18px;border-radius:12px;background:#161511;border:1px solid var(--hair-gold);color:var(--ink);font-size:13px;box-shadow:0 14px 34px rgba(0,0,0,.55);animation:pop .2s ease}
+@media (max-width:560px){.row2{grid-template-columns:minmax(0,1fr)}.dlg form{padding:16px}.reg .ch{flex-wrap:wrap}}
 .foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--hair);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-3)}
 
 /* ============ RESPONSIVO ============ */
@@ -418,6 +458,11 @@ table.tb{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
 
     <!-- ============ PÁGINA 2 · CAMPANHAS ============ -->
     <section class="page" id="pg-campanhas" aria-labelledby="ttl" hidden>
+      <div class="card reg">
+        <div class="ch"><div><h3>Campanhas cadastradas</h3><p>registro das campanhas da operação · listas de contatos ficam em pasta privada</p></div>
+          <button type="button" class="btn-add" id="addBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Adicionar campanha</button></div>
+        <div id="regBody"></div>
+      </div>
       <div class="kpis" id="ckpis"></div>
       <div class="card rv" style="--i:4" data-card="cmp">
         <div class="ch"><div><h3>Resultado por campanha</h3><p>NGR − investimento no período · ordenado</p></div><button type="button" class="tbtn" aria-pressed="false" data-tbl><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>Tabela</button></div>
@@ -459,8 +504,43 @@ table.tb{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
   </div>
 </aside>
 
+<!-- adicionar campanha -->
+<dialog class="dlg" id="addDlg" aria-labelledby="addTitle">
+  <form id="addForm" novalidate>
+    <div class="dlg-h"><div><div class="cn">Campanhas</div><h2 id="addTitle">Adicionar campanha</h2></div><button type="button" class="x" data-close aria-label="Fechar">×</button></div>
+    <label class="fld"><span>Nome da campanha</span><input class="inp" id="fNome" name="nome" maxlength="120" autocomplete="off" required></label>
+    <fieldset class="fs"><legend>Segmentação da campanha</legend>
+      <div class="row2">
+        <label class="fld"><span>Canal</span><select class="inp" id="fCan" required>
+          <option value="">Escolha o canal</option><option>SMS</option><option>E-mail</option><option>Live</option><option>Hacker</option></select></label>
+        <label class="fld"><span>Público</span><select class="inp" id="fPub" required>
+          <option value="">Escolha o público</option><option>Base completa</option><option>Novos cadastros</option><option>Cadastrados sem depósito</option><option>Depositantes ativos</option><option>Inativos há 30+ dias</option><option>VIP / alto valor</option></select></label>
+      </div>
+    </fieldset>
+    <fieldset class="fs"><legend>Duração da campanha</legend>
+      <div class="row2">
+        <label class="fld"><span>Início</span><input type="date" class="inp" id="fIni" required></label>
+        <label class="fld"><span>Fim</span><input type="date" class="inp" id="fFim" required></label>
+      </div>
+    </fieldset>
+    <label class="fld"><span>Status da campanha</span><select class="inp" id="fSt" required>
+      <option value="agendada">Agendada</option><option value="ativa">Ativa</option><option value="em teste">Em teste</option><option value="pausada">Pausada</option><option value="encerrada">Encerrada</option></select></label>
+    <div class="fld"><span>Arquivo da base <em id="baseReq">(obrigatório para SMS e E-mail)</em></span>
+      <label class="drop" id="drop"><input type="file" id="fBase" class="sr" accept=".csv,.txt,.xlsx,.xls">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg>
+        <span><b>Escolher arquivo</b> ou arraste aqui</span><small>CSV, TXT ou Excel · até 50 MB</small></label>
+      <div class="finfo" id="fInfo" hidden></div>
+      <p class="note">A lista de contatos é dado pessoal (LGPD): o arquivo vai para uma pasta privada e o painel mostra só o nome do arquivo e a quantidade de contatos.</p>
+    </div>
+    <div class="lg-err" id="addErr" role="alert" aria-live="assertive"></div>
+    <div class="dlg-f"><button type="button" class="out" data-close>Cancelar</button><button type="submit" class="btn-gold sm" id="addSave">Salvar campanha</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" hidden></div>
 <div id="tip" role="tooltip" hidden></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <script src="dados.js"></script>
 <script>
 (function(){
@@ -470,13 +550,11 @@ const IG = window.IG;
 /* ---------- marca (troque aqui o nome da operação) ---------- */
 const MARCA = { nome: "Glassy", sub: "Action Forte" };
 
-/* ---------- acesso (somente hash — a senha não fica no arquivo) ---------- */
-const ACESSO = {
-  u: "532a453bf354aaf3e2080d5db77f88ed21d6f30b76b4fe84fd016df3b6a04bff",
-  salt: "a9e1072628e5ea99070adf1185d0fb99",
-  it: 210000,
-  h: "9886a5a19a258cc3752b5761759e2834a89371ce6e85f4196b1f1304053c9cea"
-};
+/* ---------- Supabase (login + cadastro de campanhas) ---------- */
+// chave publicável: pode ficar na página; quem protege os dados são as regras (RLS) do banco.
+const SB_URL = "https://jqfpfkublwshpgtqkmeo.supabase.co";
+const SB_KEY = "sb_publishable_un-RQ5H_vweO9RPZQTMkKA_wqGMTYHJ";
+const LOGIN_DOMINIO = "glassy.app.invalid";   // usuário "bekas" → conta bekas@glassy.app.invalid
 
 /* ---------- utilidades ---------- */
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
@@ -577,7 +655,9 @@ function countTo(node, to, fmt, anim){
 function statusEl(s){
   const map = { "ativa": ["ativa","Ativa",'<circle cx="12" cy="12" r="9" fill="currentColor"/><path d="M8 12.5l2.6 2.5L16 9.5" stroke="#0a0908" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'],
                 "em teste": ["teste","Em teste",'<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 010 17z" fill="currentColor"/>'],
-                "pausada": ["pausada","Pausada",'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 8.5v7M14 8.5v7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>'] }[s] || ["", s, ""];
+                "pausada": ["pausada","Pausada",'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 8.5v7M14 8.5v7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>'],
+                "agendada": ["agend","Agendada",'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>'],
+                "encerrada": ["encer","Encerrada",'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 12.5l2.4 2.3 4.6-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'] }[s] || ["", s, ""];
   const w = el("span", "st " + map[0]); w.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + map[2] + "</svg>"; w.append(map[1]); return w;
 }
 
@@ -915,6 +995,7 @@ function go(page, anim){
   $("#ttl").textContent = page === "metricas" ? "Métricas" : "Campanhas";
   ["metricas","campanhas"].forEach(p => { const s = $("#pg-" + p); s.hidden = p !== page; s.classList.remove("show"); });
   hideTip(); render(anim !== false);
+  if (page === "campanhas" && REG === null && !regBusy) loadReg();
   const s = $("#pg-" + page); void s.offsetWidth; s.classList.add("show");
 }
 $$("[data-page]").forEach(b => b.addEventListener("click", () => { if (ST.page !== b.dataset.page) { go(b.dataset.page); scrollTo({top:0, behavior: REDUCE ? "auto" : "smooth"}); } }));
@@ -927,51 +1008,187 @@ if (!IG.exemplo) $("#exChip").hidden = true;
 let rz = 0, lastW = 0;
 new ResizeObserver(en => { const w = Math.round(en[0].contentRect.width); if (w === lastW) return; lastW = w; cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { if (!$("#app").hidden) render(false); }); }).observe($("#main"));
 
-/* ---------- login ---------- */
-const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
-const unhex = h => new Uint8Array(h.match(/../g).map(x => parseInt(x, 16)));
-async function sha256(str){ return hex(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str))); }
-async function pbkdf2(pass){
-  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(pass), "PBKDF2", false, ["deriveBits"]);
-  return hex(await crypto.subtle.deriveBits({name:"PBKDF2", hash:"SHA-256", salt:unhex(ACESSO.salt), iterations:ACESSO.it}, key, 256));
+/* ---------- login (Supabase Auth) ---------- */
+const keepOn = () => { try { return localStorage.getItem("glassy_keep") === "1"; } catch(e){ return false; } };
+const authStore = {
+  getItem: k => sget(k),
+  setItem: (k, v) => { const s = store(keepOn() ? "l" : "s"); try { s && s.setItem(k, v); } catch(e){} },
+  removeItem: k => { for (const s of [store("l"), store("s")]) { try { s && s.removeItem(k); } catch(e){} } }
+};
+const sb = (window.supabase && window.supabase.createClient)
+  ? window.supabase.createClient(SB_URL, SB_KEY, {auth:{storage:authStore, storageKey:"glassy-auth", persistSession:true, autoRefreshToken:true, detectSessionInUrl:false}})
+  : null;
+const emailDe = u => u.includes("@") ? u.trim().toLowerCase() : u.trim().toLowerCase().replace(/\s+/g, "") + "@" + LOGIN_DOMINIO;
+const nomeDe = email => { const n = String(email || "").split("@")[0]; return n ? n.charAt(0).toUpperCase() + n.slice(1) : "Usuário"; };
+async function ehMembro(uid){
+  const { data, error } = await sb.from("glassy_membros").select("user_id").eq("user_id", uid).limit(1);
+  if (error) throw error; return !!(data && data.length);
 }
-const TOKEN = ACESSO.h.slice(0, 24);
 function enter(name, anim){
   $("#login").hidden = true; $("#app").hidden = false;
   const mn = $("#main"), cs = getComputedStyle(mn); lastW = Math.round(mn.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
   const nm = name || "Usuário"; $$("[data-user]").forEach(e => e.textContent = nm); $$("[data-avatar]").forEach(e => e.textContent = nm.trim().charAt(0).toUpperCase() || "·");
   go(ST.page, anim);
 }
-function logout(){
+function showLogin(){
+  if (dwCamp) closeDrawer(); if ($("#addDlg").open) $("#addDlg").close(); hideTip(); REG = null;
+  $("#app").hidden = true; $("#login").hidden = false; $("#lgPass").value = ""; $("#lgUser").focus();
+}
+async function logout(){
   for (const s of [store("l"), store("s")]) { try { s && (s.removeItem("ig_sess"), s.removeItem("ig_name")); } catch(e){} }
-  if (dwCamp) closeDrawer(); hideTip();
-  $("#app").hidden = true; $("#login").hidden = false; $("#lgPass").value = ""; $("#lgErr").textContent = ""; $("#lgUser").focus();
+  if (sb) { try { await sb.auth.signOut(); } catch(e){} }
+  $("#lgErr").textContent = ""; showLogin();
 }
 $$("[data-logout]").forEach(b => b.addEventListener("click", logout));
 $("#lgEye").addEventListener("click", () => { const p = $("#lgPass"), on = p.type === "password"; p.type = on ? "text" : "password"; $("#lgEye").setAttribute("aria-pressed", on); $("#lgEye").setAttribute("aria-label", on ? "Ocultar senha" : "Mostrar senha"); });
 $("#lgForm").addEventListener("submit", async e => {
   e.preventDefault();
   const u = $("#lgUser").value.trim(), pw = $("#lgPass").value, err = $("#lgErr"), btn = $("#lgBtn"), card = $("#lgForm");
+  const falha = msg => { err.textContent = msg; card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake"); };
   err.textContent = "";
   if (!u || !pw) { err.textContent = "Preencha usuário e senha."; return; }
-  if (!window.crypto || !crypto.subtle) { err.textContent = "Abra o painel pelo endereço https para entrar."; return; }
-  btn.disabled = true; btn.textContent = "Verificando…";
+  if (!sb) { err.textContent = "Não foi possível carregar o login. Verifique a internet e recarregue a página."; return; }
+  btn.disabled = true; btn.textContent = "Entrando…";
   try {
-    const [uh, ph] = await Promise.all([sha256("igaming-user:" + u.toLowerCase()), pbkdf2(pw)]);
-    if (uh === ACESSO.u && ph === ACESSO.h) {
-      const keep = $("#lgKeep").checked, s = store(keep ? "l" : "s");
-      try { s.setItem("ig_sess", TOKEN); s.setItem("ig_name", u); } catch(x){}
+    try { if ($("#lgKeep").checked) localStorage.setItem("glassy_keep", "1"); else localStorage.removeItem("glassy_keep"); } catch(x){}
+    const { data, error } = await sb.auth.signInWithPassword({ email: emailDe(u), password: pw });
+    if (error) falha(error.code === "invalid_credentials" || error.status === 400 ? "Usuário ou senha incorretos." : "Não foi possível entrar agora. Tente de novo em instantes.");
+    else if (!(await ehMembro(data.user.id))) { await sb.auth.signOut(); falha("Esta conta ainda não tem acesso ao Glassy. Peça a liberação ao administrador."); }
+    else {
       if (window.PasswordCredential) { try { await navigator.credentials.store(new PasswordCredential(card)); } catch(x){} }
-      $("#lgPass").value = ""; enter(u, true);
-    } else {
-      err.textContent = "Usuário ou senha incorretos.";
-      card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake"); $("#lgPass").select();
+      $("#lgPass").value = ""; enter(nomeDe(data.user.email), true);
     }
-  } catch(x) { err.textContent = "Não foi possível verificar o acesso neste navegador."; }
+  } catch(x) { falha("Não foi possível verificar o acesso agora. Tente de novo."); }
   btn.disabled = false; btn.textContent = "Entrar";
 });
-if (sget("ig_sess") === TOKEN) enter(sget("ig_name"), true);
-else { $("#lgUser").focus(); }
+
+/* ---------- campanhas cadastradas ---------- */
+let REG = null, regErr = false, regBusy = false;
+const dataBR = iso => iso ? iso.slice(0, 10).split("-").reverse().join("/") : "—";
+async function loadReg(){
+  if (!sb) return; regBusy = true; renderReg();
+  const { data, error } = await sb.from("glassy_campanhas")
+    .select("id,nome,canal,publico,data_inicio,data_fim,status,base_nome,base_contatos,criado_em")
+    .order("criado_em", {ascending:false}).limit(500);
+  regBusy = false; if (error) regErr = true; else { REG = data || []; regErr = false; } renderReg();
+}
+function renderReg(){
+  const body = $("#regBody"); if (!body) return;
+  body.classList.toggle("loading", regBusy && REG !== null);
+  if (REG === null) { body.replaceChildren(el("div", "empty", regErr ? "Não foi possível carregar as campanhas cadastradas. Verifique a conexão e recarregue a página." : "Carregando campanhas cadastradas…")); return; }
+  if (!REG.length) { body.replaceChildren(el("div", "empty", "Nenhuma campanha cadastrada ainda. Use “Adicionar campanha” para registrar a primeira.")); return; }
+  const w = el("div", "tw"), t = el("table", "tb"), th = el("thead"), hr = el("tr");
+  ["Campanha", "Período", "Status", "Base de contatos", "Cadastrada em"].forEach(h => { const c = el("th", null, h); c.scope = "col"; hr.append(c); });
+  th.append(hr); t.append(th);
+  const tb = el("tbody");
+  REG.forEach(r => {
+    const tr = el("tr");
+    const c1 = el("td", "cn"); c1.append(el("b", null, r.nome), el("span", null, r.canal + " · " + r.publico));
+    const c2 = el("td", null, dataBR(r.data_inicio) + " a " + dataBR(r.data_fim));
+    const c3 = el("td"); c3.style.textAlign = "left"; c3.append(statusEl(r.status));
+    const c4 = el("td", "cn"); if (r.base_nome) { c4.append(el("b", null, r.base_contatos != null ? int(r.base_contatos) + " contatos" : "contatos não contados"), el("span", null, r.base_nome)); } else c4.append(el("span", null, "sem arquivo"));
+    const c5 = el("td", null, dataBR(r.criado_em));
+    tr.append(c1, c2, c3, c4, c5); tb.append(tr);
+  });
+  t.append(tb); w.append(t); body.replaceChildren(w);
+}
+
+/* ---------- adicionar campanha ---------- */
+const dlg = $("#addDlg"), fForm = $("#addForm");
+let baseFile = null, baseCount = null, stTocado = false;
+const hojeISO = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); };
+const precisaBase = () => ["SMS", "E-mail"].includes($("#fCan").value);
+const tamanho = b => b >= 1048576 ? nf1.format(b/1048576) + " MB" : nf0.format(Math.max(1, Math.round(b/1024))) + " KB";
+function sugereStatus(){ if (stTocado) return; const ini = $("#fIni").value; $("#fSt").value = ini && ini > hojeISO() ? "agendada" : "ativa"; }
+function marcaBase(){ const c = $("#fCan").value; $("#baseReq").textContent = !c ? "(obrigatório para SMS e E-mail)" : precisaBase() ? "(obrigatório)" : "(opcional para " + c + ")"; }
+function addErro(msg, foco){ $("#addErr").textContent = msg; if (foco) $(foco).focus(); }
+function openAdd(){
+  fForm.reset(); baseFile = null; baseCount = null; stTocado = false;
+  $("#fInfo").hidden = true; $("#addErr").textContent = ""; $("#fIni").value = hojeISO(); $("#fIni").min = ""; $("#fFim").min = hojeISO();
+  sugereStatus(); marcaBase(); dlg.showModal(); $("#fNome").focus();
+}
+$("#addBtn").addEventListener("click", openAdd);
+$$("#addDlg [data-close]").forEach(b => b.addEventListener("click", () => dlg.close()));
+$("#fIni").addEventListener("change", () => { $("#fFim").min = $("#fIni").value; sugereStatus(); });
+$("#fSt").addEventListener("change", () => { stTocado = true; });
+$("#fCan").addEventListener("change", marcaBase);
+function infoBase(txt){
+  const info = $("#fInfo"), d = el("div"); d.append(el("b", null, baseFile.name), el("span", null, tamanho(baseFile.size) + " · " + txt));
+  const rm = el("button", null, "Remover"); rm.type = "button"; rm.addEventListener("click", () => { baseFile = null; baseCount = null; $("#fBase").value = ""; info.hidden = true; });
+  info.replaceChildren(d, rm); info.hidden = false;
+}
+const ehCabecalho = cells => cells.some(c => /[A-Za-zÀ-ÿ]/.test(c)) && !cells.some(c => c.includes("@") || c.replace(/\D/g, "").length >= 8);
+function carregaXLSX(){
+  if (window.XLSX) return Promise.resolve();
+  return new Promise((ok, bad) => { const sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"; sc.onload = ok; sc.onerror = () => bad(new Error("xlsx")); document.head.appendChild(sc); });
+}
+async function contarContatos(f, ext){
+  let rows;
+  if (ext === "csv" || ext === "txt") rows = (await f.text()).split(/\r?\n/).map(l => l.trim()).filter(Boolean).map(l => l.split(/[;,\t]/).map(c => c.trim()));
+  else {
+    await carregaXLSX();
+    const wb = XLSX.read(await f.arrayBuffer(), {type:"array"}), ws = wb.Sheets[wb.SheetNames[0]];
+    rows = XLSX.utils.sheet_to_json(ws, {header:1, blankrows:false}).map(r => r.map(c => String(c == null ? "" : c).trim())).filter(r => r.some(Boolean));
+  }
+  if (!rows.length) return 0;
+  return ehCabecalho(rows[0]) ? rows.length - 1 : rows.length;
+}
+async function setBase(f){
+  $("#addErr").textContent = ""; if (!f) return;
+  const ext = (f.name.split(".").pop() || "").toLowerCase();
+  if (!["csv", "txt", "xlsx", "xls"].includes(ext)) return addErro("Formato não aceito. Envie a base em CSV, TXT ou Excel (.xlsx).");
+  if (f.size > 50 * 1048576) return addErro("O arquivo passa de 50 MB. Divida a base em partes menores.");
+  if (!f.size) return addErro("O arquivo está vazio.");
+  baseFile = f; baseCount = null; infoBase("contando contatos…");
+  let n = null; try { n = await contarContatos(f, ext); } catch(x) { n = null; }
+  if (baseFile !== f) return; baseCount = n; infoBase(n == null ? "não foi possível contar os contatos" : int(n) + " contatos");
+}
+$("#fBase").addEventListener("change", e => setBase(e.target.files[0]));
+const drop = $("#drop");
+["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, () => drop.classList.remove("over")));
+drop.addEventListener("drop", e => { e.preventDefault(); const f = e.dataTransfer && e.dataTransfer.files[0]; if (f) setBase(f); });
+const nomeSeguro = n => n.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9._-]+/g, "-").replace(/-+/g, "-").slice(-100) || "base";
+let toastT = 0;
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2800); }
+fForm.addEventListener("submit", async e => {
+  e.preventDefault();
+  const v = { nome: $("#fNome").value.trim(), canal: $("#fCan").value, publico: $("#fPub").value, ini: $("#fIni").value, fim: $("#fFim").value, st: $("#fSt").value };
+  if (v.nome.length < 2) return addErro("Dê um nome à campanha (pelo menos 2 letras).", "#fNome");
+  if (!v.canal) return addErro("Escolha o canal da campanha.", "#fCan");
+  if (!v.publico) return addErro("Escolha o público da campanha.", "#fPub");
+  if (!v.ini || !v.fim) return addErro("Informe a data de início e a de fim.", v.ini ? "#fFim" : "#fIni");
+  if (v.fim < v.ini) return addErro("A data de fim não pode ser antes do início.", "#fFim");
+  if (precisaBase() && !baseFile) return addErro("Para SMS e E-mail, envie o arquivo da base de contatos.", "#fBase");
+  if (!sb) return addErro("Sem conexão com o banco. Recarregue a página e tente de novo.");
+  const btn = $("#addSave"); btn.disabled = true; btn.textContent = "Salvando…"; $("#addErr").textContent = "";
+  const id = crypto.randomUUID(); let caminho = null;
+  try {
+    const { data: { user } } = await sb.auth.getUser(); if (!user) throw new Error("sessao");
+    if (baseFile) {
+      caminho = id + "/" + nomeSeguro(baseFile.name);
+      const up = await sb.storage.from("glassy-bases").upload(caminho, baseFile, {upsert:false, contentType: baseFile.type || "application/octet-stream"});
+      if (up.error) { caminho = null; throw up.error; }
+    }
+    const ins = await sb.from("glassy_campanhas").insert({ id, nome: v.nome, canal: v.canal, publico: v.publico, data_inicio: v.ini, data_fim: v.fim, status: v.st,
+      base_caminho: caminho, base_nome: baseFile ? baseFile.name.slice(0, 200) : null, base_contatos: baseFile ? baseCount : null, base_bytes: baseFile ? baseFile.size : null, criado_por: user.id });
+    if (ins.error) throw ins.error;
+    dlg.close(); toast("Campanha “" + v.nome + "” cadastrada."); loadReg();
+  } catch(x) {
+    if (caminho) { try { await sb.storage.from("glassy-bases").remove([caminho]); } catch(y){} }
+    addErro(x && x.message === "sessao" ? "Sua sessão expirou. Saia e entre de novo para salvar." : "Não foi possível salvar a campanha. Verifique a conexão e tente de novo.");
+  }
+  btn.disabled = false; btn.textContent = "Salvar campanha";
+});
+
+/* ---------- início ---------- */
+if (sb) sb.auth.onAuthStateChange(ev => { if (ev === "SIGNED_OUT" && !$("#app").hidden) showLogin(); });
+(async () => {
+  if (sb) {
+    try { const { data: { session } } = await sb.auth.getSession(); if (session && await ehMembro(session.user.id)) { enter(nomeDe(session.user.email), true); return; } } catch(e){}
+  }
+  $("#lgUser").focus();
+})();
 })();
 </script>
 </body>
